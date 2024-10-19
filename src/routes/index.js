@@ -3,10 +3,10 @@ import userRouter from "./user";
 import adminRouter from "./admin";
 import apiRouter from "./api";
 
-const router = express.Router();
+const initWebRouter = (app) => {
+  app.use("/", userRouter);
+  app.use("/admin", adminRouter);
+  app.use("/api", apiRouter);
+};
 
-router.use("/", userRouter);
-router.use("/admin", adminRouter);
-router.use("/api", apiRouter);
-
-export default router;
+export default initWebRouter;

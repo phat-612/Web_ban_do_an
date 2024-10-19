@@ -6,7 +6,13 @@ const router = express.Router();
 
 // Routes
 router.get("/", (req, res) => {
-  res.render("user/home", { title: "Hello World!" });
+  res.render("main", {
+    data: {
+      title: "Home",
+      header: "partials/headerUser",
+      page: "user/home",
+    },
+  });
 });
 
-module.exports = router;
+export default router;
