@@ -4,7 +4,7 @@ import adminController from "../controllers/AdminControllers";
 const router = express.Router();
 
 // PRODUCT ( SAN PHAM )
-router.get("/product", adminController.getProductPage);
+router.get("/", adminController.getProductPage);
 
 // ORDER ( DON HANG)
 router.get("/order", adminController.getOrderPage);
