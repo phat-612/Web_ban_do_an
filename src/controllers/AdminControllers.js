@@ -1,8 +1,35 @@
 // PRODUCT ( SAN PHAM )
+const getProductPage = async (req, res) => {
+  res.render("main", {
+    data: {
+      title: "Product",
+      header: "partials/headerAdmin",
+      page: "admin/product",
+    },
+  });
+};
 
 // ORDER ( DON HANG)
+const getOrderPage = async (req, res) => {
+  res.render("main", {
+    data: {
+      title: "Order",
+      header: "partials/headerAdmin",
+      page: "admin/order",
+    },
+  });
+};
 
 // BANNER ( BANNER )
+const getBannerPage = async (req, res) => {
+  res.render("main", {
+    data: {
+      title: "Banner",
+      header: "partials/headerAdmin",
+      page: "admin/banner",
+    },
+  });
+};
 
 // CATEGORY ( DANH MỤC )
 const getCategoryPage = async (req, res) => {
@@ -14,20 +41,46 @@ const getCategoryPage = async (req, res) => {
     },
   });
 };
-const getAddCategoryPage = async (req, res) => {
+
+// ACCOUNT ( TAI KHOAN )
+const getAccountPage = async (req, res) => {
   res.render("main", {
     data: {
-      title: "Add Category",
+      title: "Account",
       header: "partials/headerAdmin",
-      page: "admin/addCategory",
+      page: "admin/account",
     },
   });
 };
 
-// ACCOUNT ( TAI KHOAN )
-
 // FEEDBACK ( PHAN HOI )
+const getFeedbackPage = async (req, res) => {
+  res.render("main", {
+    data: {
+      title: "Feedback",
+      header: "partials/headerAdmin",
+      page: "admin/product",
+    },
+  });
+};
 
 // STORE-INFORMATION ( THONG TIN CUA HANG)
+const getShopInforPage = async (req, res) => {
+  res.render("main", {
+    data: {
+      title: "Product",
+      header: "partials/headerAdmin",
+      page: "admin/shopInfor",
+    },
+  });
+};
 
-export default { getCategoryPage, getAddCategoryPage };
+export default {
+  getProductPage,
+  getOrderPage,
+  getBannerPage,
+  getCategoryPage,
+  getAccountPage,
+  getFeedbackPage,
+  getShopInforPage,
+};
