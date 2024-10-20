@@ -9,6 +9,16 @@ const getProductPage = async (req, res) => {
   });
 };
 
+const getAddProductPage = async (req, res) => {
+  res.render("main", {
+    data: {
+      title: "Add Product",
+      header: "partials/headerAdmin",
+      page: "admin/addProduct",
+    },
+  });
+};
+
 // ORDER ( DON HANG)
 const getOrderPage = async (req, res) => {
   res.render("main", {
@@ -59,7 +69,7 @@ const getFeedbackPage = async (req, res) => {
     data: {
       title: "Feedback",
       header: "partials/headerAdmin",
-      page: "admin/product",
+      page: "admin/feedback",
     },
   });
 };
@@ -77,6 +87,7 @@ const getShopInforPage = async (req, res) => {
 
 export default {
   getProductPage,
+  getAddProductPage,
   getOrderPage,
   getBannerPage,
   getCategoryPage,

@@ -5,6 +5,7 @@ const router = express.Router();
 
 // PRODUCT ( SAN PHAM )
 router.get("/", adminController.getProductPage);
+router.get("/product/addProduct", adminController.getAddProductPage);
 
 // ORDER ( DON HANG)
 router.get("/order", adminController.getOrderPage);
