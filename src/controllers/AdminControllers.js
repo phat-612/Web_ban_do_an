@@ -1,3 +1,5 @@
+import categoryModel from "../services/CategoryModel";
+
 // PRODUCT ( SAN PHAM )
 const getProductPage = async (req, res) => {
   res.render("main", {
@@ -43,13 +45,22 @@ const getBannerPage = async (req, res) => {
 
 // CATEGORY ( DANH MỤC )
 const getCategoryPage = async (req, res) => {
+  let categoryList = await categoryModel.getAllCategory();
   res.render("main", {
     data: {
       title: "Category",
       header: "partials/headerAdmin",
       page: "admin/category",
+      categorys: categoryList,
     },
   });
+};
+
+const addCategory = async (req, res) => {
+  const { nameCategory } = req.body;
+  console.log(req.body);
+  await categoryModel.addCategory(nameCategory);
+  res.redirect("/admin/category");
 };
 
 // ACCOUNT ( TAI KHOAN )
@@ -86,6 +97,7 @@ const getShopInforPage = async (req, res) => {
 };
 
 export default {
+  // GET PAGE
   getProductPage,
   getAddProductPage,
   getOrderPage,
@@ -94,4 +106,8 @@ export default {
   getAccountPage,
   getFeedbackPage,
   getShopInforPage,
+
+  // API
+
+  addCategory,
 };

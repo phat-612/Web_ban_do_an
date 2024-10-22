@@ -27,19 +27,21 @@
         </tr>
       </thead>
       <tbody>
+        <% for (let i = 0; i < data.categorys.length; i++) { %>
         <tr>
-          <th>1</th>
-          <td>Ít Calo</td>
+          <th><%= data.categorys[i].id %></th>
+          <td><%= data.categorys[i].name %></td>
           <td>
             <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalSuaDanhMuc">
               Sửa
             </button>
             <form action="" method="post" class="d-inline-block">
-              <input type="hidden" value="">
+              <input type="hidden" value="<%= data.categorys[i].id %>">
               <button type="submit" class="btn btn-danger">Xóa</button>
             </form>
           </td>
         </tr>
+        <%} %>
       </tbody>
     </table>
   </div>
@@ -55,14 +57,16 @@
         <h5 class="modal-title" id="exampleModalLabel">THÊM DANH MỤC</h5>
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
-      <div class="modal-body">
-        <label for="tenDanhMuc">Tên Danh Mục</label>
-        <input type="text" class="form-control mt-3" id="tenDanhMuc" placeholder="Nhập Tên Danh Mục">
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-        <button type="button" class="btn btn-success">Thêm</button>
-      </div>
+      <form action="/api/addCategory" method="post">
+        <div class="modal-body">
+          <label for="tenDanhMuc">Tên Danh Mục</label>
+          <input name="nameCategory" type="text" class="form-control mt-3" id="tenDanhMuc" placeholder="Nhập Tên Danh Mục">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="submit" class="btn btn-success">Thêm</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
