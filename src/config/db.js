@@ -1,10 +1,16 @@
 import mysql from "mysql2";
+import dotenv from "dotenv";
+
+dotenv.config();
+
 const pool = mysql.createPool({
-  host: "g2u23.h.filess.io",
-  user: "webBanDoAn_teapoormen",
-  database: "webBanDoAn_teapoormen",
-  password: "e03711447cf37beadd274623ffb54f3863709bab",
-  port: "3306",
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  database: process.env.DB_DATABASE,
+  password: process.env.DB_PASSWORD,
+  port: process.env.DB_PORT,
 });
+
 const connection = pool.promise();
+
 export default connection;

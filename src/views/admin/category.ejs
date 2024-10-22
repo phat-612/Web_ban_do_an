@@ -6,14 +6,25 @@
 <div class="container">
   <!-- tìm kiếm này cũng coppy cho đồng bộ -->
   <div class="searchbox w-100 d-flex justify-content-end">
-    <form class="d-flex">
-      <input class="form-control me-2" type="search" placeholder="Nhập Tên Danh Mục" aria-label="Search">
+    <form class="d-flex" action="">
+      <input
+        class="form-control me-2"
+        type="search"
+        name="name"
+        placeholder="Nhập Tên Danh Mục"
+        aria-label="Search"
+      />
       <button class="btn btn-outline-success" type="submit">TÌM</button>
     </form>
   </div>
   <!-- ----- -->
   <div class="addBtnBox mt-3 w-100 d-flex justify-content-end">
-    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#ModalThemDanhMuc">
+    <button
+      type="button"
+      class="btn btn-primary"
+      data-bs-toggle="modal"
+      data-bs-target="#ModalThemDanhMuc"
+    >
       THÊM DANH MỤC
     </button>
   </div>
@@ -29,14 +40,27 @@
       <tbody>
         <% for (let i = 0; i < data.categorys.length; i++) { %>
         <tr>
-          <th><%= data.categorys[i].id %></th>
+          <th><%= i+1 %></th>
           <td><%= data.categorys[i].name %></td>
           <td>
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalSuaDanhMuc">
+            <button
+              type="button"
+              class="btn btn-success"
+              data-bs-toggle="modal"
+              data-bs-target="#ModalSuaDanhMuc"
+            >
               Sửa
             </button>
-            <form action="" method="post" class="d-inline-block">
-              <input type="hidden" value="<%= data.categorys[i].id %>">
+            <form
+              action="/api/deleteCategory"
+              method="post"
+              class="d-inline-block"
+            >
+              <input
+                type="hidden"
+                name="id"
+                value="<%= data.categorys[i].id %>"
+              />
               <button type="submit" class="btn btn-danger">Xóa</button>
             </form>
           </td>
@@ -47,23 +71,44 @@
   </div>
 </div>
 
-
-
 <!-- Modal THEM DANH MUC -->
-<div class="modal fade" id="ModalThemDanhMuc" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="ModalThemDanhMuc"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">THÊM DANH MỤC</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <form action="/api/addCategory" method="post">
         <div class="modal-body">
           <label for="tenDanhMuc">Tên Danh Mục</label>
-          <input name="nameCategory" type="text" class="form-control mt-3" id="tenDanhMuc" placeholder="Nhập Tên Danh Mục">
+          <input
+            name="nameCategory"
+            type="text"
+            class="form-control mt-3"
+            id="tenDanhMuc"
+            placeholder="Nhập Tên Danh Mục"
+          />
         </div>
         <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button
+            type="button"
+            class="btn btn-secondary"
+            data-bs-dismiss="modal"
+          >
+            Close
+          </button>
           <button type="submit" class="btn btn-success">Thêm</button>
         </div>
       </form>
@@ -72,19 +117,37 @@
 </div>
 
 <!-- Modal SUA DANH MUC -->
-<div class="modal fade" id="ModalSuaDanhMuc" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="ModalSuaDanhMuc"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">SỬA DANH MỤC</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
         <label for="tenDanhMuc">Tên Danh Mục</label>
-        <input type="text" class="form-control mt-3" id="tenDanhMuc" placeholder="Nhập Tên Danh Mục">
+        <input
+          type="text"
+          class="form-control mt-3"
+          id="tenDanhMuc"
+          placeholder="Nhập Tên Danh Mục"
+        />
       </div>
       <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Close
+        </button>
         <button type="button" class="btn btn-success">Thêm</button>
       </div>
     </div>

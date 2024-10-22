@@ -45,7 +45,14 @@ const getBannerPage = async (req, res) => {
 
 // CATEGORY ( DANH MỤC )
 const getCategoryPage = async (req, res) => {
-  let categoryList = await categoryModel.getAllCategory();
+  const { name } = req.query;
+  let categoryList;
+  if (name) {
+    categoryList = await categoryModel.getCategoryByName(name);
+  } else {
+    categoryList = await categoryModel.getAllCategory();
+  }
+
   res.render("main", {
     data: {
       title: "Category",
@@ -60,6 +67,11 @@ const addCategory = async (req, res) => {
   const { nameCategory } = req.body;
   console.log(req.body);
   await categoryModel.addCategory(nameCategory);
+  res.redirect("/admin/category");
+};
+const deleteCategory = async (req, res) => {
+  const { id } = req.body;
+  await categoryModel.deleteCategory(id);
   res.redirect("/admin/category");
 };
 
@@ -110,4 +122,5 @@ export default {
   // API
 
   addCategory,
+  deleteCategory,
 };
