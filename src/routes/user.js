@@ -1,18 +1,11 @@
 import express from "express";
+import userController from "../controllers/UserController";
 
 const router = express.Router();
 
-// Controller functions (you need to implement these)
-
 // Routes
-router.get("/", (req, res) => {
-  res.render("main", {
-    data: {
-      title: "Home",
-      header: "partials/headerUser",
-      page: "user/home",
-    },
-  });
-});
+
+router.get("/", userController.getUserHomePage);
+router.get("/menu", userController.getUserMenuPage);
 
 export default router;
