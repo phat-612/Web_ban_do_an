@@ -11,7 +11,7 @@ const getUserHomePage = async (req, res) => {
 };
 
 const getUserMenuPage = async (req, res) => {
-  categoryList = await categoryModel.getAllCategory();
+  const categoryList = await categoryModel.getAllCategory();
   res.render("main", {
     data: {
       title: "Menu",

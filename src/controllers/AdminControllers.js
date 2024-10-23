@@ -12,11 +12,14 @@ const getProductPage = async (req, res) => {
 };
 
 const getAddProductPage = async (req, res) => {
+  const categoryList = await categoryModel.getAllCategory();
+
   res.render("main", {
     data: {
       title: "Add Product",
       header: "partials/headerAdmin",
       page: "admin/addProduct",
+      categorys: categoryList,
     },
   });
 };

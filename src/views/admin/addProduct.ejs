@@ -4,5 +4,40 @@
 </div>
 <!-- ----- -->
 <div class="container">
-
+  <form action="" method="post">
+    <div class="row d-flex mt-3 justify-content-center">
+      <label class="form-label col-2">Tên sản phẩm</label>
+      <input type="text" class="col-7" name="inpName" />
+    </div>
+    <div class="row d-flex mt-3 justify-content-center">
+      <label class="form-label col-2">Giá sản phẩm</label>
+      <input type="number" class="col-7" name="inpPrice" />
+    </div>
+    <div class="row d-flex mt-3 justify-content-center">
+      <label class="form-label col-2">Danh mục</label>
+      <select name="inpCategory" class="col-7">
+        <% data.categorys.forEach(function(category) { %>
+        <option value="<%= category.id %>"><%= category.name %></option>
+        <% }); %>
+      </select>
+    </div>
+    <div class="row d-flex mt-3 justify-content-center">
+      <label class="form-label col-2">Mô tả sản phẩm</label>
+      <textarea name="" id="" class="col-7" style="resize: none;"></textarea>
+    </div>
+    <div class="row d-flex mt-3 justify-content-center">
+      <label class="form-label col-2">Danh sách món ăn kèm</label>
+      <select name="" id="" class="col-7">
+        <option value="">Danh mục 1</option>
+        <option value="">Danh mục 2</option>
+        <option value="">Danh mục 3</option>
+      </select>
+    </div>
+    <div class="row d-flex mt-3 justify-content-center">
+      <label class="form-label col-2">Hình ảnh</label>
+      <input type="file" id="inpImage" hidden />
+      <label for="inpImage" class="btn btn-primary col-7">Chọn hình ảnh</label>
+    </div>
+    <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
+  </form>
 </div>
