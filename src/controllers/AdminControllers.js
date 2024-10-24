@@ -1,12 +1,17 @@
 import categoryModel from "../services/CategoryModel";
+import shopModel from "../services/ShopModel";
+import productModel from "../services/ProductModel";
+import userModel from "../services/UserModel";
 
 // PRODUCT ( SAN PHAM )
 const getProductPage = async (req, res) => {
+  const productList = await productModel.getAllProduct();
   res.render("main", {
     data: {
       title: "Product",
       header: "partials/headerAdmin",
       page: "admin/product",
+      products: productList,
     },
   });
 };
@@ -22,6 +27,13 @@ const getAddProductPage = async (req, res) => {
       categorys: categoryList,
     },
   });
+};
+const addProduct = async (req, res) => {
+  const data = req.body;
+  const productImage = req.file.filename;
+  data.image = productImage;
+  await productModel.addProduct(data);
+  res.redirect("/admin");
 };
 
 // ORDER ( DON HANG)
@@ -80,11 +92,13 @@ const deleteCategory = async (req, res) => {
 
 // ACCOUNT ( TAI KHOAN )
 const getAccountPage = async (req, res) => {
+  const row = await userModel.getAllUser();
   res.render("main", {
     data: {
       title: "Account",
       header: "partials/headerAdmin",
       page: "admin/account",
+      users: row,
     },
   });
 };
@@ -102,13 +116,21 @@ const getFeedbackPage = async (req, res) => {
 
 // STORE-INFORMATION ( THONG TIN CUA HANG)
 const getShopInforPage = async (req, res) => {
+  const row = await shopModel.getInfoShop();
   res.render("main", {
     data: {
       title: "Product",
       header: "partials/headerAdmin",
       page: "admin/shopInfor",
+      shopInfo: row[0],
     },
   });
+};
+
+const updateInfoShop = async (req, res) => {
+  const data = req.body;
+  await shopModel.updateInfoShop(data);
+  res.redirect("/admin/shopInfor");
 };
 
 export default {
@@ -126,4 +148,6 @@ export default {
 
   addCategory,
   deleteCategory,
+  addProduct,
+  updateInfoShop,
 };

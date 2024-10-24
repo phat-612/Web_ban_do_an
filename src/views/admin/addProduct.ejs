@@ -4,18 +4,18 @@
 </div>
 <!-- ----- -->
 <div class="container">
-  <form action="" method="post">
+  <form action="/api/addProduct" method="post" enctype="multipart/form-data">
     <div class="row d-flex mt-3 justify-content-center">
       <label class="form-label col-2">Tên sản phẩm</label>
-      <input type="text" class="col-7" name="inpName" />
+      <input type="text" class="col-7" name="name" />
     </div>
     <div class="row d-flex mt-3 justify-content-center">
       <label class="form-label col-2">Giá sản phẩm</label>
-      <input type="number" class="col-7" name="inpPrice" />
+      <input type="number" class="col-7" name="currentPrice" />
     </div>
     <div class="row d-flex mt-3 justify-content-center">
       <label class="form-label col-2">Danh mục</label>
-      <select name="inpCategory" class="col-7">
+      <select name="idCategory" name="idCategory" class="col-7">
         <% data.categorys.forEach(function(category) { %>
         <option value="<%= category.id %>"><%= category.name %></option>
         <% }); %>
@@ -23,7 +23,12 @@
     </div>
     <div class="row d-flex mt-3 justify-content-center">
       <label class="form-label col-2">Mô tả sản phẩm</label>
-      <textarea name="" id="" class="col-7" style="resize: none;"></textarea>
+      <textarea
+        name="description"
+        id=""
+        class="col-7"
+        style="resize: none;"
+      ></textarea>
     </div>
     <div class="row d-flex mt-3 justify-content-center">
       <label class="form-label col-2">Danh sách món ăn kèm</label>
@@ -35,7 +40,7 @@
     </div>
     <div class="row d-flex mt-3 justify-content-center">
       <label class="form-label col-2">Hình ảnh</label>
-      <input type="file" id="inpImage" hidden />
+      <input type="file" id="inpImage" name="productImage" hidden />
       <label for="inpImage" class="btn btn-primary col-7">Chọn hình ảnh</label>
     </div>
     <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>

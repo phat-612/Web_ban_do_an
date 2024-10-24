@@ -1,0 +1,94 @@
+<div class="container-fluid">
+  <div class="row">
+    <nav
+      class="col-md-3 col-lg-2 d-md-block text-white min-vh-20 p-4 rounded"
+      style="background-color: #007f00;"
+    >
+      <h6 class="text-center">THÔNG TIN TÀI KHOẢN</h6>
+      <ul class="nav flex-column text-center p-3">
+        <li class="nav-item">
+          <a class="nav-link text-white active" href="#"
+            ><i class="bi bi-person-circle"></i> Quản lý tài khoản</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#"
+            ><i class="bi bi-gear"></i> Quản lý địa chỉ</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#"
+            ><i class="bi bi-chat-dots"></i> Lịch sử đặt hàng</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#"
+            ><i class="bi bi-bell"></i> Đặt lại mật khẩu</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#"
+            ><i class="bi bi-box-arrow-right"></i> Xóa tài khoản</a
+          >
+        </li>
+      </ul>
+    </nav>
+
+    <div class="col-md-9 ms-sm-auto mt-4">
+      <h1>BẠN CÓ CHẮC MUỐN XÓA TÀI KHOẢN KHÔNG?</h1>
+      <strong class="mt-4">
+        Xóa tài khoản của bạn cũng sẽ xóa vĩnh viễn các thông tin bên dưới:
+      </strong>
+      <ul class="list-unstyled">
+        <li class="position-relative mb-2">• Đơn hàng trước đây của tôi</li>
+        <li class="position-relative mb-2">• Đơn hàng trong giỏ hàng</li>
+        <li class="position-relative mb-2">• Địa chỉ giao hàng đã lưu</li>
+      </ul>
+      <div>
+        <button
+          type="button"
+          class="btn btn-danger"
+          data-bs-toggle="modal"
+          data-bs-target="#confirmDeleteModal"
+        >
+          Xóa
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal -->
+<div
+  class="modal fade"
+  id="confirmDeleteModal"
+  tabindex="-1"
+  aria-labelledby="confirmDeleteModalLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="confirmDeleteModalLabel">
+          Xác nhận xóa tài khoản
+        </h5>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
+      </div>
+      <div class="modal-body">
+        Bạn có chắc chắn muốn xóa tài khoản này không? Hành động này không thể
+        hoàn tác.
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+          Hủy
+        </button>
+        <button type="button" class="btn btn-danger">Xóa</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -4,7 +4,7 @@ import path from "path";
 // Đặt vị trí lưu trữ và đặt tên tệp
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, "../public/imgs/products"); // Thư mục lưu trữ ảnh
+    cb(null, "src/public/imgs/products"); // Thư mục lưu trữ ảnh
   },
   filename: (req, file, cb) => {
     cb(null, Date.now() + path.extname(file.originalname)); // Tên tệp sẽ là thời gian hiện tại cộng với đuôi tệp gốc

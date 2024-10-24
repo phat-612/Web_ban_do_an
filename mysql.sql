@@ -81,6 +81,14 @@ create table feedbacks (
     content text,
     created_at timestamp default current_timestamp
 )
+create table shopInfo(
+    name varchar(255) not null,
+    phone varchar(12) not null,
+    taxCode varchar(50) not null,
+    email varchar(255) not null,
+    address varchar(255) not null,
+    activeTime varchar(255) not null,
+)
 
 alter table addresses
     add constraint fk_addresses_users foreign key (idUser) references users(id);

@@ -1,0 +1,84 @@
+<div class="container-fluid">
+  <div class="row">
+    <nav class="col-md-3 col-lg-2 d-md-block text-white min-vh-20 p-4  rounded" style="background-color: #007f00">
+      <h6 class="text-center">THÔNG TIN TÀI KHOẢN</h6>
+      <ul class="nav flex-column text-center p-3">
+        <li class="nav-item"><a class="nav-link text-white active" href="#"><i class="bi bi-person-circle"></i> Quản lý tài khoản</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="#"><i class="bi bi-gear"></i> Quản lý địa chỉ</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="#"><i class="bi bi-chat-dots"></i> Lịch sử đặt hàng</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="#"><i class="bi bi-bell"></i> Đặt lại mật khẩu</a></li>
+        <li class="nav-item"><a class="nav-link text-white" href="#"><i class="bi bi-box-arrow-right"></i> Xóa tài khoản</a></li>
+      </ul>
+    </nav>
+
+    <div class="ms-sm-auto col-lg-9 px-md-4">
+      <form>
+        <div class="mb-2">
+          <label for="hovaten" class="form-label">Họ của bạn *</label>
+          <input type="text" class="form-control" id="hovaten" required />
+        </div>
+        <div class="mb-2">
+          <label for="tencuaban" class="form-label">Tên của bạn *</label>
+          <input type="text" class="form-control" id="tencuaban" required />
+        </div>
+        <div class="mb-2">
+          <label for="sodienthoai" class="form-label">Số điện thoại *</label>
+          <input type="text" class="form-control" id="sodienthoai" required />
+        </div>
+        <div class="mb-2">
+          <label for="email" class="form-label">Địa chỉ email của bạn *</label>
+          <input type="email" class="form-control" id="email" required />
+        </div>
+        <div class="mb-2">
+          <label for="inputState" class="form-label">Giới tính *</label>
+          <select id="inputState" class="form-select" required>
+            <option selected>Chọn...</option>
+            <option>Nam</option>
+            <option>Nữ</option>
+          </select>
+        </div>
+        <div class="mb-2">
+          <label for="birthdate" class="col-form-label">Ngày sinh của bạn</label>
+          <div class="row">
+            <div class="col-3">
+              <span>Ngày</span>
+              <select class="form-select" aria-label="Ngày" id="day"></select>
+            </div>
+            <div class="col-5">
+              <span>Tháng</span>
+              <select class="form-select" aria-label="Tháng" id="month"></select>
+            </div>
+            <div class="col-4">
+              <span>Năm</span>
+              <select class="form-select" aria-label="Năm" id="year"></select>
+            </div>
+          </div>
+        </div>
+        <div>
+          <button type="submit" class="btn btn-primary w-100">Cập nhật tài khoản</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Tạo các lựa chọn cho ngày
+  const daySelect = document.getElementById("day");
+  for (let i = 1; i <= 31; i++) {
+    daySelect.appendChild(new Option(i < 10 ? "0" + i : i, i));
+  }
+
+  // Tạo các lựa chọn cho tháng
+  const monthSelect = document.getElementById("month");
+  for (let i = 1; i <= 12; i++) {
+    monthSelect.appendChild(new Option("Tháng " + (i < 10 ? "0" + i : i), i));
+  }
+
+  // Tạo các lựa chọn cho năm
+  const yearSelect = document.getElementById("year");
+  const currentYear = new Date().getFullYear();
+  for (let i = currentYear; i >= 1900; i--) {
+    yearSelect.appendChild(new Option(i, i));
+  }
+</script>

@@ -7,5 +7,11 @@ const router = express.Router();
 
 router.get("/", userController.getUserHomePage);
 router.get("/menu", userController.getUserMenuPage);
+// profile
+router.get("/profile", userController.getProfile);
+router.get("/profileAddress", userController.getProfileAddress);
+router.get("/historyProduct", userController.historyProduct);
+router.get("/rePassword", userController.rePassword);
+router.get("/deleteAccount", userController.deleteAccount);
 
 export default router;

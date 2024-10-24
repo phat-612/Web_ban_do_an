@@ -18,30 +18,38 @@
         <tr>
           <th scope="col">STT</th>
           <th scope="col">Tên Khách Hàng</th>
+          <th scope="col">Email</th>
           <th scope="col">Số Điện Thoại</th>
           <th scope="col">Quyền</th>
           <th scope="col">Trạng Thái</th>
         </tr>
       </thead>
       <tbody>
-        <tr>
-          <th>1</th>
-          <td>Dương Minh Luân</td>
-          <td>0335226656</td>
-          <td class="col-2">
-            <select class="form-select">
-              <option value="">Người Dùng</option>
-              <option value="">Admin</option>
-            </select>
-          </td>
-          <td class="col-2">
-            <select class="form-select">
-              <option value="">Đang Hoạt Động</option>
-              <option value="">Không Hoạt Động</option>
-            </select>
-          </td>
-        </tr>
+        <% data.users.forEach(function(user,index) { %>
+          <tr>
+            <th><%= index +1 %></th>
+            <td><%= user.name %></td>
+            <td><%= user.email %></td>
+            <td><%= user.phone %></td>
+            <td class="col-2">
+              <select class="form-select">
+                <option value="0" <%= user.role == 0 ? "selected" : "" %>>Admin</option>
+                <option value="1" <%= user.role == 1 ? "selected" : "" %>>Người Dùng</option>
+              </select>
+            </td>
+            <td class="col-2">
+              <select class="form-select">
+                <option value="1" <%= user.status == 1 ? "selected" : "" %>>Đang Hoạt Động</option>
+                <option value="2" <%= user.status == 2 ? "selected" : "" %>>Tạm Ngưng</option>
+                <option value="3" <%= user.status == 3 ? "selected" : "" %>>Vô Hiệu Hóa</option>
+              </select>
+            </td>
+          </tr>
+        <% }) %>
       </tbody>
     </table>
   </div>
 </div>
+
+<!-- đang hoạt động, tạm ngưng, vô hiệu hóa -->
+<!-- 0 là admin, 1 là người dùng -->
