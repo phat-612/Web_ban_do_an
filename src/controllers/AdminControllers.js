@@ -28,6 +28,20 @@ const getAddProductPage = async (req, res) => {
     },
   });
 };
+const getEditProductPage = async (req, res) => {
+  const { id } = req.params;
+  const product = await productModel.getProductById(id);
+  const categoryList = await categoryModel.getAllCategory();
+  res.render("main", {
+    data: {
+      title: "Edit Product",
+      header: "partials/headerAdmin",
+      page: "admin/editProduct",
+      product: product[0],
+      categorys: categoryList,
+    },
+  });
+};
 const addProduct = async (req, res) => {
   const data = req.body;
   const productImage = req.file.filename;
@@ -35,7 +49,23 @@ const addProduct = async (req, res) => {
   await productModel.addProduct(data);
   res.redirect("/admin");
 };
+const editProduct = async (req, res) => {
+  // nếu có ảnh mới thì xóa ảnh cũ đi
 
+  const data = req.body;
+  const productImage = req.file ? req.file.filename : null;
+  console.log(productImage);
+  if (productImage) {
+    data.image = productImage;
+    console.log(12345678987654323456789);
+    fs.unlinkSync(`src/public/imgs/products/${oldImage}`);
+  } else {
+    data.image = data.oldImage;
+  }
+  console.log(data);
+  await productModel.editProduct(data);
+  res.redirect("/admin");
+};
 // ORDER ( DON HANG)
 const getOrderPage = async (req, res) => {
   res.render("main", {
@@ -137,6 +167,7 @@ export default {
   // GET PAGE
   getProductPage,
   getAddProductPage,
+  getEditProductPage,
   getOrderPage,
   getBannerPage,
   getCategoryPage,
@@ -149,5 +180,6 @@ export default {
   addCategory,
   deleteCategory,
   addProduct,
+  editProduct,
   updateInfoShop,
 };

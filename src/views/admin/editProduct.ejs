@@ -1,0 +1,42 @@
+<!-- lấy coppy form tiêu đề này qua mấy trang khác cho đồng bộ -->
+<div class="d-flex justify-content-center mt-3">
+  <h3>CHỈNH SỬA SẢN PHẨM</h3>
+</div>
+<!-- ----- -->
+<div class="container">
+  <form action="/api/editProduct" method="post" enctype="multipart/form-data">
+    <div class="row d-flex mt-3 justify-content-center">
+      <label class="form-label col-2">Tên sản phẩm</label>
+      <input type="text" class="col-7" name="name" value="<%= data.product.name %>" />
+    </div>
+    <div class="row d-flex mt-3 justify-content-center">
+      <label class="form-label col-2">Giá sản phẩm</label>
+      <input type="number" class="col-7" name="currentPrice" value="<%= data.product.currentPrice %>" />
+    </div>
+    <div class="row d-flex mt-3 justify-content-center">
+      <label class="form-label col-2">Danh mục</label>
+      <select name="idCategory" class="col-7">
+        <% data.categorys.forEach(function(category) { %>
+        <option value="<%= category.id %>" <%= category.id === data.product.idCategory ? 'selected' : '' %>><%= category.name %></option>
+        <% }); %>
+      </select>
+    </div>
+    <div class="row d-flex mt-3 justify-content-center">
+      <label class="form-label col-2">Mô tả sản phẩm</label>
+      <textarea
+        name="description"
+        class="col-7"
+        style="resize: none;"
+      ><%= data.product.description %></textarea>
+    </div>
+    
+    <div class="row d-flex mt-3 justify-content-center">
+      <label class="form-label col-2">Hình ảnh</label>
+      <input type="file" id="inpImage" name="productImage" hidden />
+      <input type="text" hidden name="oldImage" value="<%= data.product.image %>">
+      <label for="inpImage" class="btn btn-primary col-7">Chọn hình ảnh</label>
+    </div>
+    <input type="text" name="id" hidden value="<%= data.product.id %>">
+    <button type="submit" class="btn btn-primary">Cập nhật sản phẩm</button>
+  </form>
+</div>
