@@ -1,5 +1,5 @@
 import categoryModel from "../services/CategoryModel";
-
+import UserModel from "../services/UserModel";
 const getUserHomePage = async (req, res) => {
   res.render("main", {
     data: {
@@ -74,6 +74,12 @@ const deleteAccount = async (req, res) => {
     },
   });
 };
+// api login
+const login = async (req, res) => {
+  const userData = req.body;
+  await UserModel.login(userData);
+  res.send("ĐĂNG NHẬP THÀNH CÔNG");
+};
 export default {
   getUserHomePage,
   getUserMenuPage,
@@ -82,4 +88,6 @@ export default {
   historyProduct,
   rePassword,
   deleteAccount,
+  // api
+  login,
 };
