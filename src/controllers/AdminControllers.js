@@ -18,13 +18,15 @@ const getProductPage = async (req, res) => {
 
 const getAddProductPage = async (req, res) => {
   const categoryList = await categoryModel.getAllCategory();
-
+  const products = await productModel.getAllProduct();
   res.render("main", {
     data: {
       title: "Add Product",
       header: "partials/headerAdmin",
       page: "admin/addProduct",
       categorys: categoryList,
+      products: products,
+      script: "admin/addProduct",
     },
   });
 };
@@ -32,6 +34,15 @@ const getEditProductPage = async (req, res) => {
   const { id } = req.params;
   const product = await productModel.getProductById(id);
   const categoryList = await categoryModel.getAllCategory();
+  const products = await productModel.getAllProduct();
+  const itemAddMore = await productModel.getItemAddMore(id);
+  products.map((item) => {
+    itemAddMore.map((itemAddMore) => {
+      if (item.id === itemAddMore.idProductAdd) {
+        item.selected = true;
+      }
+    });
+  });
   res.render("main", {
     data: {
       title: "Edit Product",
@@ -39,6 +50,8 @@ const getEditProductPage = async (req, res) => {
       page: "admin/editProduct",
       product: product[0],
       categorys: categoryList,
+      products: products,
+      script: "admin/editProduct",
     },
   });
 };
@@ -54,16 +67,25 @@ const editProduct = async (req, res) => {
 
   const data = req.body;
   const productImage = req.file ? req.file.filename : null;
-  console.log(productImage);
   if (productImage) {
     data.image = productImage;
-    console.log(12345678987654323456789);
     fs.unlinkSync(`src/public/imgs/products/${oldImage}`);
   } else {
     data.image = data.oldImage;
   }
-  console.log(data);
   await productModel.editProduct(data);
+  res.redirect("/admin");
+};
+const deleteProduct = async (req, res) => {
+  const { id, image } = req.body;
+  const isDelete = await productModel.isProductDelete(id);
+  if (isDelete) {
+    // xóa ảnh sản phẩm
+    fs.unlinkSync(`src/public/imgs/products/${image}`);
+    await productModel.deleteProduct(id);
+    return res.redirect("/admin");
+  }
+  //  thông báo lỗi
   res.redirect("/admin");
 };
 // ORDER ( DON HANG)
@@ -110,7 +132,6 @@ const getCategoryPage = async (req, res) => {
 
 const addCategory = async (req, res) => {
   const { nameCategory } = req.body;
-  console.log(req.body);
   await categoryModel.addCategory(nameCategory);
   res.redirect("/admin/category");
 };
@@ -181,5 +202,6 @@ export default {
   deleteCategory,
   addProduct,
   editProduct,
+  deleteProduct,
   updateInfoShop,
 };

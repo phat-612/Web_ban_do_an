@@ -15,21 +15,30 @@
     </div>
     <div class="row d-flex mt-3 justify-content-center">
       <label class="form-label col-2">Danh mục</label>
-      <select name="idCategory" class="col-7">
+      <select  name="idCategory" class="col-7">
         <% data.categorys.forEach(function(category) { %>
         <option value="<%= category.id %>" <%= category.id === data.product.idCategory ? 'selected' : '' %>><%= category.name %></option>
         <% }); %>
       </select>
     </div>
     <div class="row d-flex mt-3 justify-content-center">
-      <label class="form-label col-2">Mô tả sản phẩm</label>
+      <label class="form-label col-2"> Mô tả sản phẩm</label>
       <textarea
         name="description"
         class="col-7"
         style="resize: none;"
       ><%= data.product.description %></textarea>
     </div>
-    
+    <div class="row d-flex mt-3 justify-content-center">
+      <label class="form-label col-2"> Multi-select </label>
+      <div class="col-7">
+        <select id="multiple-select" name="addMore" multiple>
+          <% data.products.forEach(function(product) { %>
+          <option value="<%= product.id %>" <%= product.selected === true ?  'selected' : '' %>><%= product.name %></option>
+          <% }); %>
+        </select>
+      </div>
+    </div>
     <div class="row d-flex mt-3 justify-content-center">
       <label class="form-label col-2">Hình ảnh</label>
       <input type="file" id="inpImage" name="productImage" hidden />

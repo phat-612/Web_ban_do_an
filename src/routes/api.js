@@ -22,5 +22,6 @@ router.post(
   upload.single("productImage"),
   adminController.editProduct
 );
+router.post("/deleteProduct", adminController.deleteProduct);
 router.post("/updateShopInfo", adminController.updateInfoShop);
 export default router;
