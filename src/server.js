@@ -2,7 +2,10 @@ import express from "express";
 import path from "path";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
-// import session from "express-session";
+import RedisStore from "connect-redis";
+// import { createClient } from "redis";
+import redisClient from "./config/redis";
+import session from "express-session";
 import viewEngine from "./config/viewEngine";
 import initWebRouter from "./routes/index";
 
@@ -14,14 +17,26 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-// app.use(
-//   session({
-//     secret: process.env.SESSION_SECRET,
-//     resave: true,
-//     saveUninitialized: true,
-//   })
-// );
-// cấu hình viewEngine
+
+app.use(
+  session({
+    store: new RedisStore({ client: redisClient }),
+    secret: "keyboard cat",
+    resave: false,
+    saveUninitialized: false,
+    cookie: { secure: false },
+  })
+);
+app.get("/check-session", (req, res) => {
+  if (req.session.user && req.session.user.isLoggedIn) {
+    res.send(`Session tồn tại. Xin chào, ${req.session.user.name}`);
+  } else {
+    res
+      .status(401)
+      .send("Session không tồn tại hoặc người dùng chưa đăng nhập");
+  }
+});
+
 viewEngine(app);
 initWebRouter(app);
 app.listen(port, () => {

@@ -1,41 +1,29 @@
 <div class="container-fluid">
   <div class="row">
-    <nav
-      class="col-md-3 col-lg-2 d-md-block text-white min-vh-20 p-4 rounded"
-      style="background-color: #007f00;"
-    >
+    <nav class="col-md-3 col-lg-2 d-md-block text-white min-vh-20 p-4 rounded" style="background-color: #007f00;">
       <h6 class="text-center">THÔNG TIN TÀI KHOẢN</h6>
       <ul class="nav flex-column text-center p-3">
         <li class="nav-item">
-          <a class="nav-link text-white active" href="#"
-            ><i class="bi bi-person-circle"></i> Quản lý tài khoản</a
-          >
+          <a class="nav-link text-white active" href="#"><i class="bi bi-person-circle"></i> Quản lý tài khoản</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="#"
-            ><i class="bi bi-gear"></i> Quản lý địa chỉ</a
-          >
+          <a class="nav-link text-white" href="#"><i class="bi bi-gear"></i> Quản lý địa chỉ</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="#"
-            ><i class="bi bi-chat-dots"></i> Lịch sử đặt hàng</a
-          >
+          <a class="nav-link text-white" href="#"><i class="bi bi-chat-dots"></i> Lịch sử đặt hàng</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="#"
-            ><i class="bi bi-bell"></i> Đặt lại mật khẩu</a
-          >
+          <a class="nav-link text-white" href="#"><i class="bi bi-bell"></i> Đặt lại mật khẩu</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="#"
-            ><i class="bi bi-box-arrow-right"></i> Xóa tài khoản</a
-          >
+          <a class="nav-link text-white" href="#"><i class="bi bi-box-arrow-right"></i> Xóa tài khoản</a>
         </li>
       </ul>
     </nav>
 
     <div class="ms-sm-auto col-lg-9 px-md-4 ">
       <h1 class="text-center">CÁC ĐƠN HÀNG ĐÃ ĐẶT</h1>
+      <% data.data.forEach(function(item,ind) { %>
       <div class="row mt-4 p-4">
         <div class="col-md-4 mb-3 ">
           <p>Tên món hiển thị ở đây</p>
@@ -43,13 +31,14 @@
         </div>
         <div class="col-md-4 mb-3">
           <label for="ordered-items" class="form-label ">Các món đã đặt</label>
-          <p class="mt-4">Danh sách các món đã đặt hiển thị ở đây</p>
+          <p class="mt-4">item.name</p>
         </div>
         <div class="col-md-4 mb-3">
           <label for="total-amount" class="form-label">Tổng tiền</label>
-          <p class="mt-4">Tổng tiền đơn hàng hiển thị ở đây</p>
+          <p class="mt-4">item.tongtien</p>
         </div>
       </div>
+      <% }) %>
     </div>
   </div>
 </div>
