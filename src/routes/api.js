@@ -1,6 +1,6 @@
 import express from "express";
 import adminController from "../controllers/AdminControllers";
-import UserController from "../controllers/UserController";
+import userController from "../controllers/UserController";
 import upload from "../config/multer";
 
 const router = express.Router();
@@ -12,8 +12,11 @@ router.post(
   upload.single("productImage"),
   adminController.addProduct
 );
+// USER API
+// feedback
+router.post("/sendFeedback", userController.sendFeedback);
 // login
-router.post("/login", UserController.login);
+router.post("/login", userController.login);
 router.post(
   "/editProduct",
   upload.single("productImage"),

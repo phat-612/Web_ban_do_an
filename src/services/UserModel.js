@@ -12,6 +12,14 @@ const login = async (userData) => {
   );
   return row;
 };
+const sendFeedback = async (data) => {
+  const [row, field] = await pool.execute(
+    "INSERT INTO `feedbacks` (`name`, `email`, `title`, `content`) VALUES (?,?,?,?)",
+    [data.name, data.email, data.title, data.content]
+  );
+  return row;
+};
+
 // fsdfsfsfs
 
-export default { getAllUser, login };
+export default { getAllUser, login, sendFeedback };

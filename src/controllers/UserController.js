@@ -1,11 +1,12 @@
 import categoryModel from "../services/CategoryModel";
-import UserModel from "../services/UserModel";
+import userModel from "../services/UserModel";
+import productModel from "../services/ProductModel";
 const getUserHomePage = async (req, res) => {
   res.render("main", {
     data: {
       title: "Home",
       header: "partials/headerUser",
-      footer: "partials/footerUser",
+      footer: "partials/footerUser",productModel
       page: "user/home",
     },
   });
@@ -13,6 +14,7 @@ const getUserHomePage = async (req, res) => {
 
 const getUserMenuPage = async (req, res) => {
   const categoryList = await categoryModel.getAllCategory();
+  const productList = await productModel.getAllProduct();
   res.render("main", {
     data: {
       title: "Menu",
@@ -20,6 +22,7 @@ const getUserMenuPage = async (req, res) => {
       footer: "partials/footerUser",
       page: "user/menu",
       categorys: categoryList,
+      products: productList,
     },
   });
 };
@@ -30,9 +33,14 @@ const getUserFeedback = async (req, res) => {
       title: "Feedback",
       header: "partials/headerUser",
       footer: "partials/footerUser",
-      page: "user/feedback",
+      page: "user/sendFeedback",
     },
   });
+};
+const sendFeedback = async (req, res) => {
+  const data = req.body;
+  await userModel.sendFeedback(data);
+  res.redirect("/");
 };
 // start profile
 const getProfile = async (req, res) => {
@@ -111,7 +119,7 @@ const deleteAccount = async (req, res) => {
 // api login
 const login = async (req, res) => {
   const userData = req.body;
-  const user = await UserModel.login(userData);
+  const user = await userModel.login(userData);
 
   if (user) {
     req.session.user = {
@@ -139,4 +147,5 @@ export default {
 
   // api
   login,
+  sendFeedback,
 };

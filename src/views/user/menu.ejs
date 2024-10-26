@@ -2,13 +2,10 @@
   <div class="col-8 row">
     <!-- danh muc -->
 
-    <ul
-      class="row col-12 d-flex justify-content-center align-items-center"
-      style="background-color: green; border-radius: 15px; list-style-type: none;"
-    >
+    <ul class="row col-12 d-flex justify-content-center align-items-center" style="background-color: green; border-radius: 15px; list-style-type: none;">
       <!-- 1 the danh muc  -->
       <% for (var i = 0; i < data.categorys.length; i++) { %>
-      <li class="my-3 col-3 row d-flex justify-content-center">
+      <li class="my-3 col row d-flex justify-content-center">
         <a href="" class="btn btn-light col-10">
           <%= data.categorys[i].name %>
         </a>
@@ -24,25 +21,21 @@
   <div class="container d-flex justify-content-center">
     <div class="row">
       <!-- 1 the san pham -->
+       <% data.products.forEach(function (product){ %>
       <div class="col-3 my-5">
         <div class="card" style="width: 18rem;">
-          <img
-            src="https://cityfood.com.vn/wp-content/uploads/2024/07/do-an-healthy-L10.png"
-            class="card-img-top"
-            alt="Ảnh + tên món ăn"
-          />
+          <img src="imgs/<%= product.image %>" class="card-img-top" alt="Ảnh + tên món ăn" />
           <div class="card-body">
-            <h5 class="card-title d-flex justify-content-center">Tên Món Ăn</h5>
+            <h5 class="card-title d-flex justify-content-center"><%= product.name %></h5>
             <h5 class="card-title d-flex justify-content-center">
-              125.000 VND
+              <%= product.currentPrice %>
             </h5>
-            <a href="#" class="btn btn-success d-flex justify-content-center"
-              >Đặt Hàng Ngay</a
-            >
+            <a href="#" class="btn btn-success d-flex justify-content-center">Đặt Hàng Ngay</a>
           </div>
         </div>
       </div>
+      <%})%>
       <!-- -------------- -->
-    </div>
   </div>
+</div>
 </main>

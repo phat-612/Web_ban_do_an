@@ -22,7 +22,7 @@ router.get("/account", adminController.getAccountPage);
 // FEEDBACK ( PHAN HOI )
 router.get("/feedback", adminController.getFeedbackPage);
 
-// STORE-INFORMATION ( THONG TIN CUA HANG)
+// SHOP-INFORMATION ( THONG TIN CUA HANG)
 router.get("/shopInfor", adminController.getShopInforPage);
 
 export default router;
