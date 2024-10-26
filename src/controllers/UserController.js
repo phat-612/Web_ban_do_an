@@ -6,7 +6,7 @@ const getUserHomePage = async (req, res) => {
     data: {
       title: "Home",
       header: "partials/headerUser",
-      footer: "partials/footerUser",productModel
+      footer: "partials/footerUser",
       page: "user/home",
     },
   });
