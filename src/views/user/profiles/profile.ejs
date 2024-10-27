@@ -1,21 +1,52 @@
 <div class="container-fluid">
   <div class="row">
-    <nav class="col-md-3 col-lg-2 d-md-block text-white min-vh-20 p-4  rounded" style="background-color: #007f00">
+    <nav
+      class="col-md-3 col-lg-2 d-md-block text-white min-vh-20 p-4 rounded"
+      style="background-color: #007f00"
+    >
       <h6 class="text-center">THÔNG TIN TÀI KHOẢN</h6>
       <ul class="nav flex-column text-center p-3">
-        <li class="nav-item"><a class="nav-link text-white active" href="#"><i class="bi bi-person-circle"></i> Quản lý tài khoản</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#"><i class="bi bi-gear"></i> Quản lý địa chỉ</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#"><i class="bi bi-chat-dots"></i> Lịch sử đặt hàng</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#"><i class="bi bi-bell"></i> Đặt lại mật khẩu</a></li>
-        <li class="nav-item"><a class="nav-link text-white" href="#"><i class="bi bi-box-arrow-right"></i> Xóa tài khoản</a></li>
+        <li class="nav-item">
+          <a class="nav-link text-white active" href="#"
+            ><i class="bi bi-person-circle"></i> Quản lý tài khoản</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#"
+            ><i class="bi bi-gear"></i> Quản lý địa chỉ</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#"
+            ><i class="bi bi-chat-dots"></i> Lịch sử đặt hàng</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#"
+            ><i class="bi bi-bell"></i> Đặt lại mật khẩu</a
+          >
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="#"
+            ><i class="bi bi-box-arrow-right"></i> Xóa tài khoản</a
+          >
+        </li>
       </ul>
     </nav>
 
     <div class="ms-sm-auto col-lg-9 px-md-4">
+      <% data.user.forEach(function(item,ind) { %>
       <form>
         <div class="mb-2">
           <label for="hovaten" class="form-label">Họ của bạn *</label>
-          <input type="text" class="form-control" id="hovaten" required />
+          <input
+            type="text"
+            class="form-control"
+            id="hovaten"
+            name="name"
+            value="<%= item.name %>"
+            required
+          />
         </div>
         <div class="mb-2">
           <label for="tencuaban" class="form-label">Tên của bạn *</label>
@@ -23,11 +54,23 @@
         </div>
         <div class="mb-2">
           <label for="sodienthoai" class="form-label">Số điện thoại *</label>
-          <input type="text" class="form-control" id="sodienthoai" required />
+          <input
+            type="text"
+            class="form-control"
+            value="<%= item.phone %>"
+            id="sodienthoai"
+            required
+          />
         </div>
         <div class="mb-2">
           <label for="email" class="form-label">Địa chỉ email của bạn *</label>
-          <input type="email" class="form-control" id="email" required />
+          <input
+            type="email"
+            class="form-control"
+            value="<%= item.email %>"
+            id="email"
+            required
+          />
         </div>
         <div class="mb-2">
           <label for="inputState" class="form-label">Giới tính *</label>
@@ -38,7 +81,9 @@
           </select>
         </div>
         <div class="mb-2">
-          <label for="birthdate" class="col-form-label">Ngày sinh của bạn</label>
+          <label for="birthdate" class="col-form-label"
+            >Ngày sinh của bạn</label
+          >
           <div class="row">
             <div class="col-3">
               <span>Ngày</span>
@@ -46,7 +91,11 @@
             </div>
             <div class="col-5">
               <span>Tháng</span>
-              <select class="form-select" aria-label="Tháng" id="month"></select>
+              <select
+                class="form-select"
+                aria-label="Tháng"
+                id="month"
+              ></select>
             </div>
             <div class="col-4">
               <span>Năm</span>
@@ -55,9 +104,12 @@
           </div>
         </div>
         <div>
-          <button type="submit" class="btn btn-primary w-100">Cập nhật tài khoản</button>
+          <button type="submit" class="btn btn-primary w-100">
+            Cập nhật tài khoản
+          </button>
         </div>
       </form>
+      <% }) %>
     </div>
   </div>
 </div>

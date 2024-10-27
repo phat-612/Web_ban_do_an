@@ -17,6 +17,9 @@ router.post(
 router.post("/sendFeedback", userController.sendFeedback);
 // login
 router.post("/login", userController.login);
+// register
+router.post("/register", userController.apiRegister);
+
 router.post(
   "/editProduct",
   upload.single("productImage"),

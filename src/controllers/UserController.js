@@ -44,12 +44,15 @@ const sendFeedback = async (req, res) => {
 };
 // start profile
 const getProfile = async (req, res) => {
+  const user = await userModel.userProfile();
+  console.log(user);
   res.render("main", {
     data: {
       title: "Profile",
       header: "partials/headerUser",
       footer: "partials/footerUser",
       page: "user/profiles/profile",
+      user,
     },
   });
 };
@@ -64,35 +67,12 @@ const getProfileAddress = async (req, res) => {
   });
 };
 const historyProduct = async (req, res) => {
-  const data = [
-    {
-      name: "1",
-      mon: "2",
-      tongtien: 2345678,
-    },
-    {
-      name: "1",
-      mon: "2",
-      tongtien: 2345678,
-    },
-    {
-      name: "1",
-      mon: "2",
-      tongtien: 2345678,
-    },
-    {
-      name: "1",
-      mon: "2",
-      tongtien: 2345678,
-    },
-  ];
   res.render("main", {
     data: {
       title: "Profile",
       header: "partials/headerUser",
       footer: "partials/footerUser",
       page: "user/profiles/historyProduct",
-      data,
     },
   });
 };
@@ -118,9 +98,9 @@ const deleteAccount = async (req, res) => {
 };
 // api login
 const login = async (req, res) => {
-  const userData = req.body;
-  const user = await userModel.login(userData);
+  const { email, password } = req.body;
 
+  const user = await userModel.login({ email, password });
   if (user) {
     req.session.user = {
       id: user.id,
@@ -128,13 +108,27 @@ const login = async (req, res) => {
       email: user.email,
       isLoggedIn: true,
     };
-
-    res.send("ĐĂNG NHẬP THÀNH CÔNG");
+    res.redirect("/profile");
   } else {
-    res.status(401).send("Đăng nhập thất bại");
+    res.status(401).send("Email hoặc mật khẩu không đúng");
   }
 };
-
+// register
+const getRegister = async (req, res) => {
+  res.render("main", {
+    data: {
+      title: "Register",
+      page: "user/profiles/register",
+    },
+  });
+};
+// api register
+const apiRegister = async (req, res) => {
+  const data = req.body;
+  console.log(data);
+  await userModel.apiRegister(data);
+  res.send("/profile");
+};
 export default {
   getUserHomePage,
   getUserMenuPage,
@@ -144,8 +138,9 @@ export default {
   historyProduct,
   rePassword,
   deleteAccount,
-
+  getRegister,
   // api
   login,
   sendFeedback,
+  apiRegister,
 };

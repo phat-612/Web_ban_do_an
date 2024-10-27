@@ -14,5 +14,6 @@ router.get("/profileAddress", userController.getProfileAddress);
 router.get("/historyProduct", userController.historyProduct);
 router.get("/rePassword", userController.rePassword);
 router.get("/deleteAccount", userController.deleteAccount);
+router.get("/register", userController.getRegister);
 
 export default router;
