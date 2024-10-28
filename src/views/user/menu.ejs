@@ -2,7 +2,7 @@
   <div class="col-8 row">
     <!-- danh muc -->
 
-    <ul class="row col-12 d-flex justify-content-center align-items-center" style="background-color: green; border-radius: 15px; list-style-type: none;">
+    <ul class="row col-12 d-flex justify-content-center align-items-center" style="box-shadow: 2px 2px 4px #000000;background-color: #198754; border-radius: 15px; list-style-type: none;">
       <!-- 1 the danh muc  -->
       <% for (var i = 0; i < data.categorys.length; i++) { %>
       <li class="my-3 col row d-flex justify-content-center">
@@ -17,12 +17,12 @@
     <!-- -------- -->
   </div>
 </div>
-<main class="" style="background-image: url(/imgs/static/bg-top.png);">
-  <div class="container d-flex justify-content-center">
-    <div class="row">
+<main class="d-flex justify-content-center" style="background-image: url(/imgs/static/bg-top.png);">
+  <div class="container row d-flex justify-content-between">
+ 
       <!-- 1 the san pham -->
        <% data.products.forEach(function (product){ %>
-      <div class="col-3 my-5">
+      <div class="col d-flex justify-content-center my-5">
         <div class="card" style="width: 18rem;">
           <img src="imgs/products/<%= product.image %>" class="card-img-top" alt="Ảnh + tên món ăn" />
           <div class="card-body">
@@ -30,12 +30,39 @@
             <h5 class="card-title d-flex justify-content-center">
               <%= product.currentPrice %>
             </h5>
-            <a href="#" class="btn btn-success d-flex justify-content-center">Đặt Hàng Ngay</a>
+            <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-success d-flex justify-content-center">Đặt Hàng Ngay</a>
           </div>
         </div>
       </div>
       <%})%>
       <!-- -------------- -->
+
   </div>
-</div>
-</main>
+  </main>
+
+
+
+
+  <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body row">
+          <div class="col-4">
+            <img src="" class="card-img-top" alt="Ảnh + tên món ăn" />
+
+          </div>
+          <div class="col">
+
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary">Understood</button>
+        </div>
+      </div>
+    </div>
+  </div>
