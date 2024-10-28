@@ -1,6 +1,8 @@
 import categoryModel from "../services/CategoryModel";
 import userModel from "../services/UserModel";
 import productModel from "../services/ProductModel";
+import bcrypt from "bcrypt";
+
 const getUserHomePage = async (req, res) => {
   res.render("main", {
     data: {
@@ -45,7 +47,6 @@ const sendFeedback = async (req, res) => {
 // start profile
 const getProfile = async (req, res) => {
   const user = await userModel.userProfile();
-  console.log(user);
   res.render("main", {
     data: {
       title: "Profile",
@@ -97,22 +98,28 @@ const deleteAccount = async (req, res) => {
   });
 };
 // api login
+
 const login = async (req, res) => {
   const { email, password } = req.body;
 
-  const user = await userModel.login({ email, password });
+  return console.log(email);
+  const user = await login({ email, password });
+
   if (user) {
+    // Lưu thông tin người dùng vào session
     req.session.user = {
       id: user.id,
       name: user.name,
       email: user.email,
       isLoggedIn: true,
     };
+
     res.redirect("/profile");
   } else {
     res.status(401).send("Email hoặc mật khẩu không đúng");
   }
 };
+
 // register
 const getRegister = async (req, res) => {
   res.render("main", {
@@ -125,7 +132,6 @@ const getRegister = async (req, res) => {
 // api register
 const apiRegister = async (req, res) => {
   const data = req.body;
-  console.log(data);
   await userModel.apiRegister(data);
   res.send("/profile");
 };

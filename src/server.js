@@ -3,7 +3,6 @@ import path from "path";
 import dotenv from "dotenv";
 import bodyParser from "body-parser";
 import RedisStore from "connect-redis";
-// import { createClient } from "redis";
 import redisClient from "./config/redis";
 import session from "express-session";
 import viewEngine from "./config/viewEngine";
