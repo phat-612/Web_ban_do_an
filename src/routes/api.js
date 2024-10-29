@@ -16,7 +16,7 @@ router.post(
 // feedback
 router.post("/sendFeedback", userController.sendFeedback);
 // login
-router.post("/login", userController.login);
+router.post("/login", userController.apilogin);
 // register
 router.post("/register", userController.apiRegister);
 

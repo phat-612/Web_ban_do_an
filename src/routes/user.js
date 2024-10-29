@@ -9,7 +9,7 @@ router.get("/menu", userController.getUserMenuPage);
 router.get("/feedback", userController.getUserFeedback);
 
 // profile
-router.get("/profile", userController.getProfile);
+router.get("/profile/:id", userController.getProfile);
 router.get("/profileAddress", userController.getProfileAddress);
 router.get("/historyProduct", userController.historyProduct);
 router.get("/rePassword", userController.rePassword);

@@ -16,19 +16,18 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(bodyParser.json());
-
 app.use(
   session({
     store: new RedisStore({ client: redisClient }),
     secret: "keyboard cat",
     resave: false,
     saveUninitialized: false,
-    cookie: { secure: false },
+    cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 },
   })
 );
 app.get("/check-session", (req, res) => {
   if (req.session.user && req.session.user.isLoggedIn) {
-    res.send(`Session tồn tại. Xin chào, ${req.session.user.name}`);
+    res.send(`Session tồn tại. Xin chào, ${req.session.user.id}`);
   } else {
     res
       .status(401)
