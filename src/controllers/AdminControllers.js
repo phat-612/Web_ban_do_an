@@ -2,6 +2,7 @@ import categoryModel from "../services/CategoryModel";
 import shopModel from "../services/ShopModel";
 import productModel from "../services/ProductModel";
 import userModel from "../services/UserModel";
+import fs from "fs";
 
 // PRODUCT ( SAN PHAM )
 const getProductPage = async (req, res) => {
@@ -69,7 +70,10 @@ const editProduct = async (req, res) => {
   const productImage = req.file ? req.file.filename : null;
   if (productImage) {
     data.image = productImage;
-    fs.unlinkSync(`src/public/imgs/products/${oldImage}`);
+    // kiểm tra file có tồn tại hay không
+    if (fs.existsSync(`src/public/imgs/products/${data.oldImage}`)) {
+      fs.unlinkSync(`src/public/imgs/products/${oldImage}`);
+    }
   } else {
     data.image = data.oldImage;
   }
