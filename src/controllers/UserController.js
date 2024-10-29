@@ -46,17 +46,27 @@ const sendFeedback = async (req, res) => {
 };
 // start profile
 const getProfile = async (req, res) => {
-  const user = await userModel.userProfile();
+  const id = req.session.user.id;
+  if (!id) {
+    return res.status(400).send("ID không hợp lệ");
+  }
+  const user = await userModel.userProfile(id);
+
+  if (!user) {
+    return res.status(404).send("Người dùng không tồn tại");
+  }
+
   res.render("main", {
     data: {
       title: "Profile",
       header: "partials/headerUser",
       footer: "partials/footerUser",
       page: "user/profiles/profile",
-      user,
+      user: user,
     },
   });
 };
+
 const getProfileAddress = async (req, res) => {
   res.render("main", {
     data: {
@@ -98,23 +108,25 @@ const deleteAccount = async (req, res) => {
   });
 };
 // api login
-
-const login = async (req, res) => {
+const apilogin = async (req, res) => {
   const { email, password } = req.body;
 
-  return console.log(email);
-  const user = await login({ email, password });
+  if (!email || !password) {
+    return res.status(400).send("Vui lòng nhập đầy đủ email và mật khẩu");
+  }
+
+  const user = await userModel.login({ email, password });
 
   if (user) {
-    // Lưu thông tin người dùng vào session
     req.session.user = {
       id: user.id,
-      name: user.name,
       email: user.email,
+      phone: user.phone,
+      status: user.status,
+      role: user.role,
       isLoggedIn: true,
     };
-
-    res.redirect("/profile");
+    res.redirect(`/profile/${user.id}`);
   } else {
     res.status(401).send("Email hoặc mật khẩu không đúng");
   }
@@ -146,7 +158,7 @@ export default {
   deleteAccount,
   getRegister,
   // api
-  login,
+  apilogin,
   sendFeedback,
   apiRegister,
 };

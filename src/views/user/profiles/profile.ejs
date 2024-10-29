@@ -7,7 +7,7 @@
       <h6 class="text-center">THÔNG TIN TÀI KHOẢN</h6>
       <ul class="nav flex-column text-center p-3">
         <li class="nav-item">
-          <a class="nav-link text-white active" href="#"
+          <a class="nav-link text-white active" href=""
             ><i class="bi bi-person-circle"></i> Quản lý tài khoản</a
           >
         </li>
@@ -33,12 +33,12 @@
         </li>
       </ul>
     </nav>
-
     <div class="ms-sm-auto col-lg-9 px-md-4">
+      <h1 class="text-center">QUẢN LÝ TÀI KHOẢN</h1>
       <% data.user.forEach(function(item,ind) { %>
       <form>
         <div class="mb-2">
-          <label for="hovaten" class="form-label">Họ của bạn *</label>
+          <label for="hovaten" class="form-label">Họ và tên *</label>
           <input
             type="text"
             class="form-control"
@@ -48,10 +48,7 @@
             required
           />
         </div>
-        <div class="mb-2">
-          <label for="tencuaban" class="form-label">Tên của bạn *</label>
-          <input type="text" class="form-control" id="tencuaban" required />
-        </div>
+
         <div class="mb-2">
           <label for="sodienthoai" class="form-label">Số điện thoại *</label>
           <input

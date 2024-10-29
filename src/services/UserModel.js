@@ -7,8 +7,6 @@ const getAllUser = async () => {
 };
 // login
 const login = async (userData) => {
-  // return console.log(req.body);
-
   const { email, password } = userData;
 
   const [users] = await pool.execute("SELECT * FROM `users` WHERE email = ?", [
@@ -16,7 +14,7 @@ const login = async (userData) => {
   ]);
 
   if (users.length === 0) {
-    return null; // Không tìm thấy người dùng với email đã nhập
+    return null;
   }
 
   const user = users[0];
@@ -30,10 +28,14 @@ const login = async (userData) => {
   }
 };
 
-const userProfile = async () => {
-  const [row, field] = await pool.execute("SELECT * FROM `users`");
-  return row;
+// userModel.js
+const userProfile = async (userId) => {
+  const [rows] = await pool.execute("SELECT * FROM `users` WHERE id = ?", [
+    userId,
+  ]);
+  return rows;
 };
+
 const sendFeedback = async (data) => {
   const [row, field] = await pool.execute(
     "INSERT INTO `feedbacks` (`name`, `email`, `title`, `content`) VALUES (?,?,?,?)",
