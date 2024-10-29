@@ -7,7 +7,7 @@
   <!-- tìm kiếm này cũng coppy cho đồng bộ -->
   <div class="searchbox w-100 d-flex justify-content-end">
     <form class="d-flex">
-      <input class="form-control me-2" type="search" placeholder="Nhập Tên Người Dùng" aria-label="Search">
+      <input class="form-control me-2" name="find" type="search" placeholder="Nhập Tên Người Dùng" aria-label="Search">
       <button class="btn btn-outline-success" type="submit">TÌM</button>
     </form>
   </div>
@@ -32,17 +32,23 @@
             <td><%= user.email %></td>
             <td><%= user.phone %></td>
             <td class="col-2">
-              <select class="form-select">
-                <option value="0" <%= user.role == 0 ? "selected" : "" %>>Admin</option>
-                <option value="1" <%= user.role == 1 ? "selected" : "" %>>Người Dùng</option>
-              </select>
+              <form action="/api/updateRoleUser" method="post">
+                <select class="form-select selectChangeRole" name="role">
+                  <option value="0" <%= user.role == 0 ? "selected" : "" %>>Admin</option>
+                  <option value="1" <%= user.role == 1 ? "selected" : "" %>>Người Dùng</option>
+                </select>
+                <input type="text" name="idUser" value="<%= user.id %>" hidden>
+              </form>
             </td>
             <td class="col-2">
-              <select class="form-select">
-                <option value="1" <%= user.status == 1 ? "selected" : "" %>>Đang Hoạt Động</option>
-                <option value="2" <%= user.status == 2 ? "selected" : "" %>>Tạm Ngưng</option>
-                <option value="3" <%= user.status == 3 ? "selected" : "" %>>Vô Hiệu Hóa</option>
-              </select>
+              <form action="/api/updateStatusUser" method="post">
+                <select class="form-select selectChangeStatus" name="status" id="">
+                  <option value="1" <%= user.status == 1 ? "selected" : "" %>>Đang Hoạt Động</option>
+                  <option value="2" <%= user.status == 2 ? "selected" : "" %>>Tạm Ngưng</option>
+                  <option value="3" <%= user.status == 3 ? "selected" : "" %>>Vô Hiệu Hóa</option>
+                </select>
+                <input type="text" name="idUser" value="<%= user.id %>" hidden>
+            </form>
             </td>
           </tr>
         <% }) %>

@@ -5,6 +5,31 @@ const getAllUser = async () => {
   const [row, field] = await pool.execute("SELECT * FROM`users`");
   return row;
 };
+const updateStatus  = async (idUser, status) => {
+  const [row, field] = await pool.execute("UPDATE `users` SET `status` = ? WHERE `id` = ?", 
+    [
+      status,
+      idUser
+    ]
+  )
+  return row;
+}
+
+const updateRole = async (idUser, role) => {
+  const [row, field] = await pool.execute("UPDATE `users` SET `role` = ? WHERE `id` = ?",
+    [
+      role,
+      idUser
+    ]
+  )
+  return row;
+}
+
+const findUserByEmail = async (email) => {
+  const stringQuery = `%${email}%`
+  const [row, field] = await pool.execute("SELECT * FROM `users` WHERE `email` LIKE ?",[stringQuery])
+  return row;
+}
 // login
 const login = async (userData) => {
   const { email, password } = userData;
@@ -59,4 +84,4 @@ const apiRegister = async (data) => {
 
 // fsdfsfsfs
 
-export default { getAllUser, login, sendFeedback, userProfile, apiRegister };
+export default { getAllUser, updateStatus, updateRole, findUserByEmail, login, sendFeedback, userProfile, apiRegister };

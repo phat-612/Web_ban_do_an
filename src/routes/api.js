@@ -12,6 +12,9 @@ router.post(
   upload.single("productImage"),
   adminController.addProduct
 );
+// account admin
+router.post('/updateStatusUser', adminController.setStatus)
+router.post('/updateRoleUser', adminController.setRole);
 // USER API
 // feedback
 router.post("/sendFeedback", userController.sendFeedback);

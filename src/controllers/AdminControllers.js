@@ -147,17 +147,35 @@ const deleteCategory = async (req, res) => {
 
 // ACCOUNT ( TAI KHOAN )
 const getAccountPage = async (req, res) => {
-  const row = await userModel.getAllUser();
+  const find= req.query.find
+  let row;
+  if (find) {
+    row = await userModel.findUserByEmail(find)
+  }
+  else {
+    row = await userModel.getAllUser();
+  }
   res.render("main", {
     data: {
       title: "Account",
       header: "partials/headerAdmin",
       page: "admin/account",
       users: row,
+      script: "admin/account"
     },
   });
 };
+const setStatus = async (req, res) => {
+  const { idUser,status } = req.body;
+  await userModel.updateStatus(idUser, status);
+  res.redirect("/admin/account");
+};
 
+const setRole = async (req, res) => {
+  const { idUser, role } = req.body;
+  await userModel.updateRole(idUser, role);
+  res.redirect("/admin/account");
+}
 // FEEDBACK ( PHAN HOI )
 const getFeedbackPage = async (req, res) => {
   res.render("main", {
@@ -208,4 +226,6 @@ export default {
   editProduct,
   deleteProduct,
   updateInfoShop,
+  setStatus,
+  setRole,
 };
