@@ -22,7 +22,8 @@ router.post("/sendFeedback", userController.sendFeedback);
 router.post("/login", userController.login);
 // register
 router.post("/register", userController.apiRegister);
-
+// sửa profile
+router.post("/editProfile/:id", userController.editProfile);
 router.post(
   "/editProduct",
   upload.single("productImage"),

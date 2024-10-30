@@ -36,7 +36,7 @@
     <div class="ms-sm-auto col-lg-9 px-md-4">
       <h1 class="text-center">QUẢN LÝ TÀI KHOẢN</h1>
       <% data.userProfile.forEach(function(item, ind) { %>
-      <form method="POST" action="/update-user">
+      <form method="POST" action="/api/editProfile/<%= data.user.id %>">
         <div class="mb-2">
           <label for="hovaten" class="form-label">Họ và tên *</label>
           <input
@@ -80,26 +80,21 @@
             <option value="Nữ" <%= item.gender === 'Nữ' ? 'selected' : '' %>>Nữ</option>
           </select>
         </div>
-
-        <div class="mb-2">
-          <label for="birthdate" class="col-form-label">Ngày sinh của bạn</label>
-          <div class="row">
-            <div class="col-4">
-              <span>Ngày</span>
-              <select class="form-select" aria-label="Ngày" id="day" name="day" required></select>
-            </div>
-            <div class="col-4">
-              <span>Tháng</span>
-              <select class="form-select" aria-label="Tháng" id="month" name="month" required></select>
-            </div>
-            <div class="col-4">
-              <span>Năm</span>
-              <select class="form-select" aria-label="Năm" id="year" name="year" required></select>
-            </div>
-          </div>
+       <div class="mb-2">
+          <label for="date" class="col-form-label">Ngày sinh của bạn *</label>
+          <input
+            type="date"
+            class="form-control"
+            id="date"
+            name="date"
+            required
+            value="<%= new Date(item.date).toISOString().split('T')[0] %>" 
+          />
         </div>
 
-        <div>
+
+
+        <div class="mt-4">
           <button type="submit" class="btn btn-primary w-100">
             Cập nhật tài khoản
           </button>
@@ -110,23 +105,3 @@
   </div>
 </div>
 
-<script>
-  // Tạo các lựa chọn cho ngày
-  const daySelect = document.getElementById("day");
-  for (let i = 1; i <= 31; i++) {
-    daySelect.appendChild(new Option(i < 10 ? "0" + i : i, i));
-  }
-
-  // Tạo các lựa chọn cho tháng
-  const monthSelect = document.getElementById("month");
-  for (let i = 1; i <= 12; i++) {
-    monthSelect.appendChild(new Option("Tháng " + (i < 10 ? "0" + i : i), i));
-  }
-
-  // Tạo các lựa chọn cho năm
-  const yearSelect = document.getElementById("year");
-  const currentYear = new Date().getFullYear();
-  for (let i = currentYear; i >= 1900; i--) {
-    yearSelect.appendChild(new Option(i, i));
-  }
-</script>

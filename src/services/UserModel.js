@@ -80,6 +80,18 @@ const apiRegister = async (data) => {
 
   return row;
 };
+const editProfile = async (id, data) => {
+  const { name, email, phone, day, month, year, sex } = data;
+
+  const birthdate = `${year}-${month}-${day}`;
+
+  const [row, field] = await pool.execute(
+    "UPDATE `users` SET `name` =?, `email` =?, `phone` =?, `sex` =?, `date` =? WHERE `id` =?",
+    [name, email, phone, sex, birthdate, id]
+  );
+
+  return row;
+};
 
 // fsdfsfsfs
 
@@ -92,4 +104,5 @@ export default {
   sendFeedback,
   userProfile,
   apiRegister,
+  editProfile,
 };

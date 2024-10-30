@@ -53,7 +53,7 @@ const getProfile = async (req, res) => {
     return res.status(400).send("ID không hợp lệ");
   }
   const userProfile = await userModel.userProfile(id);
-
+  console.log(userProfile);
   if (!user) {
     return res.status(404).send("Người dùng không tồn tại");
   }
@@ -160,6 +160,27 @@ const apiRegister = async (req, res) => {
   await userModel.apiRegister(data);
   res.redirect("/");
 };
+// api edit profile
+
+const editProfile = async (req, res) => {
+  const data = req.body;
+  return console.log(data);
+  const user = req.session.user;
+
+  if (!user) {
+    return res.status(401).send("Bạn phải đăng nhập để sửa thông tin cá nhân");
+  }
+
+  // Kiểm tra xem dữ liệu đầu vào có hợp lệ không
+  if (!data.name || !data.email || !data.phone || !data.sex || !data.date) {
+    return res.status(400).send("Vui lòng điền đầy đủ thông tin");
+  }
+
+  await userModel.editProfile(user.id, data);
+
+  res.redirect(`/profile/${user.id}`);
+};
+
 export default {
   getUserHomePage,
   getUserMenuPage,
@@ -174,4 +195,5 @@ export default {
   login,
   sendFeedback,
   apiRegister,
+  editProfile,
 };
