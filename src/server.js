@@ -27,7 +27,7 @@ app.use(
 );
 app.get("/check-session", (req, res) => {
   if (req.session.user && req.session.user.isLoggedIn) {
-    res.send(`Session tồn tại. Xin chào, ${req.session.user.id}`);
+    res.send(`Session tồn tại. Xin chào, ${req.session.user.name}`);
   } else {
     res
       .status(401)

@@ -1,33 +1,35 @@
 <div class="container-fluid">
   <div class="row">
     <nav
-      class="col-md-3 col-lg-2 d-md-block text-white min-vh-20 p-4 rounded"
-      style="background-color: #007f00;"
+      class="col-md-3 col-lg-2 d-md-block text-white min-vh-100 p-4 rounded"
+      style="background-color: #007f00"
     >
       <h6 class="text-center">THÔNG TIN TÀI KHOẢN</h6>
       <ul class="nav flex-column text-center p-3">
         <li class="nav-item">
-          <a class="nav-link text-white active" href="#"
+          <a
+            class="nav-link text-white active"
+            href="/profile/<%= data.user.id %>"
             ><i class="bi bi-person-circle"></i> Quản lý tài khoản</a
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="#"
+          <a class="nav-link text-white" href="/profileAddress"
             ><i class="bi bi-gear"></i> Quản lý địa chỉ</a
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="#"
+          <a class="nav-link text-white" href="historyProduct"
             ><i class="bi bi-chat-dots"></i> Lịch sử đặt hàng</a
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="#"
+          <a class="nav-link text-white" href="rePassword"
             ><i class="bi bi-bell"></i> Đặt lại mật khẩu</a
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="#"
+          <a class="nav-link text-white" href="deleteAccount"
             ><i class="bi bi-box-arrow-right"></i> Xóa tài khoản</a
           >
         </li>

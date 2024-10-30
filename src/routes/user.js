@@ -1,6 +1,6 @@
 import express from "express";
 import userController from "../controllers/UserController";
-
+import { checkLogin, checkStatus } from "../middlewares/login";
 const router = express.Router();
 
 // Routes
@@ -9,7 +9,7 @@ router.get("/menu", userController.getUserMenuPage);
 router.get("/feedback", userController.getUserFeedback);
 
 // profile
-router.get("/profile/:id", userController.getProfile);
+router.get("/profile/:id", checkLogin, checkStatus, userController.getProfile);
 router.get("/profileAddress", userController.getProfileAddress);
 router.get("/historyProduct", userController.historyProduct);
 router.get("/rePassword", userController.rePassword);

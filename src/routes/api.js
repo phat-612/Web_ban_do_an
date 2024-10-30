@@ -13,13 +13,13 @@ router.post(
   adminController.addProduct
 );
 // account admin
-router.post('/updateStatusUser', adminController.setStatus)
-router.post('/updateRoleUser', adminController.setRole);
+router.post("/updateStatusUser", adminController.setStatus);
+router.post("/updateRoleUser", adminController.setRole);
 // USER API
 // feedback
 router.post("/sendFeedback", userController.sendFeedback);
 // login
-router.post("/login", userController.apilogin);
+router.post("/login", userController.login);
 // register
 router.post("/register", userController.apiRegister);
 

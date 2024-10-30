@@ -5,31 +5,30 @@ const getAllUser = async () => {
   const [row, field] = await pool.execute("SELECT * FROM`users`");
   return row;
 };
-const updateStatus  = async (idUser, status) => {
-  const [row, field] = await pool.execute("UPDATE `users` SET `status` = ? WHERE `id` = ?", 
-    [
-      status,
-      idUser
-    ]
-  )
+const updateStatus = async (idUser, status) => {
+  const [row, field] = await pool.execute(
+    "UPDATE `users` SET `status` = ? WHERE `id` = ?",
+    [status, idUser]
+  );
   return row;
-}
+};
 
 const updateRole = async (idUser, role) => {
-  const [row, field] = await pool.execute("UPDATE `users` SET `role` = ? WHERE `id` = ?",
-    [
-      role,
-      idUser
-    ]
-  )
+  const [row, field] = await pool.execute(
+    "UPDATE `users` SET `role` = ? WHERE `id` = ?",
+    [role, idUser]
+  );
   return row;
-}
+};
 
 const findUserByEmail = async (email) => {
-  const stringQuery = `%${email}%`
-  const [row, field] = await pool.execute("SELECT * FROM `users` WHERE `email` LIKE ?",[stringQuery])
+  const stringQuery = `%${email}%`;
+  const [row, field] = await pool.execute(
+    "SELECT * FROM `users` WHERE `email` LIKE ?",
+    [stringQuery]
+  );
   return row;
-}
+};
 // login
 const login = async (userData) => {
   const { email, password } = userData;
@@ -70,13 +69,13 @@ const sendFeedback = async (data) => {
 };
 
 const apiRegister = async (data) => {
-  const { name, email, phone, password, date } = data;
+  const { name, email, phone, password, date, sex } = data;
 
   const hashedPassword = await bcrypt.hash(password, 10);
 
   const [row] = await pool.execute(
-    "INSERT INTO `users` (`name`, `email`, `phone`, `password`, `date`) VALUES (?, ?, ?, ?, ?)",
-    [name, email, phone, hashedPassword, date]
+    "INSERT INTO `users` (`name`, `email`, `phone`, `password`, `date`,`sex`) VALUES (?, ?, ?, ?, ?,?)",
+    [name, email, phone, hashedPassword, date, sex]
   );
 
   return row;
@@ -84,4 +83,13 @@ const apiRegister = async (data) => {
 
 // fsdfsfsfs
 
-export default { getAllUser, updateStatus, updateRole, findUserByEmail, login, sendFeedback, userProfile, apiRegister };
+export default {
+  getAllUser,
+  updateStatus,
+  updateRole,
+  findUserByEmail,
+  login,
+  sendFeedback,
+  userProfile,
+  apiRegister,
+};

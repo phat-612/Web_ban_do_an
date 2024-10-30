@@ -1,33 +1,33 @@
 <div class="container-fluid">
   <div class="row">
     <nav
-      class="col-md-3 col-lg-2 d-md-block text-white min-vh-20 p-4 rounded"
+      class="col-md-3 col-lg-2 d-md-block text-white min-vh-100 p-4 rounded"
       style="background-color: #007f00"
     >
       <h6 class="text-center">THÔNG TIN TÀI KHOẢN</h6>
       <ul class="nav flex-column text-center p-3">
         <li class="nav-item">
-          <a class="nav-link text-white active" href=""
+          <a class="nav-link text-white active" href="/profile/<%= data.user.id %>"
             ><i class="bi bi-person-circle"></i> Quản lý tài khoản</a
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="#"
+          <a class="nav-link text-white" href="/profileAddress"
             ><i class="bi bi-gear"></i> Quản lý địa chỉ</a
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="#"
+          <a class="nav-link text-white" href="historyProduct"
             ><i class="bi bi-chat-dots"></i> Lịch sử đặt hàng</a
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="#"
+          <a class="nav-link text-white" href="rePassword"
             ><i class="bi bi-bell"></i> Đặt lại mật khẩu</a
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="#"
+          <a class="nav-link text-white" href="deleteAccount"
             ><i class="bi bi-box-arrow-right"></i> Xóa tài khoản</a
           >
         </li>
@@ -35,8 +35,8 @@
     </nav>
     <div class="ms-sm-auto col-lg-9 px-md-4">
       <h1 class="text-center">QUẢN LÝ TÀI KHOẢN</h1>
-      <% data.user.forEach(function(item,ind) { %>
-      <form>
+      <% data.userProfile.forEach(function(item, ind) { %>
+      <form method="POST" action="/update-user">
         <div class="mb-2">
           <label for="hovaten" class="form-label">Họ và tên *</label>
           <input
@@ -54,52 +54,51 @@
           <input
             type="text"
             class="form-control"
-            value="<%= item.phone %>"
             id="sodienthoai"
+            name="phone"
+            value="<%= item.phone %>"
             required
           />
         </div>
+        
         <div class="mb-2">
           <label for="email" class="form-label">Địa chỉ email của bạn *</label>
           <input
             type="email"
             class="form-control"
-            value="<%= item.email %>"
             id="email"
+            name="email"
+            value="<%= item.email %>"
             required
           />
         </div>
+        
         <div class="mb-2">
           <label for="inputState" class="form-label">Giới tính *</label>
-          <select id="inputState" class="form-select" required>
-            <option selected>Chọn...</option>
-            <option>Nam</option>
-            <option>Nữ</option>
+          <select id="inputState" class="form-select" name="gender" required>
+            <option value="Nam" <%= item.gender === 'Nam' ? 'selected' : '' %>>Nam</option>
+            <option value="Nữ" <%= item.gender === 'Nữ' ? 'selected' : '' %>>Nữ</option>
           </select>
         </div>
+
         <div class="mb-2">
-          <label for="birthdate" class="col-form-label"
-            >Ngày sinh của bạn</label
-          >
+          <label for="birthdate" class="col-form-label">Ngày sinh của bạn</label>
           <div class="row">
-            <div class="col-3">
+            <div class="col-4">
               <span>Ngày</span>
-              <select class="form-select" aria-label="Ngày" id="day"></select>
+              <select class="form-select" aria-label="Ngày" id="day" name="day" required></select>
             </div>
-            <div class="col-5">
+            <div class="col-4">
               <span>Tháng</span>
-              <select
-                class="form-select"
-                aria-label="Tháng"
-                id="month"
-              ></select>
+              <select class="form-select" aria-label="Tháng" id="month" name="month" required></select>
             </div>
             <div class="col-4">
               <span>Năm</span>
-              <select class="form-select" aria-label="Năm" id="year"></select>
+              <select class="form-select" aria-label="Năm" id="year" name="year" required></select>
             </div>
           </div>
         </div>
+
         <div>
           <button type="submit" class="btn btn-primary w-100">
             Cập nhật tài khoản

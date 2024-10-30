@@ -1,15 +1,16 @@
 import categoryModel from "../services/CategoryModel";
 import userModel from "../services/UserModel";
 import productModel from "../services/ProductModel";
-import bcrypt from "bcrypt";
 
 const getUserHomePage = async (req, res) => {
+  const user = req.session.user;
   res.render("main", {
     data: {
       title: "Home",
       header: "partials/headerUser",
       footer: "partials/footerUser",
       page: "user/home",
+      user: user,
     },
   });
 };
@@ -47,10 +48,11 @@ const sendFeedback = async (req, res) => {
 // start profile
 const getProfile = async (req, res) => {
   const id = req.session.user.id;
+  const user = req.session.user;
   if (!id) {
     return res.status(400).send("ID không hợp lệ");
   }
-  const user = await userModel.userProfile(id);
+  const userProfile = await userModel.userProfile(id);
 
   if (!user) {
     return res.status(404).send("Người dùng không tồn tại");
@@ -62,53 +64,64 @@ const getProfile = async (req, res) => {
       header: "partials/headerUser",
       footer: "partials/footerUser",
       page: "user/profiles/profile",
+      userProfile: userProfile,
       user: user,
     },
   });
 };
 
 const getProfileAddress = async (req, res) => {
+  const user = req.session.user;
   res.render("main", {
     data: {
       title: "Profile",
       header: "partials/headerUser",
       footer: "partials/footerUser",
       page: "user/profiles/profileAddress",
+      user: user,
     },
   });
 };
 const historyProduct = async (req, res) => {
+  const user = req.session.user;
   res.render("main", {
     data: {
       title: "Profile",
       header: "partials/headerUser",
       footer: "partials/footerUser",
       page: "user/profiles/historyProduct",
+      user,
     },
   });
 };
 const rePassword = async (req, res) => {
+  const user = req.session.user;
+
   res.render("main", {
     data: {
       title: "Profile",
       header: "partials/headerUser",
       footer: "partials/footerUser",
       page: "user/profiles/rePassword",
+      user,
     },
   });
 };
 const deleteAccount = async (req, res) => {
+  const user = req.session.user;
+
   res.render("main", {
     data: {
       title: "Profile",
       header: "partials/headerUser",
       footer: "partials/footerUser",
       page: "user/profiles/deleteAccount",
+      user,
     },
   });
 };
 // api login
-const apilogin = async (req, res) => {
+const login = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -116,11 +129,11 @@ const apilogin = async (req, res) => {
   }
 
   const user = await userModel.login({ email, password });
-
   if (user) {
     req.session.user = {
       id: user.id,
       email: user.email,
+      name: user.name,
       phone: user.phone,
       status: user.status,
       role: user.role,
@@ -145,7 +158,7 @@ const getRegister = async (req, res) => {
 const apiRegister = async (req, res) => {
   const data = req.body;
   await userModel.apiRegister(data);
-  res.send("/profile");
+  res.redirect("/");
 };
 export default {
   getUserHomePage,
@@ -158,7 +171,7 @@ export default {
   deleteAccount,
   getRegister,
   // api
-  apilogin,
+  login,
   sendFeedback,
   apiRegister,
 };

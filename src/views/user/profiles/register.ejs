@@ -1,10 +1,10 @@
-<div class="container mt-5">
+<div class="container mt-2">
   <h2 class="text-center mb-4">Form Đăng Ký</h2>
   <div class="row justify-content-center">
     <div class="col-md-6">
       <form action="api/register" method="POST">
         <div class="mb-3">
-          <label for="username" class="form-label">Họ và tên</label>
+          <label for="username" class="form-label">Họ và tên *</label>
           <input
             type="text"
             class="form-control"
@@ -16,7 +16,7 @@
         </div>
 
         <div class="mb-3">
-          <label for="email" class="form-label">Email</label>
+          <label for="email" class="form-label">Email *</label>
           <input
             type="email"
             class="form-control"
@@ -28,7 +28,7 @@
         </div>
 
         <div class="mb-3">
-          <label for="phone" class="form-label">Số điện thoại</label>
+          <label for="phone" class="form-label">Số điện thoại *</label>
           <input
             type="tel"
             class="form-control"
@@ -40,7 +40,14 @@
         </div>
 
         <div class="mb-3">
-          <label for="dob" class="form-label">Ngày tháng năm sinh</label>
+          <label for="sex" class="form-label">Giới tính *</label>
+          <select name="sex" class="form-select">
+            <option value="nam">Nam</option>
+            <option value="nu">Nữ</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label for="dob" class="form-label">Ngày tháng năm sinh *</label>
           <input
             type="date"
             class="form-control"
@@ -51,7 +58,7 @@
         </div>
 
         <div class="mb-3">
-          <label for="password" class="form-label">Mật khẩu</label>
+          <label for="password" class="form-label">Mật khẩu *</label>
           <input
             type="password"
             class="form-control"
