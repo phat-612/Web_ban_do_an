@@ -30,26 +30,11 @@ const findUserByEmail = async (email) => {
   return row;
 };
 // login
-const login = async (userData) => {
-  const { email, password } = userData;
-  console.log(userData);
+const login = async (email) => {
   const [users] = await pool.execute("SELECT * FROM `users` WHERE email = ?", [
     email,
   ]);
-
-  if (users.length === 0) {
-    return null;
-  }
-
-  const user = users[0];
-
-  const isMatch = await bcrypt.compare(password, user.password);
-
-  if (isMatch) {
-    return user;
-  } else {
-    return null;
-  }
+  return users[0];
 };
 
 // userModel.js
@@ -67,18 +52,15 @@ const sendFeedback = async (data) => {
   );
   return row;
 };
-
+// đăng ký
 const apiRegister = async (data) => {
   const { name, email, phone, password, date, sex } = data;
 
-  const hashedPassword = await bcrypt.hash(password, 10);
-
   const [row] = await pool.execute(
     "INSERT INTO `users` (`name`, `email`, `phone`, `password`, `date`,`sex`) VALUES (?, ?, ?, ?, ?,?)",
-    [name, email, phone, hashedPassword, date, sex]
+    [name, email, phone, password, date, sex]
   );
-
-  return row;
+  return row[0];
 };
 const editProfile = async (id, data) => {
   const { name, email, phone, date, sex } = data;
@@ -141,6 +123,21 @@ const defaultAddress = async (idAddress, userId) => {
   );
   return row;
 };
+//đặt lại mật khẩu
+const resetPassword = async (email, id) => {
+  const [row, field] = await pool.execute(
+    "SELECT * FROM `users` WHERE `email` =? AND `id` =?",
+    [email, id]
+  );
+  return row[0];
+};
+const updatePassword = async (id, password) => {
+  const [row, field] = await pool.execute(
+    "UPDATE `users` SET `password` =? WHERE `id` =?",
+    [password, id]
+  );
+  return row[0];
+};
 export default {
   getAllUser,
   updateStatus,
@@ -157,4 +154,6 @@ export default {
   defaultAddress,
   editAddress,
   deleteAddress,
+  resetPassword,
+  updatePassword,
 };

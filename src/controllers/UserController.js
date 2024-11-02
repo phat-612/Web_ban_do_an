@@ -1,7 +1,7 @@
 import categoryModel from "../services/CategoryModel";
 import userModel from "../services/UserModel";
 import productModel from "../services/ProductModel";
-
+import bcrypt from "bcrypt";
 const getUserHomePage = async (req, res) => {
   const user = req.session.user;
   const productList = await productModel.getAllProduct();
@@ -176,8 +176,17 @@ const rePassword = async (req, res) => {
 // đổi mật khẩu
 const changePassword = async (req, res) => {
   const data = req.body;
-  return console.log(data);
   const user = req.session.user;
+  // const userData = await userModel.resetPassword(user.email, user.id);
+  // const isMatch = await bcrypt.compare(data.password, userData.password);
+  // if (isMatch) {
+  // const salt = await bcrypt.genSalt(10);
+  // const hashedPassword = await bcrypt.hash(data.newPassword, salt);
+  await userModel.updatePassword(user.id, data.newPassword1);
+  res.redirect("/profile/" + user.id);
+  // } else {
+  //   res.status(401).send("Mật khẩu không chính xác.");
+  // }
 };
 const deleteAccount = async (req, res) => {
   const user = req.session.user;
@@ -193,15 +202,19 @@ const deleteAccount = async (req, res) => {
   });
 };
 // api login
+
 const login = async (req, res) => {
   const { email, password } = req.body;
 
   if (!email || !password) {
-    return res.status(400).send("Vui lòng nhập đầy đủ email và mật khẩu");
+    return res
+      .status(400)
+      .json({ message: "Vui lòng nhập đầy đủ email và mật khẩu" });
   }
 
-  const user = await userModel.login({ email, password });
+  const user = await userModel.login(email);
   if (user) {
+    // const isPasswordValid = await bcrypt.compare(password, user.password);
     req.session.user = {
       id: user.id,
       email: user.email,
@@ -211,11 +224,12 @@ const login = async (req, res) => {
       role: user.role,
       isLoggedIn: true,
     };
-    res.redirect(`/profile/${user.id}`);
-  } else {
-    res.status(401).send("Email hoặc mật khẩu không đúng");
+    return res.redirect(`/profile/${user.id}`);
   }
+
+  return res.status(401).json({ message: "Email hoặc mật khẩu không đúng" });
 };
+
 // desstroy session
 const logout = async (req, res) => {
   req.session.destroy();
@@ -232,11 +246,22 @@ const getRegister = async (req, res) => {
   });
 };
 // api register
+
 const apiRegister = async (req, res) => {
   const data = req.body;
-  await userModel.apiRegister(data);
-  res.redirect("/");
+
+  // const hashedPassword = await bcrypt.hash(data.password, 10);
+
+  const userData = {
+    ...data,
+    password: data.password,
+  };
+
+  await userModel.apiRegister(userData);
+
+  return res.redirect("/");
 };
+
 // api edit profile
 
 const editProfile = async (req, res) => {
