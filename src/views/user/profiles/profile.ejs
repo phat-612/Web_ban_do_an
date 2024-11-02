@@ -1,8 +1,8 @@
 <div class="container-fluid">
   <div class="row">
     <nav
-      class="col-md-3 col-lg-2 d-md-block text-white min-vh-100 p-4 rounded"
-      style="background-color: #007f00"
+      class="col-md-3 col-lg-2 bg-success d-md-block text-white min-vh-100 p-4 rounded"
+      
     >
       <h6 class="text-center">THÔNG TIN TÀI KHOẢN</h6>
       <ul class="nav flex-column text-center p-3">
@@ -12,7 +12,7 @@
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="/profileAddress"
+          <a class="nav-link text-white" href="/listAddress"
             ><i class="bi bi-gear"></i> Quản lý địa chỉ</a
           >
         </li>
@@ -22,12 +22,12 @@
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="rePassword"
+          <a class="nav-link text-white" href="/rePassword"
             ><i class="bi bi-bell"></i> Đặt lại mật khẩu</a
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="deleteAccount"
+          <a class="nav-link text-white" href="/deleteAccount"
             ><i class="bi bi-box-arrow-right"></i> Xóa tài khoản</a
           >
         </li>
@@ -75,9 +75,9 @@
         
         <div class="mb-2">
           <label for="inputState" class="form-label">Giới tính *</label>
-          <select id="inputState" class="form-select" name="gender" required>
-            <option value="Nam" <%= item.gender === 'Nam' ? 'selected' : '' %>>Nam</option>
-            <option value="Nữ" <%= item.gender === 'Nữ' ? 'selected' : '' %>>Nữ</option>
+          <select id="inputState" class="form-select" name="sex" required>
+            <option value="Nam" <%= item.sex == 'nam' ? 'selected' : '' %>>Nam</option>
+            <option value="Nữ" <%= item.sex == 'nữ' ? 'selected' : '' %>>Nữ</option>
           </select>
         </div>
        <div class="mb-2">
@@ -95,7 +95,7 @@
 
 
         <div class="mt-4">
-          <button type="submit" class="btn btn-primary w-100">
+          <button type="submit" class="btn btn-success w-100">
             Cập nhật tài khoản
           </button>
         </div>

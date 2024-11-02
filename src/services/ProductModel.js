@@ -13,6 +13,13 @@ const getProductById = async (id) => {
   );
   return row;
 };
+const getProductByCategory = async (category) => {
+  const [row, fields] = await pool.execute(
+    "SELECT * FROM products WHERE idCategory = ?",
+    [category]
+  );
+  return row;
+};
 const getItemAddMore = async (id) => {
   const [row, fields] = await pool.execute(
     "SELECT idProductAdd FROM itemAddMore WHERE idProduct = ?",
@@ -127,4 +134,5 @@ export default {
   editProduct,
   deleteProduct,
   getItemAddMore,
+  getProductByCategory,
 };

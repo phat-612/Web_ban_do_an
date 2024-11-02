@@ -1,0 +1,197 @@
+<div class="container-fluid">
+  <div class="row">
+    <nav
+      class="col-md-3 col-lg-2 d-md-block bg-success text-white min-vh-100 p-4 rounded"
+    >
+      <h6 class="text-center">THÔNG TIN TÀI KHOẢN</h6>
+      <ul class="nav flex-column text-center p-3">
+        <li class="nav-item">
+          <a
+            class="nav-link text-white active"
+            href="/profile/<%= data.user.id %>"
+          >
+            <i class="bi bi-person-circle"></i> Quản lý tài khoản
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="/listAddress">
+            <i class="bi bi-gear"></i> Quản lý địa chỉ
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="historyProduct">
+            <i class="bi bi-chat-dots"></i> Lịch sử đặt hàng
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="rePassword">
+            <i class="bi bi-bell"></i> Đặt lại mật khẩu
+          </a>
+        </li>
+        <li class="nav-item">
+          <a class="nav-link text-white" href="deleteAccount">
+            <i class="bi bi-box-arrow-right"></i> Xóa tài khoản
+          </a>
+        </li>
+      </ul>
+    </nav>
+
+    <!-- Address Management -->
+    <div class="col-md-9 ms-sm-auto">
+      <h1 class="text-center m-4">Danh sách địa chỉ của bạn</h1>
+
+      <!-- Address List with Scrollbar -->
+      <div class="overflow-auto" style="max-height: 400px">
+        <% if (data.addresses && data.addresses.length) { %> <%
+        data.addresses.sort((a, b) => b.isDefault - a.isDefault); %>
+        <!-- Sắp xếp isDefault lên đầu -->
+        <ul class="list-group mt-3">
+          <% data.addresses.forEach((address) => { %>
+          <li
+            class="list-group-item d-flex justify-content-between align-items-start"
+          >
+            <div class="me-auto">
+              <div class="d-flex align-items-center mb-2">
+                <form
+                  method="POST"
+                  action="/api/setDefaultAddress"
+                  class="d-inline me-2"
+                >
+                  <input type="hidden" name="id" value="<%= address.id %>" />
+                  <div class="form-check form-switch">
+                    <input class="form-check-input" type="checkbox"
+                    id="defaultAddress<%= address.id %>" name="isDefault"
+                    onchange="this.form.submit();" <%= address.isDefault ?
+                    'checked' : '' %> />
+                    <label
+                      class="form-check-label"
+                      for="defaultAddress<%= address.id %>"
+                    >
+                      Chọn làm mặc định
+                    </label>
+                  </div>
+                </form>
+              </div>
+              <strong class="mb-1">
+                <%= address.name %> <% if (address.isDefault) { %> <% } %>
+              </strong>
+              <p class="mb-1">Điện thoại: <%= address.phone %></p>
+              <p class="mb-0">Địa chỉ: <%= address.address %></p>
+            </div>
+            <button
+              type="button"
+              class="btn btn-sm btn-outline-secondary mx-3"
+              data-bs-toggle="modal"
+              data-bs-target="#editAddressModal"
+              data-id="<%= address.id %>"
+              data-name="<%= address.name %>"
+              data-phone="<%= address.phone %>"
+              data-address="<%= address.address %>"
+            >
+              Sửa
+            </button>
+            <a
+              href="/api/deleteAddress/<%= address.id %>/<%= address.isDefault %>"
+              class="btn-sm btn-danger"
+              style="text-decoration: none"
+              onclick="confirmDelete(this.form)"
+            >
+              Xóa
+            </a>
+          </li>
+          <% }) %>
+        </ul>
+        <% } else { %>
+        <p>Hiện tại chưa có địa chỉ nào. Vui lòng thêm địa chỉ.</p>
+        <% } %>
+      </div>
+
+      <div class="text-center mt-4">
+        <a href="/profileAddress" class="btn btn-success w-100">Thêm địa chỉ</a>
+      </div>
+    </div>
+
+    <div
+      class="modal fade"
+      id="editAddressModal"
+      tabindex="-1"
+      aria-labelledby="editAddressModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="editAddressModalLabel">Sửa địa chỉ</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="Close"
+            ></button>
+          </div>
+          <div class="modal-body">
+            <form method="POST" action="/api/editAddress">
+              <input type="hidden" name="id" id="editAddressId" />
+              <div class="mb-3">
+                <label for="editName" class="form-label">Họ và tên</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="editName"
+                  name="name"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="editPhone" class="form-label">Số điện thoại</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="editPhone"
+                  name="phone"
+                  required
+                />
+              </div>
+              <div class="mb-3">
+                <label for="editAddress" class="form-label">Địa chỉ</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  id="editAddress"
+                  name="address"
+                  required
+                />
+              </div>
+              <button type="submit" class="btn btn-success w-100">
+                Cập nhật địa chỉ
+              </button>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script>
+      function confirmDelete(form) {
+        if (confirm("Bạn có chắc chắn muốn xóa địa chỉ này không?")) {
+          form.submit();
+        }
+      }
+      //
+      document.addEventListener("DOMContentLoaded", function () {
+        const editModal = document.getElementById("editAddressModal");
+        editModal.addEventListener("show.bs.modal", function (event) {
+          const button = event.relatedTarget;
+          document.getElementById("editAddressId").value =
+            button.getAttribute("data-id");
+          document.getElementById("editName").value =
+            button.getAttribute("data-name");
+          document.getElementById("editPhone").value =
+            button.getAttribute("data-phone");
+          document.getElementById("editAddress").value =
+            button.getAttribute("data-address");
+        });
+      });
+    </script>
+  </div>
+</div>

@@ -12,7 +12,6 @@ const getCategoryByName = async (name) => {
   );
   return rows;
 };
-
 // api
 
 // danh mục

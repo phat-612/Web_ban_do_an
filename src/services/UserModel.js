@@ -32,7 +32,7 @@ const findUserByEmail = async (email) => {
 // login
 const login = async (userData) => {
   const { email, password } = userData;
-
+  console.log(userData);
   const [users] = await pool.execute("SELECT * FROM `users` WHERE email = ?", [
     email,
   ]);
@@ -81,20 +81,66 @@ const apiRegister = async (data) => {
   return row;
 };
 const editProfile = async (id, data) => {
-  const { name, email, phone, day, month, year, sex } = data;
-
-  const birthdate = `${year}-${month}-${day}`;
+  const { name, email, phone, date, sex } = data;
 
   const [row, field] = await pool.execute(
     "UPDATE `users` SET `name` =?, `email` =?, `phone` =?, `sex` =?, `date` =? WHERE `id` =?",
-    [name, email, phone, sex, birthdate, id]
+    [name, email, phone, sex, date, id]
   );
 
   return row;
 };
+// thêm địa chỉ
+const address = async (data, idUser) => {
+  const { name, phone, address } = data;
+  const [rows] = await pool.execute(
+    "INSERT INTO `addresses` (`idUser`, `name`,`phone`,`address`) VALUES(?,?,?,?)",
+    [idUser, name, phone, address]
+  );
+  return rows;
+};
+// danh sách địa chỉ
+const getAllAddress = async (idUser) => {
+  const [rows] = await pool.execute(
+    "SELECT * FROM `addresses` WHERE `idUser` =?",
+    [idUser]
+  );
+  return rows;
+};
+// xóa địa chỉ mặc định
+const setDefaultAddress = async (idUser) => {
+  const [row, field] = await pool.execute(
+    "UPDATE `addresses` SET `isDefault` = false",
+    [idUser]
+  );
+  return row;
+};
+// sửa địa chỉ
+const editAddress = async (idAddress, data) => {
+  const { name, phone, address } = data;
+  const [row, field] = await pool.execute(
+    "UPDATE `addresses` SET `name` =?, `phone` =?, `address` =? WHERE `id` =?",
+    [name, phone, address, idAddress]
+  );
+  return row;
+};
+// xóa địa chỉ
 
-// fsdfsfsfs
-
+const deleteAddress = async (idAddress, userId) => {
+  const [row, field] = await pool.execute(
+    "DELETE FROM `addresses` WHERE `id` =? AND `idUser` =?",
+    [idAddress, userId]
+  );
+  return row;
+};
+// đặt địa chỉ mặc định
+const defaultAddress = async (idAddress, userId) => {
+  const [row, field] = await pool.execute(
+    "UPDATE `addresses` SET `isDefault` = true WHERE `id` =? AND `idUser` =?",
+    [idAddress, userId]
+  );
+  return row;
+};
 export default {
   getAllUser,
   updateStatus,
@@ -105,4 +151,10 @@ export default {
   userProfile,
   apiRegister,
   editProfile,
+  address,
+  getAllAddress,
+  setDefaultAddress,
+  defaultAddress,
+  editAddress,
+  deleteAddress,
 };

@@ -4,6 +4,7 @@ import productModel from "../services/ProductModel";
 
 const getUserHomePage = async (req, res) => {
   const user = req.session.user;
+  const productList = await productModel.getAllProduct();
   res.render("main", {
     data: {
       title: "Home",
@@ -11,13 +12,20 @@ const getUserHomePage = async (req, res) => {
       footer: "partials/footerUser",
       page: "user/home",
       user: user,
+      products: productList,
     },
   });
 };
 
 const getUserMenuPage = async (req, res) => {
+  const { category } = req.query;
+  let productList;
+  if (category) {
+    productList = await productModel.getProductByCategory(category);
+  } else {
+    productList = await productModel.getAllProduct();
+  }
   const categoryList = await categoryModel.getAllCategory();
-  const productList = await productModel.getAllProduct();
   res.render("main", {
     data: {
       title: "Menu",
@@ -53,7 +61,6 @@ const getProfile = async (req, res) => {
     return res.status(400).send("ID không hợp lệ");
   }
   const userProfile = await userModel.userProfile(id);
-  console.log(userProfile);
   if (!user) {
     return res.status(404).send("Người dùng không tồn tại");
   }
@@ -69,7 +76,7 @@ const getProfile = async (req, res) => {
     },
   });
 };
-
+// địa chỉ
 const getProfileAddress = async (req, res) => {
   const user = req.session.user;
   res.render("main", {
@@ -81,6 +88,64 @@ const getProfileAddress = async (req, res) => {
       user: user,
     },
   });
+};
+//  api address
+const addAddress = async (req, res) => {
+  const userId = req.session.user.id;
+  const data = req.body;
+  await userModel.address(data, userId);
+  res.redirect("/listAddress");
+};
+// danh sách địa chỉ
+const listAddress = async (req, res) => {
+  const user = req.session.user;
+  const addresses = await userModel.getAllAddress(user.id);
+  res.render("main", {
+    data: {
+      title: "Profile",
+      header: "partials/headerUser",
+      footer: "partials/footerUser",
+      page: "user/profiles/listAddress",
+      user,
+      addresses,
+    },
+  });
+};
+// địa chỉ mặc định
+const setDefaultAddress = async (req, res) => {
+  const userId = req.session.user.id;
+  const address = req.body;
+  if (address.isDefault === "1") {
+    return res
+      .status(400)
+      .send("Vui lòng chọn địa chỉ khác làm địa chỉ mặc định!");
+  } else {
+    await userModel.setDefaultAddress(userId);
+    await userModel.defaultAddress(address.id, userId);
+  }
+  res.redirect("/listAddress");
+};
+// sửa địa chỉ
+const editAddress = async (req, res) => {
+  const data = req.body;
+  await userModel.editAddress(data.id, data);
+  res.redirect("/listAddress");
+};
+// xóa địa chỉ
+
+const deleteAddress = async (req, res) => {
+  const userId = req.session.user.id;
+  const addressId = req.params;
+  if (addressId.isDefault === "1") {
+    return res
+      .status(400)
+      .send(
+        "Vui lòng chọn địa chỉ khác để xóa.Địa chỉ này là địa chỉ mật định!"
+      );
+  } else {
+    await userModel.deleteAddress(addressId.id, userId);
+  }
+  res.redirect("/listAddress");
 };
 const historyProduct = async (req, res) => {
   const user = req.session.user;
@@ -94,6 +159,7 @@ const historyProduct = async (req, res) => {
     },
   });
 };
+// trang đổi mật khẩu
 const rePassword = async (req, res) => {
   const user = req.session.user;
 
@@ -106,6 +172,12 @@ const rePassword = async (req, res) => {
       user,
     },
   });
+};
+// đổi mật khẩu
+const changePassword = async (req, res) => {
+  const data = req.body;
+  return console.log(data);
+  const user = req.session.user;
 };
 const deleteAccount = async (req, res) => {
   const user = req.session.user;
@@ -144,6 +216,11 @@ const login = async (req, res) => {
     res.status(401).send("Email hoặc mật khẩu không đúng");
   }
 };
+// desstroy session
+const logout = async (req, res) => {
+  req.session.destroy();
+  res.redirect("/");
+};
 
 // register
 const getRegister = async (req, res) => {
@@ -164,19 +241,23 @@ const apiRegister = async (req, res) => {
 
 const editProfile = async (req, res) => {
   const data = req.body;
-  return console.log(data);
   const user = req.session.user;
 
-  if (!user) {
-    return res.status(401).send("Bạn phải đăng nhập để sửa thông tin cá nhân");
-  }
-
-  // Kiểm tra xem dữ liệu đầu vào có hợp lệ không
   if (!data.name || !data.email || !data.phone || !data.sex || !data.date) {
     return res.status(400).send("Vui lòng điền đầy đủ thông tin");
   }
 
-  await userModel.editProfile(user.id, data);
+  const updatedData = {
+    id: user.id,
+    name: data.name,
+    email: data.email,
+    phone: data.phone,
+    sex: data.sex,
+    date: data.date,
+    status: "1",
+  };
+
+  await userModel.editProfile(user.id, updatedData);
 
   res.redirect(`/profile/${user.id}`);
 };
@@ -191,9 +272,16 @@ export default {
   rePassword,
   deleteAccount,
   getRegister,
+  listAddress,
   // api
   login,
   sendFeedback,
   apiRegister,
   editProfile,
+  logout,
+  addAddress,
+  setDefaultAddress,
+  editAddress,
+  deleteAddress,
+  changePassword,
 };

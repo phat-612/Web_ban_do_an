@@ -95,24 +95,31 @@
           </a>
         </div>
         <% } else { %>
-        <div class="col-8 d-flex justify-content-center">
+        <div class="col-6 d-flex justify-content-center">
           <a
-            href="/profile/<%= user.id %>"
+            href="<%= user.role === 0 ? '/admin' : `/profile/${user.id}` %>"
             class="text-dark h5 fw-bold"
             style="text-decoration: none"
           >
-            Xin Chào, <%= user.name %>
+            <%= user.name %>
           </a>
         </div>
-        <div class="col-4 d-flex justify-content-center">
-          <a
-            href="/logout"
+        <form
+          action="/api/destroy"
+          method="POST"
+          class="col-4 d-flex justify-content-center"
+        >
+          <!-- <button
+            type="submit"
             class="text-dark h5 fw-bold"
             style="text-decoration: none"
           >
             ĐĂNG XUẤT
-          </a>
-        </div>
+          </button> -->
+          <input type="submit" id="inpLogout" hidden />
+          <label for="inpLogout" class="text-dark h5 fw-bold">ĐĂNG XUẤT</label>
+        </form>
+
         <% } %>
 
         <div

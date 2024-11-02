@@ -24,6 +24,18 @@ router.post("/login", userController.login);
 router.post("/register", userController.apiRegister);
 // sửa profile
 router.post("/editProfile/:id", userController.editProfile);
+// thêm địa chỉ
+router.post("/address", userController.addAddress);
+// địa chỉ mặc định
+router.post("/setDefaultAddress", userController.setDefaultAddress);
+// sửa địa chỉ
+router.post("/editAddress", userController.editAddress);
+// xóa địa chỉ
+router.get("/deleteAddress/:id/:isDefault", userController.deleteAddress);
+// xóa session
+router.post("/destroy", userController.logout);
+// đổi mật khẩu
+router.post("/changePassword", userController.changePassword);
 router.post(
   "/editProduct",
   upload.single("productImage"),

@@ -7,11 +7,11 @@
   <form action="/api/addProduct" method="post" enctype="multipart/form-data">
     <div class="row d-flex mt-3 justify-content-center">
       <label class="form-label col-2">Tên sản phẩm</label>
-      <input type="text" class="col-7" name="name" />
+      <input required type="text" class="col-7" name="name" />
     </div>
     <div class="row d-flex mt-3 justify-content-center">
       <label class="form-label col-2">Giá sản phẩm</label>
-      <input type="number" class="col-7" name="currentPrice" />
+      <input required type="number" class="col-7" name="currentPrice" />
     </div>
     <div class="row d-flex mt-3 justify-content-center">
       <label class="form-label col-2">Danh mục</label>
@@ -27,11 +27,12 @@
         name="description"
         id=""
         class="col-7"
-        style="resize: none;"
+        style="resize: none"
+        required
       ></textarea>
     </div>
     <div class="row d-flex mt-3 justify-content-center">
-      <label class="form-label col-2"> Multi-select </label>
+      <label class="form-label col-2"> Món ăn kèm </label>
       <div class="col-7">
         <select id="multiple-select" name="addMore" multiple>
           <% data.products.forEach(function(product) { %>
@@ -42,7 +43,7 @@
     </div>
     <div class="row d-flex mt-3 justify-content-center">
       <label class="form-label col-2">Hình ảnh</label>
-      <input type="file" id="inpImage" name="productImage" hidden />
+      <input required type="file" id="inpImage" name="productImage" hidden />
       <label for="inpImage" class="btn btn-primary col-7">Chọn hình ảnh</label>
     </div>
     <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
