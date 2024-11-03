@@ -30,7 +30,7 @@
 </div>
 <main
   class="d-flex justify-content-center"
-  style="background-image: url(/imgs/static/bg-top.png)"
+  style="background-image: url(/imgs/static/bg-top.png); background-size: cover"
 >
   <div class="container row d-flex justify-content-between">
     <!-- 1 the san pham -->
@@ -101,32 +101,43 @@
             </p>
           </div>
           <div>
-            <strong>Danh Sách món ăn kèm</strong>
-            <div class="row">
+            <strong class="h5 mb-3">Danh Sách món ăn kèm</strong>
+            <div class="row d-flex justify-content-around align-items-center">
               <div class="col-2">
-                <img src="" alt="" />
+                <img
+                  src="https://beptueu.vn/hinhanh/tintuc/top-15-hinh-anh-mon-an-ngon-viet-nam-khien-ban-khong-the-roi-mat-3.jpg"
+                  alt=""
+                  width="100"
+                />
               </div>
-              <div class="col-4">Ten Mon An Kem</div>
-              <div class="col">
+              <div class="col-4"><p class="h6">Ten Mon An Kem</p></div>
+              <div class="col-2">
                 <div class="input-group mb-3">
                   <button
                     class="btn btn-outline-secondary"
                     type="button"
-                    id="button-addon1"
-                  ></button>
+                    id="button-minus-Addmore"
+                  >
+                    <i class="bi bi-dash"></i>
+                  </button>
                   <input
-                    type="text"
+                    id="quantity-Addmore"
+                    type="number"
                     class="form-control"
                     placeholder=""
                     aria-label="Example text with button addon"
                     aria-describedby="button-addon1"
+                    min="0"
+                    max="100"
+                    oninput="validity.valid||(value='');"
+                    value="0"
                   />
                   <button
                     class="btn btn-outline-secondary"
                     type="button"
-                    id="button-addon2"
+                    id="button-plus-Addmore"
                   >
-                    Button
+                    <i class="bi bi-plus"></i>
                   </button>
                 </div>
               </div>
@@ -140,3 +151,11 @@
     </div>
   </div>
 </div>
+<!-- CSS xoa mui ten cua input number -->
+<style>
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+</style>

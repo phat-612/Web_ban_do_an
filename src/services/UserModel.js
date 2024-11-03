@@ -107,7 +107,6 @@ const editAddress = async (idAddress, data) => {
   return row;
 };
 // xóa địa chỉ
-
 const deleteAddress = async (idAddress, userId) => {
   const [row, field] = await pool.execute(
     "DELETE FROM `addresses` WHERE `id` =? AND `idUser` =?",
@@ -123,6 +122,23 @@ const defaultAddress = async (idAddress, userId) => {
   );
   return row;
 };
+// lịch sử đơn hàng
+const getAllOrder = async (idUser) => {
+  const [rows] = await pool.execute(
+    "SELECT * FROM `orders` WHERE `idUser` =?",
+    [idUser]
+  );
+  return rows;
+};
+// sản phẩm trong đơn hàng
+const getAllOrderDetail = async (idOrder) => {
+  const [rows] = await pool.execute(
+    "SELECT * FROM `orderDetail` WHERE `idOrder` =?",
+    [idOrder]
+  );
+  return rows;
+};
+
 //đặt lại mật khẩu
 const resetPassword = async (email, id) => {
   const [row, field] = await pool.execute(
@@ -137,6 +153,29 @@ const updatePassword = async (id, password) => {
     [password, id]
   );
   return row[0];
+};
+// hủy tài khoản
+const cancelAccount = async (id) => {
+  const [row, field] = await pool.execute(
+    "UPDATE `users` SET `status` = 3 WHERE `id` =?",
+    [id]
+  );
+  return row[0];
+};
+// hủy đơn hàng
+const cancelOrder = async (idOrder) => {
+  const [row, field] = await pool.execute(
+    "DELETE FROM `orders` WHERE `id` =?",
+    [idOrder]
+  );
+  return row[0];
+};
+// hủy sản phẩm trong đơn hàng
+const cancelOrderDetail = async (idOrderDetail) => {
+  const [row, field] = await pool.execute(
+    "DELETE FROM `orderDetail` WHERE `idOrder` =?",
+    [idOrderDetail]
+  );
 };
 export default {
   getAllUser,
@@ -156,4 +195,9 @@ export default {
   deleteAddress,
   resetPassword,
   updatePassword,
+  cancelAccount,
+  getAllOrder,
+  getAllOrderDetail,
+  cancelOrder,
+  cancelOrderDetail,
 };

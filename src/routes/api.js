@@ -36,6 +36,11 @@ router.get("/deleteAddress/:id/:isDefault", userController.deleteAddress);
 router.post("/destroy", userController.logout);
 // đổi mật khẩu
 router.post("/changePassword", userController.changePassword);
+// hủy tài khoản
+router.post("/cancelAccount", userController.cancelAccount);
+// hủy đơn hàng
+
+router.get("/cancelOrder/:id", userController.cancelOrder);
 router.post(
   "/editProduct",
   upload.single("productImage"),

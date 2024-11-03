@@ -27,7 +27,7 @@ const checkStatus = async (req, res, next) => {
         "Tài khoản của bạn đã vi phạm quy định.Vui lòng liên hệ quản trị để biết thêm chi tiết."
       );
   } else {
-    res.redirect("/login");
+    res.redirect("/");
   }
 };
 

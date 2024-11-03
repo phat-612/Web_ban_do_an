@@ -18,6 +18,7 @@ const getUserHomePage = async (req, res) => {
 };
 
 const getUserMenuPage = async (req, res) => {
+  const user = req.session.user;
   const { category } = req.query;
   let productList;
   if (category) {
@@ -34,6 +35,8 @@ const getUserMenuPage = async (req, res) => {
       page: "user/menu",
       categorys: categoryList,
       products: productList,
+      user: user,
+      script: "user/menu",
     },
   });
 };
@@ -97,7 +100,7 @@ const addAddress = async (req, res) => {
   res.redirect("/listAddress");
 };
 // danh sách địa chỉ
-const listAddress = async (req, res) => {
+const getListAddress = async (req, res) => {
   const user = req.session.user;
   const addresses = await userModel.getAllAddress(user.id);
   res.render("main", {
@@ -147,8 +150,17 @@ const deleteAddress = async (req, res) => {
   }
   res.redirect("/listAddress");
 };
-const historyProduct = async (req, res) => {
+// lịch sử đơn hàng
+const getHistoryProduct = async (req, res) => {
   const user = req.session.user;
+  const orderList = await userModel.getAllOrder(user.id); //đơn hàng
+  // sản phẩm trong đơn hàng
+  const orders = await Promise.all(
+    orderList.map(async (order) => {
+      const productList = await userModel.getAllOrderDetail(order.id);
+      return { ...order, productList };
+    })
+  );
   res.render("main", {
     data: {
       title: "Profile",
@@ -156,11 +168,13 @@ const historyProduct = async (req, res) => {
       footer: "partials/footerUser",
       page: "user/profiles/historyProduct",
       user,
+      orders,
     },
   });
 };
+
 // trang đổi mật khẩu
-const rePassword = async (req, res) => {
+const getRePassword = async (req, res) => {
   const user = req.session.user;
 
   res.render("main", {
@@ -177,20 +191,18 @@ const rePassword = async (req, res) => {
 const changePassword = async (req, res) => {
   const data = req.body;
   const user = req.session.user;
-  // const userData = await userModel.resetPassword(user.email, user.id);
-  // const isMatch = await bcrypt.compare(data.password, userData.password);
-  // if (isMatch) {
-  // const salt = await bcrypt.genSalt(10);
-  // const hashedPassword = await bcrypt.hash(data.newPassword, salt);
-  await userModel.updatePassword(user.id, data.newPassword1);
-  res.redirect("/profile/" + user.id);
-  // } else {
-  //   res.status(401).send("Mật khẩu không chính xác.");
-  // }
+  const userData = await userModel.resetPassword(user.email, user.id);
+  const isMatch = await bcrypt.compare(data.password, userData.password);
+  if (isMatch) {
+    const hashedPassword = await bcrypt.hash(data.newPassword1, 10);
+    await userModel.updatePassword(user.id, hashedPassword);
+    res.redirect("/profile/" + user.id);
+  } else {
+    res.status(401).send("Mật khẩu không chính xác.");
+  }
 };
-const deleteAccount = async (req, res) => {
+const getDeleteAccount = async (req, res) => {
   const user = req.session.user;
-
   res.render("main", {
     data: {
       title: "Profile",
@@ -205,29 +217,41 @@ const deleteAccount = async (req, res) => {
 
 const login = async (req, res) => {
   const { email, password } = req.body;
-
   if (!email || !password) {
     return res
       .status(400)
       .json({ message: "Vui lòng nhập đầy đủ email và mật khẩu" });
   }
-
   const user = await userModel.login(email);
-  if (user) {
-    // const isPasswordValid = await bcrypt.compare(password, user.password);
-    req.session.user = {
-      id: user.id,
-      email: user.email,
-      name: user.name,
-      phone: user.phone,
-      status: user.status,
-      role: user.role,
-      isLoggedIn: true,
-    };
-    return res.redirect(`/profile/${user.id}`);
-  }
 
-  return res.status(401).json({ message: "Email hoặc mật khẩu không đúng" });
+  if (!user || user.status == 3) {
+    return res.status(401).json({ message: "Tài khoản không tồn tại" });
+  }
+  if (user && user.status == 2) {
+    return res.status(401).json({
+      message: "Tài khoản đã bị khóa do vi phạm tiêu chuẩn cộng đồng",
+    });
+  }
+  const isPassword = await bcrypt.compare(password, user.password);
+
+  if (user && user.status == 1) {
+    if (isPassword) {
+      req.session.user = {
+        id: user.id,
+        email: user.email,
+        name: user.name,
+        phone: user.phone,
+        status: user.status,
+        role: user.role,
+        isLoggedIn: true,
+      };
+    } else {
+      return res.status(401).json({ message: "Mặt khẩu không chính xác" });
+    }
+  } else {
+    return res.status(401).json({ message: "Tài khoản không tồn tại" });
+  }
+  return res.redirect("back");
 };
 
 // desstroy session
@@ -250,11 +274,11 @@ const getRegister = async (req, res) => {
 const apiRegister = async (req, res) => {
   const data = req.body;
 
-  // const hashedPassword = await bcrypt.hash(data.password, 10);
+  const hashedPassword = await bcrypt.hash(data.password, 10);
 
   const userData = {
     ...data,
-    password: data.password,
+    password: hashedPassword,
   };
 
   await userModel.apiRegister(userData);
@@ -286,18 +310,33 @@ const editProfile = async (req, res) => {
 
   res.redirect(`/profile/${user.id}`);
 };
+// người dùng hủy tài khoản
+const cancelAccount = async (req, res) => {
+  const user = req.session.user;
+  console.log("user", user);
+  await userModel.cancelAccount(user.id);
+  req.session.destroy();
+  res.redirect("/");
+};
+// hủy đơn hàng
+const cancelOrder = async (req, res) => {
+  const id = req.params.id;
+  await userModel.cancelOrderDetail(id);
+  await userModel.cancelOrder(id);
 
+  res.redirect("back");
+};
 export default {
   getUserHomePage,
   getUserMenuPage,
   getUserFeedback,
   getProfile,
   getProfileAddress,
-  historyProduct,
-  rePassword,
-  deleteAccount,
+  getHistoryProduct,
+  getRePassword,
+  getDeleteAccount,
   getRegister,
-  listAddress,
+  getListAddress,
   // api
   login,
   sendFeedback,
@@ -309,4 +348,6 @@ export default {
   editAddress,
   deleteAddress,
   changePassword,
+  cancelAccount,
+  cancelOrder,
 };

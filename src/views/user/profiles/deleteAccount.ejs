@@ -1,8 +1,7 @@
 <div class="container-fluid">
   <div class="row">
     <nav
-      class="col-md-3 col-lg-2 d-md-block text-white min-vh-100 p-4 rounded"
-      style="background-color: #007f00"
+      class="col-md-3 col-lg-2 bg-success d-md-block text-white min-vh-100 p-4 rounded"
     >
       <h6 class="text-center">THÔNG TIN TÀI KHOẢN</h6>
       <ul class="nav flex-column text-center p-3">
@@ -24,12 +23,12 @@
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="rePassword"
+          <a class="nav-link text-white" href="/rePassword"
             ><i class="bi bi-bell"></i> Đặt lại mật khẩu</a
           >
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="deleteAccount"
+          <a class="nav-link text-white" href="/deleteAccount"
             ><i class="bi bi-box-arrow-right"></i> Xóa tài khoản</a
           >
         </li>
@@ -89,7 +88,9 @@
         <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
           Hủy
         </button>
-        <button type="button" class="btn btn-danger">Xóa</button>
+        <form method="POST" action="/api/cancelAccount">
+          <button type="submit" class="btn btn-danger">Xóa</button>
+        </form>
       </div>
     </div>
   </div>
