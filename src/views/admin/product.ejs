@@ -37,12 +37,12 @@
     <tbody>
       <% data.products.forEach(function (product, index) { %>
       <tr>
-        <th><%= index + 1 %></th>
-        <td><%= product.name %></td>
+        <th class="table-cell"><%= index + 1 %></th>
+        <td class="table-cell"><%= product.name %></td>
         <td><%= product.nameCategory %></td>
         <td><%= product.currentPrice %></td>
-        <td><%= product.description %></td>
-        <td>
+        <td class="table-cell"><%= product.description %></td>
+        <td class="col-2">
           <a
             class="btn btn-primary"
             href="/admin/product/view/<%= product.id %>"
