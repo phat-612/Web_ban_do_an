@@ -22,7 +22,7 @@ const getProductByCategory = async (category) => {
 };
 const getItemAddMore = async (id) => {
   const [row, fields] = await pool.execute(
-    "SELECT idProductAdd FROM itemAddMore WHERE idProduct = ?",
+    "SELECT idProductAdd, products.name as nameProductAdd FROM itemAddMore JOIN products on products.id = itemAddMore.idProductAdd WHERE idProduct = ?",
     [id]
   );
   return row;
