@@ -56,6 +56,24 @@ const getEditProductPage = async (req, res) => {
     },
   });
 };
+const getViewDetailProductPage = async (req, res, next) => {
+  const { id } = req.params;
+  const product = await productModel.getProductById(id);
+  const productAddMore = await productModel.getItemAddMore(id);
+  if (product.length === 0) {
+    next();
+  }
+  res.render("main", {
+    data: {
+      title: "Detail Product",
+      header: "partials/headerAdmin",
+      page: "admin/viewDetailProduct",
+      script: "admin/viewDetailProduct",
+      product: product[0],
+      productAddMore: productAddMore,
+    },
+  });
+};
 const addProduct = async (req, res) => {
   const data = req.body;
   const productImage = req.file.filename;
@@ -147,12 +165,11 @@ const deleteCategory = async (req, res) => {
 
 // ACCOUNT ( TAI KHOAN )
 const getAccountPage = async (req, res) => {
-  const find= req.query.find
+  const find = req.query.find;
   let row;
   if (find) {
-    row = await userModel.findUserByEmail(find)
-  }
-  else {
+    row = await userModel.findUserByEmail(find);
+  } else {
     row = await userModel.getAllUser();
   }
   res.render("main", {
@@ -161,12 +178,12 @@ const getAccountPage = async (req, res) => {
       header: "partials/headerAdmin",
       page: "admin/account",
       users: row,
-      script: "admin/account"
+      script: "admin/account",
     },
   });
 };
 const setStatus = async (req, res) => {
-  const { idUser,status } = req.body;
+  const { idUser, status } = req.body;
   await userModel.updateStatus(idUser, status);
   res.redirect("/admin/account");
 };
@@ -175,7 +192,7 @@ const setRole = async (req, res) => {
   const { idUser, role } = req.body;
   await userModel.updateRole(idUser, role);
   res.redirect("/admin/account");
-}
+};
 // FEEDBACK ( PHAN HOI )
 const getFeedbackPage = async (req, res) => {
   res.render("main", {
@@ -211,6 +228,7 @@ export default {
   getProductPage,
   getAddProductPage,
   getEditProductPage,
+  getViewDetailProductPage,
   getOrderPage,
   getBannerPage,
   getCategoryPage,
