@@ -30,7 +30,7 @@
       ><%= data.product.description %></textarea>
     </div>
     <div class="row d-flex mt-3 justify-content-center">
-      <label class="form-label col-2"> Multi-select </label>
+      <label class="form-label col-2"> Món ăn kèm </label>
       <div class="col-7">
         <select id="multiple-select" name="addMore" multiple>
           <% data.products.forEach(function(product) { %>
@@ -45,7 +45,20 @@
       <input type="text" hidden name="oldImage" value="<%= data.product.image %>">
       <label for="inpImage" class="btn btn-primary col-7">Chọn hình ảnh</label>
     </div>
+    <div class="row d-flex mt-3 justify-content-center">
+      <div class="col-2"></div>
+      <div class="col-7 text-center">
+        <img src="/imgs/products/<%= data.product.image %>" alt="" id="preview" style="max-height: 130px;" />
+      </div>
+    </div>
     <input type="text" name="id" hidden value="<%= data.product.id %>">
-    <button type="submit" class="btn btn-primary">Cập nhật sản phẩm</button>
+    <div class="row d-flex mt-3 justify-content-center">
+      <div class="col-2"></div>
+      <div class="col-7 text-center">
+        <button type="submit" class="btn btn-primary" style="width: 50%;">
+          Lưu sản phẩm
+        </button>
+      </div>
+    </div>
   </form>
 </div>

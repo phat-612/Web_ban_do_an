@@ -43,9 +43,23 @@
     </div>
     <div class="row d-flex mt-3 justify-content-center">
       <label class="form-label col-2">Hình ảnh</label>
+
+      <label for="inpImage" class="btn btn-warning col-7">Chọn hình ảnh</label>
       <input required type="file" id="inpImage" name="productImage" hidden />
-      <label for="inpImage" class="btn btn-primary col-7">Chọn hình ảnh</label>
     </div>
-    <button type="submit" class="btn btn-primary">Thêm sản phẩm</button>
+    <div class="row d-flex mt-3 justify-content-center">
+      <div class="col-2"></div>
+      <div class="col-7 text-center">
+        <img alt="" id="preview" style="max-height: 130px;" />
+      </div>
+    </div>
+    <div class="row d-flex mt-3 justify-content-center">
+      <div class="col-2"></div>
+      <div class="col-7 text-center">
+        <button type="submit" class="btn btn-primary" style="width: 50%;">
+          Thêm sản phẩm
+        </button>
+      </div>
+    </div>
   </form>
 </div>
