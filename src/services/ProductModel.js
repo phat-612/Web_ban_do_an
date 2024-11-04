@@ -78,7 +78,7 @@ const isProductDelete = async (id) => {
     [id]
   );
   const [row2, fields2] = await pool.execute(
-    "SELECT idProduct FROM itemAddMore WHERE idProduct = ?",
+    "SELECT idProduct FROM itemAddMore WHERE idProductAdd = ?",
     [id]
   );
   if (row.length > 0 || row2.length > 0) {
