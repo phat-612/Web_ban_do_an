@@ -22,11 +22,8 @@
     <!-- -------- -->
   </div>
 </div>
-<main
-  class="d-flex justify-content-center"
-  style="background-image: url(/imgs/static/bg-top.png); background-size: cover"
->
-  <div class="container row d-flex justify-content-between">
+<main class="d-flex justify-content-center">
+  <div class="container row d-flex justify-content-between" style="background-image: url(/imgs/static/bg-top.png); background-size: contain;">
     <!-- 1 the san pham -->
     <% data.products.forEach(function (product){ %>
       <div class="col d-flex justify-content-center my-5">
@@ -39,7 +36,10 @@
             <h5 class="card-title d-flex justify-content-center">
               <%= product.currentPrice %>
             </h5>
-            <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-success d-flex justify-content-center btnShowModal" data-bs-productName="<%= product.name %>" data-bs-productCurrentPrice="<%= product.currentPrice %>" data-bs-productImage="<%= product.image %>" data-bs-productDescription="<%= product.description %>">Thêm Vào Giỏ Hàng</a>
+
+            <div class="d-flex justify-content-center">
+              <button data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-success d-flex justify-content-center btnShowModal" data-bs-productName="<%= product.name %>" <% if (product.itemAddMore) {%>data-bs-itemAddMore="<%= JSON.stringify(product.itemAddMore) %>" <%}%> data-bs-productCurrentPrice="<%= product.currentPrice %>" data-bs-productImage="<%= product.image %>" data-bs-productDescription="<%= product.description %>">Thêm Vào Giỏ Hàng</button>
+            </div>
           </div>
         </div>
       </div>
@@ -47,6 +47,14 @@
       <!-- -------------- -->
   </div>
   </main>
+
+
+
+
+
+  <!-- modal chi tiet mon an -->
+
+
 
   <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
@@ -81,28 +89,15 @@
               <!-- mô tả món ăn -->
               <p class="modal-productDescription"></p>
             </div>
-            <div>
+            <div id="areaAddMore">
               <strong class="h5 mb-3">Danh Sách món ăn kèm</strong>
-              <div class="row d-flex justify-content-around align-items-center">
-                <div class="col-2">
-                  <img src="https://beptueu.vn/hinhanh/tintuc/top-15-hinh-anh-mon-an-ngon-viet-nam-khien-ban-khong-the-roi-mat-3.jpg" alt="" width="100" />
-                </div>
-                <div class="col-4">
-                  <p class="h6">Ten Mon An Kem</p>
-                </div>
-                <div class="col-2">
-                  <div class="input-group mb-3">
-                    <button class="btn btn-outline-secondary" type="button" id="button-minus-Addmore">
-                      <i class="bi bi-dash"></i>
-                    </button>
-                    <input style="text-align: center;" id="quantity-Addmore" type="number" class="form-control quantity-Addmore" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" min="0" max="100" oninput="validity.valid||(value='');" value="0" />
-                    <button class="btn btn-outline-secondary" type="button" id="button-plus-Addmore">
-                      <i class="bi bi-plus"></i>
-                    </button>
-                  </div>
-                </div>
+              <div id="areaAddMoreItem">
+                <!-- 1 the mon an kem -->
+
+                <!-- ------------------------  -->
               </div>
             </div>
+
           </div>
         </div>
         <div class="modal-footer">

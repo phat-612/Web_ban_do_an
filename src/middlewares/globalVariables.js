@@ -1,6 +1,6 @@
 import shopModel from "../services/ShopModel";
 
-const globalVariable = async (req, res, next) => {
+const globalVariables = async (req, res, next) => {
   try {
     const infoShop = await shopModel.getInfoShop();
     res.locals.infoShop = infoShop[0];
@@ -10,4 +10,4 @@ const globalVariable = async (req, res, next) => {
   }
 };
 
-export default infoShopMiddleware;
+export default globalVariables;

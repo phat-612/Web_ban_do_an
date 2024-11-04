@@ -6,7 +6,7 @@
     <div class="mb-3">
       <div class="col-12 row d-flex justify-content-center align-items-center">
         <div class="col-12 d-flex justify-content-center align-items-center">
-          <a href="tel:19001533" class="text-white h5" style="margin-bottom: -3px; text-decoration: none;text-shadow: 2px 2px 4px #000000;">1900-1533</a>
+          <a href="tel:<%= infoShop.phone %>" class="text-white h5" style="margin-bottom: -3px; text-decoration: none;text-shadow: 2px 2px 4px #000000;"><%= infoShop.phone %></a>
         </div>
         <div style="background-color: white; border-radius: 40px; height: 20px; box-shadow: 2px 2px 4px #000000;" class="col-7 d-flex justify-content-center align-items-center">
           <span class="text-dark fw-bold">GIAO HÀNG TẬN NƠI</span>
@@ -14,10 +14,10 @@
       </div>
     </div>
     <div class="mb-3">
-      <h6 class="fw-bold text-white">THỜI GIAN MỞ CỬA: </h6>
+      <h6 class="fw-bold text-white">THỜI GIAN MỞ CỬA: <%= infoShop.activeTime %></h6>
     </div>
     <div class="mb-3">
-      <h6 class="fw-bold text-white">CỬA HÀNG: </h6>
+      <h6 class="fw-bold text-white">CỬA HÀNG: <%= infoShop.address %></h6>
     </div>
     <div class="mb-3">
       <a href="" class="h6 fw-bold text-white" style="text-decoration: none;">CHÍNH SÁCH SÁCH THANH TOÁN VÀ ĐẶT HÀNG</a>
@@ -34,7 +34,7 @@
       <a class="fw-bold text-white h4" style="text-decoration: none;"><i style="color:rgb(80,185 ,10 );" class="bi bi-facebook"></i> FACEBOOK</a>
     </div>
     <div class="mb-3">
-      <a class="fw-bold text-white h4" style="text-decoration: none;"><i style="color:rgb(80,185 ,10 );" class="bi bi-envelope"></i> E-MAIL</a>
+      <p type="Email:<%= infoShop.email %>" class="fw-bold text-white h4" style="text-decoration: none;"><i style="color:rgb(80,185 ,10 );" class="bi bi-envelope"></i> <%= infoShop.email %></p>
     </div>
     <div class="mb-3">
       <a href="/feedback" class="fw-bold text-white h4" style="text-decoration: none;">

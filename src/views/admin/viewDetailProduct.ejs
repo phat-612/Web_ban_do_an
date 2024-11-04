@@ -5,15 +5,17 @@
 <!-- ----- -->
 <div class="container">
   <style>
-    input{
+    input {
       border: none !important;
       outline: none !important;
     }
-    textarea{
+
+    textarea {
       border: none !important;
       outline: none !important;
     }
-    select{
+
+    select {
       border: none !important;
       outline: none !important;
     }
@@ -21,46 +23,27 @@
   <form>
     <div class="row d-flex mt-3 justify-content-center">
       <label class="form-label col-2">Tên sản phẩm</label>
-      <input
-        disabled
-        type="text"
-        class="col-7"
-        name="name"
-        value="<%= data.product.name %>"
-      />
+      <input disabled type="text" class="col-7" name="name" value="<%= data.product.name %>" />
     </div>
     <div class="row d-flex mt-3 justify-content-center">
       <label class="form-label col-2">Giá sản phẩm</label>
-      <input
-        disabled
-        type="number"
-        class="col-7"
-        name="currentPrice"
-        value="<%= data.product.currentPrice %>"
-      />
+      <input disabled type="number" class="col-7" name="currentPrice" value="<%= data.product.currentPrice %>" />
     </div>
     <div class="row d-flex mt-3 justify-content-center">
       <label class="form-label col-2">Danh mục</label>
-      <input
-        disabled
-        type="text"
-        class="col-7"
-        name="name"
-        value="<%= data.product.nameCategory %>"
-      />
+      <input disabled type="text" class="col-7" name="name" value="<%= data.product.nameCategory %>" />
     </div>
     <div class="row d-flex mt-3 justify-content-center">
       <label class="form-label col-2"> Mô tả sản phẩm</label>
       <textarea disabled name="description" class="col-7" style="resize: none;">
-<%= data.product.description %></textarea
-      >
+<%= data.product.description %></textarea>
     </div>
     <div class="row d-flex mt-3 justify-content-center">
       <label class="form-label col-2"> Món ăn kèm </label>
       <div class="col-7">
         <select id="multiple-select" name="addMore" multiple disabled>
           <% data.productAddMore.forEach(function(product) { %>
-          <option selected><%= product.nameProductAdd %></option>
+          <option selected><%= product.name %></option>
           <% }); %>
         </select>
       </div>
@@ -68,27 +51,14 @@
     <div class="row d-flex mt-3 justify-content-center">
       <div class="col-2"></div>
       <div class="col-7 text-center">
-        <img
-          src="/imgs/products/<%= data.product.image %>"
-          alt=""
-          id="preview"
-          style="max-height: 130px;"
-        />
+        <img src="/imgs/products/<%= data.product.image %>" alt="" id="preview" style="max-height: 130px;" />
       </div>
     </div>
-    <input
-      disabled
-      type="text"
-      name="id"
-      hidden
-      value="<%= data.product.id %>"
-    />
+    <input disabled type="text" name="id" hidden value="<%= data.product.id %>" />
     <div class="row d-flex mt-3 justify-content-center">
       <div class="col-2"></div>
       <div class="col-7 text-center">
-        <a href="/admin/product/edit/<%= data.product.id %>"
-          >Chỉnh sửa sản phẩm</a
-        >
+        <a href="/admin/product/edit/<%= data.product.id %>">Chỉnh sửa sản phẩm</a>
       </div>
     </div>
   </form>

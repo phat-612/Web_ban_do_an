@@ -2,9 +2,41 @@ import pool from "../config/db";
 
 const getAllProduct = async () => {
   const [row, fields] = await pool.execute(
-    "SELECT products.id, products.name, currentPrice, description, products.image, categories.name as nameCategory FROM products JOIN categories on products.idCategory = categories.id"
+    "SELECT products.*, categories.id idCategory, categories.name nameCategory, productAdd.id idProductAdd, productAdd.name nameProductAdd, productAdd.currentPrice currentPriceProductAdd, productAdd.image imageProductAdd, productAdd.isExit isExitProductAdd , productAdd.isBussiness isBussinessProductAdd from products left JOIN categories on categories.id = products.idCategory left JOIN itemAddMore on products.id = itemAddMore.idProduct left JOIN products as productAdd on productAdd.id = itemAddMore.idProductAdd"
   );
-  return row;
+
+  // const [row, fields] = await pool.execute(
+  //   "SELECT products.id, products.name, currentPrice, description, products.image, categories.name as nameCategory FROM products JOIN categories on products.idCategory = categories.id"
+  // );
+  // console.log(row);
+  let products = [];
+  row.forEach((product) => {
+    let index = products.findIndex((item) => item.id === product.id);
+    if (index === -1) {
+      products.push({
+        id: product.id,
+        name: product.name,
+        currentPrice: product.currentPrice,
+        description: product.description,
+        image: product.image,
+        idCategory: product.idCategory,
+        nameCategory: product.nameCategory,
+        itemAddMore: [],
+      });
+      index = products.length - 1;
+    }
+    if (product.idProductAdd)
+      products[index].itemAddMore.push({
+        id: product.idProductAdd,
+        name: product.nameProductAdd,
+        currentPrice: product.currentPriceProductAdd,
+        image: product.imageProductAdd,
+        isExit: product.isExitProductAdd,
+        isBussiness: product.isBussinessProductAdd,
+      });
+  });
+
+  return products;
 };
 const getProductById = async (id) => {
   const [row, fields] = await pool.execute(
@@ -22,11 +54,24 @@ const getProductByCategory = async (category) => {
 };
 const getItemAddMore = async (id) => {
   const [row, fields] = await pool.execute(
-    "SELECT idProductAdd, products.name as nameProductAdd FROM itemAddMore JOIN products on products.id = itemAddMore.idProductAdd WHERE idProduct = ?",
+    "SELECT idProductAdd, products.* FROM itemAddMore JOIN products on products.id = itemAddMore.idProductAdd WHERE idProduct = ?",
     [id]
   );
   return row;
 };
+const getFullProduct = async () => {
+  const [row, fields] = await pool.execute(
+    "SELECT * FROM products left join itemAddMore on products.id = itemAddMore.idProduct left join categories on products.idCategory = categories.id"
+  );
+  return row;
+};
+
+// const getItemAddMoreFromProductlist = async (productList) => {
+//   console.log(productList);
+//   productList.forEach((product) => {
+//     console.log(product);
+//   });
+// };
 const isProductDelete = async (id) => {
   const [row, fields] = await pool.execute(
     "SELECT idProduct FROM orderDetail WHERE idProduct = ?",
@@ -135,4 +180,5 @@ export default {
   deleteProduct,
   getItemAddMore,
   getProductByCategory,
+  getFullProduct,
 };
