@@ -43,7 +43,7 @@ $(".btnShowModal").on("click", function (e) {
     eleAreaAddMore.show();
     itemAddMore.forEach((item) => {
       eleAreaAddMoreItem.append(
-        `<div class="row d-flex justify-content-around align-items-center">
+        `<div class="row d-flex justify-content-around align-items-center mb-3">
           <div class="col-2">
             <img src="/imgs/products/${item.image}" alt="" width="100" />
           </div>
@@ -62,7 +62,7 @@ $(".btnShowModal").on("click", function (e) {
             </div>
           </div>
           <div class="col-2">
-            <p>${item.currentPrice}</p>
+            <p class="h6">${item.currentPrice}</p>
           </div>
         </div>`
       );

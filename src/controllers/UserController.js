@@ -5,14 +5,21 @@ import bcrypt from "bcrypt";
 const getUserHomePage = async (req, res) => {
   const user = req.session.user;
   const productList = await productModel.getAllProduct();
+  const success = req.session.success || ""; // Đảm bảo là chuỗi rỗng nếu không có thông báo
+  const error = req.session.error || ""; // Đảm bảo là chuỗi rỗng nếu không có thông báo
 
+  req.session.success = null;
+  req.session.error = null;
   res.render("main", {
     data: {
       title: "Home",
       header: "partials/headerUser",
       footer: "partials/footerUser",
       page: "user/home",
+      script: "/alert",
       user: user,
+      success: success,
+      error: error,
       products: productList,
     },
   });
@@ -215,24 +222,25 @@ const getDeleteAccount = async (req, res) => {
   });
 };
 // api login
-
 const login = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
-    return res
-      .status(400)
-      .json({ message: "Vui lòng nhập đầy đủ email và mật khẩu" });
+    req.session.error = "Vui lòng nhập đầy đủ email và mật khẩu";
+    return res.redirect("/"); // Chuyển hướng tới trang chính
   }
+
   const user = await userModel.login(email);
 
   if (!user || user.status == 3) {
-    return res.status(401).json({ message: "Tài khoản không tồn tại" });
+    req.session.error = "Tài khoản không tồn tại";
+    return res.redirect("/");
   }
+
   if (user && user.status == 2) {
-    return res.status(401).json({
-      message: "Tài khoản đã bị khóa do vi phạm tiêu chuẩn cộng đồng",
-    });
+    req.session.error = "Tài khoản đã bị khóa do vi phạm tiêu chuẩn cộng đồng";
+    return res.redirect("/");
   }
+
   const isPassword = await bcrypt.compare(password, user.password);
 
   if (user && user.status == 1) {
@@ -244,15 +252,16 @@ const login = async (req, res) => {
         phone: user.phone,
         status: user.status,
         role: user.role,
-        isLoggedIn: true,
       };
+      req.session.success = "Đăng nhập thành công!";
     } else {
-      return res.status(401).json({ message: "Mặt khẩu không chính xác" });
+      req.session.error = "Mật khẩu không chính xác";
     }
   } else {
-    return res.status(401).json({ message: "Tài khoản không tồn tại" });
+    req.session.error = "Tài khoản không tồn tại";
   }
-  return res.redirect("back");
+
+  return res.redirect("/");
 };
 
 // desstroy session

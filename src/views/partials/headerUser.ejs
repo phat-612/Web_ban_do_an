@@ -124,11 +124,11 @@
 
   <!-- Modal dang nhap -->
   <div class="modal fade" id="ModalDangNhap" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <form action="api/login" method="POST">
+    <form action="api/login" data-success="Đăng nhập thành công!" data-error="Email hoặc mật khẩu không đúng." method="POST">
       <div class="modal-dialog">
         <div class="modal-content">
           <div class="modal-header text-center">
-            <h5 class="w-100 text-center p-2" id="exampleModalLabel">
+            <h5 class="w-100 text-center p-2" id="exampleModalLabel ">
               ĐĂNG NHẬP
             </h5>
             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -158,3 +158,6 @@
     </form>
   </div>
 </div>
+<script>
+  showAlert()
+</script>
