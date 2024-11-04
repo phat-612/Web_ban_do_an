@@ -2,9 +2,10 @@
 
 $(".modal-btnCloseModal").on("click", function () {
   $(".quantity-Product").val(1);
+  $(".quantity-Addmore").val(0);
 });
 
-// xu ly input so luong san pham trong modal neu bi xoa so ttrong input
+// xu ly input so luong san pham trong modal neu bi xoa so trong input
 
 $(".quantity-Product").on("change", function () {
   const input = $(".quantity-Product");
@@ -52,11 +53,11 @@ $(".btnShowModal").on("click", function (e) {
           </div>
           <div class="col-2">
             <div class="input-group mb-3">
-              <button class="btn btn-outline-secondary" type="button" id="button-minus-Addmore">
+              <button class="btn btn-outline-secondary button-minus-Addmore" type="button">
                 <i class="bi bi-dash"></i>
               </button>
-              <input style="text-align: center;" id="quantity-Addmore" type="number" class="form-control quantity-Addmore" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" min="0" max="100" oninput="validity.valid||(value='');" value="0" />
-              <button class="btn btn-outline-secondary" type="button" id="button-plus-Addmore">
+              <input style="text-align: center;" type="number" class="form-control quantity-Addmore" aria-label="Example text with button addon" aria-describedby="button-addon1" min="0" max="100" oninput="validity.valid||(value='');" value="0" />
+              <button class="btn btn-outline-secondary button-plus-Addmore" type="button">
                 <i class="bi bi-plus"></i>
               </button>
             </div>
@@ -68,6 +69,32 @@ $(".btnShowModal").on("click", function (e) {
       );
     });
   }
+
+  // xu ly nut cong tru so luong cua mon an kem
+
+  $(".button-minus-Addmore").on("click", function (e) {
+    const inputAddmore = $(this)
+      .closest(".input-group")
+      .find(".quantity-Addmore");
+    let inputAddmoreValue = parseInt(inputAddmore.val());
+
+    if (inputAddmoreValue > 1) {
+      inputAddmoreValue--;
+      inputAddmore.val(inputAddmoreValue);
+    }
+  });
+
+  $(".button-plus-Addmore").on("click", function (e) {
+    const inputAddmore = $(this)
+      .closest(".input-group")
+      .find(".quantity-Addmore");
+    let inputAddmoreValue = parseInt(inputAddmore.val());
+
+    if (inputAddmoreValue < 100) {
+      inputAddmoreValue++;
+      inputAddmore.val(inputAddmoreValue);
+    }
+  });
 });
 
 // xu ly nut cong tru so luong san pham trong modal
@@ -96,13 +123,7 @@ $(".button-plus-Product").on("click", function (e) {
   }
 });
 
-//
-$("#button-plus-Addmore").on("click", function (e) {
-  const btn = e.target;
-  const inputGroup = $(btn.closest(".input-group"));
-  const inpValue = btn.getAtrribute("quantity-Addmore");
-});
-
+// api :((
 function sendFetchUpdateQuantityAddmore() {
   fetch("", {
     method: "POST",

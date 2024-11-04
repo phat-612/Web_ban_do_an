@@ -2,6 +2,7 @@ import categoryModel from "../services/CategoryModel";
 import userModel from "../services/UserModel";
 import productModel from "../services/ProductModel";
 import bcrypt from "bcrypt";
+
 const getUserHomePage = async (req, res) => {
   const user = req.session.user;
   const productList = await productModel.getAllProduct();
@@ -35,6 +36,7 @@ const getUserMenuPage = async (req, res) => {
     productList = await productModel.getAllProduct();
   }
   const categoryList = await categoryModel.getAllCategory();
+  // console.log(productList);
   res.render("main", {
     data: {
       title: "Menu",
@@ -226,7 +228,7 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   if (!email || !password) {
     req.session.error = "Vui lòng nhập đầy đủ email và mật khẩu";
-    return res.redirect("/"); // Chuyển hướng tới trang chính
+    return res.redirect("/");
   }
 
   const user = await userModel.login(email);

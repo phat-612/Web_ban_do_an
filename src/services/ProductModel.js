@@ -1,5 +1,12 @@
 import pool from "../config/db";
 
+// format money
+const formatter = new Intl.NumberFormat("vi-VN", {
+  style: "currency",
+  currency: "VND",
+  trailingZeroDisplay: "stripIfInteger",
+});
+
 const getAllProduct = async () => {
   const [row, fields] = await pool.execute(
     "SELECT products.*, categories.id idCategory, categories.name nameCategory, productAdd.id idProductAdd, productAdd.name nameProductAdd, productAdd.currentPrice currentPriceProductAdd, productAdd.image imageProductAdd, productAdd.isExit isExitProductAdd , productAdd.isBussiness isBussinessProductAdd from products left JOIN categories on categories.id = products.idCategory left JOIN itemAddMore on products.id = itemAddMore.idProduct left JOIN products as productAdd on productAdd.id = itemAddMore.idProductAdd"
@@ -16,7 +23,7 @@ const getAllProduct = async () => {
       products.push({
         id: product.id,
         name: product.name,
-        currentPrice: product.currentPrice,
+        currentPrice: formatter.format(product.currentPrice),
         description: product.description,
         image: product.image,
         idCategory: product.idCategory,
@@ -29,7 +36,7 @@ const getAllProduct = async () => {
       products[index].itemAddMore.push({
         id: product.idProductAdd,
         name: product.nameProductAdd,
-        currentPrice: product.currentPriceProductAdd,
+        currentPrice: formatter.format(product.currentPriceProductAdd),
         image: product.imageProductAdd,
         isExit: product.isExitProductAdd,
         isBussiness: product.isBussinessProductAdd,
