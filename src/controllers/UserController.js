@@ -5,6 +5,7 @@ import bcrypt from "bcrypt";
 const getUserHomePage = async (req, res) => {
   const user = req.session.user;
   const productList = await productModel.getAllProduct();
+
   res.render("main", {
     data: {
       title: "Home",

@@ -39,7 +39,7 @@
             <h5 class="card-title d-flex justify-content-center">
               <%= product.currentPrice %>
             </h5>
-            <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-success d-flex justify-content-center">Thêm Vào Giỏ Hàng</a>
+            <a data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-success d-flex justify-content-center btnShowModal" data-bs-productName="<%= product.name %>" data-bs-productCurrentPrice="<%= product.currentPrice %>" data-bs-productImage="<%= product.image %>" data-bs-productDescription="<%= product.description %>">Thêm Vào Giỏ Hàng</a>
           </div>
         </div>
       </div>
@@ -52,19 +52,25 @@
     <div class="modal-dialog modal-xl">
       <div class="modal-content">
         <div class="modal-header">
-          <h5 class="modal-title" id="staticBackdropLabel">Modal title</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <!-- modal title la` ten mon an  -->
+          <h4 class="modal-title modal-productName" id="staticBackdropLabel"></h4>
+          <button type="button" class="btn-close modal-btnCloseModal" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body row">
           <div class="col-4 row d-flex justify-content-center">
-            <img src="https://specialdocs.com/wp-content/uploads/2017/11/AICR_NewAmericanPlate-824x824-1.png" class="card-img-top" alt="Ảnh + tên món ăn" />
-            <div class="col-4">
+            <img src="" class="card-img-top mb-3 modal-productImage" alt="Ảnh + tên món ăn" />
+            <div class="d-flex justify-content-center mb-3">
+              <!-- gia san pham -->
+              <h3 class="modal-productCurrentPrice"></h3>
+            </div>
+            <!-- nut cong tru so luong san pham -->
+            <div class="col-4 mb-3">
               <div class="input-group mb-3">
-                <button class="btn btn-outline-secondary" type="button" id="button-minus-Product">
+                <button class="btn btn-outline-secondary button-minus-Product" type="button" id="">
                   <i class="bi bi-dash"></i>
                 </button>
-                <input id="quantity-Product" type="number" class="form-control quantity-Product" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" min="0" max="100" oninput="validity.valid||(value='');" value="0" />
-                <button class="btn btn-outline-secondary" type="button" id="button-plus-Product">
+                <input style="text-align: center;" type="number" class="form-control quantity-Product" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" min="0" max="100" oninput="validity.valid||(value='');" value="1" />
+                <button class="btn btn-outline-secondary button-plus-Product" type="button" id="">
                   <i class="bi bi-plus"></i>
                 </button>
               </div>
@@ -73,12 +79,7 @@
           <div class="col">
             <div>
               <!-- mô tả món ăn -->
-              <p>
-                Lorem ipsum dolor sit amet consectetur adipisicing elit. Facere
-                officia perspiciatis nobis, aut deleniti facilis velit quaerat
-                architecto sed alias exercitationem odio sit nihil rem vitae quae
-                quos minus! Odio.
-              </p>
+              <p class="modal-productDescription"></p>
             </div>
             <div>
               <strong class="h5 mb-3">Danh Sách món ăn kèm</strong>
@@ -94,7 +95,7 @@
                     <button class="btn btn-outline-secondary" type="button" id="button-minus-Addmore">
                       <i class="bi bi-dash"></i>
                     </button>
-                    <input id="quantity-Addmore" type="number" class="form-control quantity-Addmore" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" min="0" max="100" oninput="validity.valid||(value='');" value="0" />
+                    <input style="text-align: center;" id="quantity-Addmore" type="number" class="form-control quantity-Addmore" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" min="0" max="100" oninput="validity.valid||(value='');" value="0" />
                     <button class="btn btn-outline-secondary" type="button" id="button-plus-Addmore">
                       <i class="bi bi-plus"></i>
                     </button>
