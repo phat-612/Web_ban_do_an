@@ -15,7 +15,18 @@ router.post(
 // account admin
 router.post("/updateStatusUser", adminController.setStatus);
 router.post("/updateRoleUser", adminController.setRole);
-// USER API
+router.post(
+  "/editProduct",
+  upload.single("productImage"),
+  adminController.editProduct
+);
+router.post("/deleteProduct", adminController.deleteProduct);
+// cập nhật thông tin của hàng
+router.post("/updateShopInfo", adminController.updateInfoShop);
+// USER API-------------------------------------------------------------------------------
+
+// thêm sản phẩm vào gio hang
+router.post("/addProductToCart", userController.addProductToCart);
 // feedback
 router.post("/sendFeedback", userController.sendFeedback);
 // login
@@ -39,13 +50,6 @@ router.post("/changePassword", userController.changePassword);
 // hủy tài khoản
 router.post("/cancelAccount", userController.cancelAccount);
 // hủy đơn hàng
-
 router.get("/cancelOrder/:id", userController.cancelOrder);
-router.post(
-  "/editProduct",
-  upload.single("productImage"),
-  adminController.editProduct
-);
-router.post("/deleteProduct", adminController.deleteProduct);
-router.post("/updateShopInfo", adminController.updateInfoShop);
+
 export default router;

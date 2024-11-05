@@ -3,6 +3,7 @@ import userModel from "../services/UserModel";
 import productModel from "../services/ProductModel";
 import bcrypt from "bcrypt";
 
+// TRANG CHU
 const getUserHomePage = async (req, res) => {
   const user = req.session.user;
   const productList = await productModel.getAllProduct();
@@ -26,6 +27,7 @@ const getUserHomePage = async (req, res) => {
   });
 };
 
+// THUC DON
 const getUserMenuPage = async (req, res) => {
   const user = req.session.user;
   const { category } = req.query;
@@ -342,6 +344,17 @@ const cancelOrder = async (req, res) => {
 
   res.redirect("back");
 };
+
+const addProductToCart = async (req, res) => {
+  const data = req.body;
+  const userId = req.session.user.id;
+  if (!userId) {
+    console.log("ban chua dang nhap");
+  } else {
+    console.log(userId, data);
+  }
+};
+
 export default {
   getUserHomePage,
   getUserMenuPage,
@@ -366,4 +379,5 @@ export default {
   changePassword,
   cancelAccount,
   cancelOrder,
+  addProductToCart,
 };
