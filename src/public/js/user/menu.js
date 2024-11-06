@@ -1,3 +1,16 @@
+// xy ly xem nguoi dung co dang nhập hay chưa
+
+$("#modalFormAddToCart").on("submit", function (e) {
+  e.preventDefault();
+  const isLogin = $(".isLogin").getAttribute("data-bs-isLogin");
+  if (isLogin == "true") {
+    next();
+  } else {
+    $(".divModalFormAddToCart").attr("aria-hidden", true);
+    $("#ModalDangNhap").attr("aria-hidden", false);
+  }
+});
+
 // xu ly nut dong' modal thi` refresh cac gia' tri.
 
 $(".modal-btnCloseModal").on("click", function () {

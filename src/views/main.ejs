@@ -50,7 +50,7 @@
   </head>
 
   <body>
-    <% if (data.header) { %> <%- include(data.header, { user: data.user }) %>
+    <% if (data.header) { %> <%- include(data.header) %>
     <!-- Truyền user vào header -->
     <% } %> <% if (data.page) { %> <%- include(data.page) %> <% } %> <% if
     (data.footer) { %> <%- include(data.footer) %> <% } %>

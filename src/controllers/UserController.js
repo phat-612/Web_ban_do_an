@@ -70,6 +70,8 @@ const sendFeedback = async (req, res) => {
 };
 // cart
 const getCartPage = async (req, res) => {
+  let listAddress = await userModel.getAllAddress(req.session.user.id);
+
   res.render("main", {
     data: {
       title: "Cart",
@@ -77,6 +79,7 @@ const getCartPage = async (req, res) => {
       footer: "partials/footerUser",
       page: "user/cart",
       script: "user/cart",
+      listAddress: listAddress,
     },
   });
 };
@@ -360,11 +363,11 @@ const cancelOrder = async (req, res) => {
 
 const addProductToCart = async (req, res) => {
   const data = req.body;
-  const userId = req.session.user.id;
-  if (!userId) {
+  const user = req.session.user;
+  if (!user) {
     console.log("ban chua dang nhap");
   } else {
-    console.log(userId, data);
+    console.log(user.id, data);
   }
 };
 
