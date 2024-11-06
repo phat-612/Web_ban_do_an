@@ -1,20 +1,20 @@
 import express from "express";
 import userController from "../controllers/UserController";
-import { checkLogin, checkStatus } from "../middlewares/login";
+import { isUser } from "../middlewares/login";
 const router = express.Router();
 
 // Routes
 router.get("/", userController.getUserHomePage);
 router.get("/menu", userController.getUserMenuPage);
 router.get("/feedback", userController.getUserFeedback);
-router.get("/cart", userController.getCartPage);
+router.get("/cart", isUser, userController.getCartPage);
 // profile
-router.get("/profile/:id", checkLogin, checkStatus, userController.getProfile);
-router.get("/profileAddress", userController.getProfileAddress);
-router.get("/listAddress", userController.getListAddress);
-router.get("/historyProduct", userController.getHistoryProduct);
-router.get("/rePassword", userController.getRePassword);
-router.get("/deleteAccount", userController.getDeleteAccount);
+router.get("/profile", isUser, userController.getProfile);
+router.get("/addAddress", isUser, userController.getProfileAddress);
+router.get("/listAddress", isUser, userController.getListAddress);
+router.get("/historyProduct", isUser, userController.getHistoryProduct);
+router.get("/rePassword", isUser, userController.getRePassword);
+router.get("/deleteAccount", isUser, userController.getDeleteAccount);
 router.get("/register", userController.getRegister);
 
 export default router;

@@ -5,11 +5,7 @@ import bcrypt from "bcrypt";
 
 // TRANG CHU
 const getUserHomePage = async (req, res) => {
-  const user = req.session.user;
   const productList = await productModel.getAllProduct();
-  const success = req.session.success || ""; // Đảm bảo là chuỗi rỗng nếu không có thông báo
-  const error = req.session.error || ""; // Đảm bảo là chuỗi rỗng nếu không có thông báo
-
   req.session.success = null;
   req.session.error = null;
   res.render("main", {
@@ -19,9 +15,6 @@ const getUserHomePage = async (req, res) => {
       footer: "partials/footerUser",
       page: "user/home",
       script: "/alert",
-      user: user,
-      success: success,
-      error: error,
       products: productList,
     },
   });
@@ -86,12 +79,8 @@ const getCartPage = async (req, res) => {
 // end cart
 // start profile
 const getProfile = async (req, res) => {
-  const id = req.session.user.id;
   const user = req.session.user;
-  if (!id) {
-    return res.status(400).send("ID không hợp lệ");
-  }
-  const userProfile = await userModel.userProfile(id);
+  const userProfile = await userModel.userProfile(user.id);
   if (!user) {
     return res.status(404).send("Người dùng không tồn tại");
   }
@@ -245,7 +234,6 @@ const getDeleteAccount = async (req, res) => {
 const login = async (req, res) => {
   const { email, password } = req.body;
 
-  // Kiểm tra nếu email hoặc mật khẩu không được cung cấp
   if (!email || !password) {
     return res.json({
       success: false,
@@ -325,24 +313,26 @@ const apiRegister = async (req, res) => {
 const editProfile = async (req, res) => {
   const data = req.body;
   const user = req.session.user;
-
   if (!data.name || !data.email || !data.phone || !data.sex || !data.date) {
     return res.status(400).send("Vui lòng điền đầy đủ thông tin");
   }
 
   const updatedData = {
-    id: user.id,
     name: data.name,
     email: data.email,
     phone: data.phone,
     sex: data.sex,
     date: data.date,
-    status: "1",
   };
 
   await userModel.editProfile(user.id, updatedData);
-
-  res.redirect(`/profile/${user.id}`);
+  req.session.user = {
+    ...user,
+    email: updatedData.email,
+    name: updatedData.name,
+    phone: updatedData.phone,
+  };
+  res.redirect("/profile/");
 };
 // người dùng hủy tài khoản
 const cancelAccount = async (req, res) => {
