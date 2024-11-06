@@ -83,6 +83,25 @@ const getCartPage = async (req, res) => {
     },
   });
 };
+const addProductToCart = async (req, res) => {
+  const data = req.body;
+  const user = req.session.user;
+  if (!user) {
+    console.log("ban chua dang nhap");
+  } else {
+    console.log(user.id, data);
+  }
+};
+const updateQuantityCart = async (req, res) => {
+  const { idProdcut, quantity } = req.body;
+  const user = req.session.user;
+  if (quantity == 0) {
+    await userModel.deleteProductCart(user.id, idProdcut);
+    return res.json({ success: true, message: "Xóa sản phẩm thành công" });
+  }
+  await userModel.updateQuantityCart(user.id, idProdcut, quantity);
+  return res.json({ success: true, message: "Cập nhật số lượng thành công" });
+};
 // end cart
 // start profile
 const getProfile = async (req, res) => {
@@ -361,16 +380,6 @@ const cancelOrder = async (req, res) => {
   res.redirect("back");
 };
 
-const addProductToCart = async (req, res) => {
-  const data = req.body;
-  const user = req.session.user;
-  if (!user) {
-    console.log("ban chua dang nhap");
-  } else {
-    console.log(user.id, data);
-  }
-};
-
 export default {
   getUserHomePage,
   getUserMenuPage,
@@ -397,4 +406,5 @@ export default {
   cancelAccount,
   cancelOrder,
   addProductToCart,
+  updateQuantityCart,
 };

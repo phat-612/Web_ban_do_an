@@ -6,7 +6,7 @@
           text-overflow: ellipsis;
       }
   </style>
-  <div class="row">
+  <form class="row">
     <div class="col-7 p-1">
       <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
@@ -21,9 +21,12 @@
           class="row position-relative shadow p-1 mb-3 bg-body rounded justify-content-between"
         >
           <span
-            class="position-absolute text-danger end-0 col-1 border text-center rounded"
-            >Xóa</span
+            type="submit"
+            class="position-absolute text-danger end-0 col-1 border text-center rounded deleteProduct"
+            data-bs-idProduct="1"
           >
+            Xóa
+          </span>
           <div class="col-2 align-self-center">
             <img
               src="https://cdn.tgdd.vn/Files/2019/11/15/1219188/3-cong-thuc-lam-salad-ca-ngu-cuc-don-gian-giau-dinh-duong-lam-nhanh-6.jpg"
@@ -32,24 +35,43 @@
             />
           </div>
           <div class="col-6 align-self-center">
-            <h2>salad cá ngừ</h2>
+            <h2 class="nameProduct">salad cá ngừ</h2>
             <p class="one-row">
               Lorem ipsum dolor sit amet consectetur adipisicing elit. I
             </p>
-            <p class="text-danger fs-4 fw-bold">125.000 đ</p>
+            <p
+              class="priceProduct"
+              data-bs-priceProduct="125000"
+              class="text-danger fs-4 fw-bold"
+            >
+              125.000 đ
+            </p>
           </div>
-          <div class="col-3 align-self-center align-item-center">
-            <button class="btn border w-10 fw-bold py-1">-</button>
-            <input type="number" class="w-50" value="1" />
-            <button class="btn border w-10 fw-bold py-1">+</button>
+          <div
+            class="col-3 align-self-center align-item-center controlQuantity"
+          >
+            <button
+              type="button"
+              class="btn border w-10 fw-bold py-1 minusQuantity"
+            >
+              -
+            </button>
+            <input
+              type="number"
+              class="inpQuantity w-50"
+              value="1"
+              data-bs-idProduct="1"
+            />
+            <button
+              type="button"
+              class="btn border w-10 fw-bold py-1 addQuantity"
+            >
+              +
+            </button>
           </div>
+          <input type="text" hidden value="1" name="idProduct" />
         </div>
         <!-- kết thúc -->
-      </div>
-      <div class="shadow p-1 mb-3 bg-body rounded">
-        <h4>Lưu ý khi đặt hàng</h4>
-        <textarea name="" id="" class="w-100 rounded " style="resize: none;">
-        </textarea>
       </div>
     </div>
     <div class="col-5">
@@ -65,14 +87,26 @@
           </span>
         </h4>
 
-        <p>
-          Nguyễn Văn Phát - 0382909902 - 123 đường 3/2, phường 12, quận 10,
-          TP.HCM
-        </p>
+        <p class="showAddress"></p>
+        <!-- input ẩn vận chuyển -->
+        <input type="text" hidden name="nameDelivery" />
+        <input type="text" hidden name="phoneDelivery" />
+        <input type="text" hidden name="addressDelivery" />
+        <!-- kết thúc -->
+      </div>
+      <div class="rounded border p-1 mb-2">
+        <h4>Lưu ý khi đặt hàng</h4>
+        <textarea
+          name="description"
+          id=""
+          class="w-100 rounded "
+          style="resize: none;"
+        >
+        </textarea>
       </div>
       <div class="rounded border p-1 mb-2">
         <!-- tong phu -->
-        <div class="fs-5">
+        <div class="fs-5 areaSubTotal">
           <!-- 1 sản phẩm -->
           <div class="d-flex justify-content-between">
             <span>salad cá ngừ</span>
@@ -83,14 +117,16 @@
         <!-- tong cong -->
         <div class="d-flex justify-content-between fs-4 text-danger">
           <span>Tổng cộng</span>
-          <span>123.000đ</span>
+          <span class="total">123.000đ</span>
         </div>
         <div>
-          <button class="btn btn-primary w-100">Thanh toán</button>
+          <button type="submit" class="btn btn-primary w-100">
+            Thanh toán
+          </button>
         </div>
       </div>
     </div>
-  </div>
+  </form>
 </div>
 
 <!-- modal chọn địa chỉ -->
@@ -121,12 +157,11 @@
         <% data.listAddress.forEach((address, index) => { %>
         <div class="row align-items-center">
           <div class="col-1">
-            <input
-              type="radio"
-              name="address"
-              id="address<%= address.id %>"
-              selected
-            />
+            <input type="radio" name="address" id="address<%= address.id %>"
+            value="<%= address.name %> - <%= address.phone %> - <%=
+            address.address %>" data-bs-name="<%= address.name %>"
+            data-bs-phone="<%= address.phone %>" data-bs-address="<%=
+            address.address %>" <%= address.isDefault ? 'checked' : '' %> />
           </div>
           <label class="col-11" for="address<%= address.id %>">
             <div class="d-flex justify-content-between">
@@ -139,6 +174,7 @@
         <% }); %>
         <!-- kết thúc -->
       </div>
+      <a href="/profileAddress" class="w-100 btn btn-primary">Thêm địa chỉ</a>
     </div>
   </div>
 </div>
