@@ -28,9 +28,20 @@ const getCart = async (idUser) => {
   );
   return rows;
 };
+const getCartDetail = async (idUser) => {
+  const [rows, field] = await pool.execute(
+    `SELECT  c.idProduct, p.name, p.currentPrice, p.image, c.quantity
+        FROM carts c
+        JOIN products p ON c.idProduct = p.id
+        WHERE c.idUser = ?`,
+    [idUser]
+  );
+  return rows;
+};
 export default {
   deleteProduct,
   updateQuantityProduct,
   addProduct,
   getCart,
+  getCartDetail,
 };

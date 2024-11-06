@@ -1,12 +1,8 @@
 $(document).ready(function () {
-  // xử lý khi website load
-  loadTotal();
-  setAddress();
-  // show address
+  // function
   const setAddress = () => {
     const eleAddressChecked = $('input[name="address"]:checked');
     $(".showAddress").text(eleAddressChecked.val());
-
     $('input[name="nameDelivery"]').val(eleAddressChecked.attr("data-bs-name"));
     $('input[name="phoneDelivery"]').val(
       eleAddressChecked.attr("data-bs-phone")
@@ -15,40 +11,6 @@ $(document).ready(function () {
       eleAddressChecked.attr("data-bs-address")
     );
   };
-
-  $('input[name="address"]').on("change", () => {
-    setAddress();
-  });
-  // xử lý số lượng sản phẩm trong giỏ hàng
-  $(".minusQuantity").on("click", function (e) {
-    const input = $(this).closest(".controlQuantity").find(".inpQuantity");
-    let inputvalue = parseInt(input.val());
-
-    if (inputvalue > 1) {
-      inputvalue--;
-      input.val(inputvalue);
-    }
-    input.trigger("change");
-  });
-  $(".addQuantity").on("click", function (e) {
-    const input = $(this).closest(".controlQuantity").find(".inpQuantity");
-    let inputvalue = parseInt(input.val());
-    inputvalue++;
-    input.val(inputvalue);
-    input.trigger("change");
-  });
-  $(".inpQuantity").on("change", function () {
-    let inputvalue = parseInt($(this).val());
-    if (isNaN(inputvalue)) {
-      $(this).val(1);
-    }
-    updateQuantity($(this).attr("data-bs-idProduct"), inputvalue);
-  });
-  //   xóa sản phẩm trong giỏ hàng
-  $(".deleteProduct").on("click", function (e) {
-    const idProduct = $(this).attr("data-bs-idProduct");
-    updateQuantity(idProduct, 0);
-  });
   //   hàm update số lượng lên server và total
   const updateQuantity = (idProduct, quantity) => {
     console.log(idProduct, quantity);
@@ -71,7 +33,7 @@ $(document).ready(function () {
   const loadTotal = () => {
     const areaSubTotal = $(".areaSubTotal");
     const areaProduct = $(".areaProduct");
-    const listEleProduct = areaProduct.find("div");
+    const listEleProduct = areaProduct.children("div");
     let dataProduct = [];
     listEleProduct.each((ind, ele) => {
       const name = $(ele).find(".nameProduct").text();
@@ -96,7 +58,46 @@ $(document).ready(function () {
         </div>
         `;
     });
+    console.log(dataProduct);
     areaSubTotal.html(htmlSubTotal);
     $(".total").text(dataProduct.reduce((acc, cur) => acc + cur.total, 0));
   };
+  // xử lý khi website load
+  loadTotal();
+  setAddress();
+  // show address
+  $('input[name="address"]').on("change", () => {
+    setAddress();
+  });
+  // xử lý số lượng sản phẩm trong giỏ hàng
+  $(".minusQuantity").on("click", function (e) {
+    const input = $(this).closest(".controlQuantity").find(".inpQuantity");
+    let inputvalue = parseInt(input.val());
+
+    if (inputvalue > 1) {
+      inputvalue--;
+      input.val(inputvalue);
+    }
+    input.trigger("change");
+  });
+  $(".addQuantity").on("click", function (e) {
+    const input = $(this).closest(".controlQuantity").find(".inpQuantity");
+    let inputvalue = parseInt(input.val());
+    inputvalue++;
+    input.val(inputvalue);
+    input.trigger("change");
+  });
+  $(".inpQuantity").on("change", function (e) {
+    let inputvalue = parseInt($(this).val());
+    if (isNaN(inputvalue)) {
+      $(this).val(1);
+    }
+    console.log($(this).attr("data-bs-idProduct"));
+    updateQuantity($(this).attr("data-bs-idProduct"), inputvalue);
+  });
+  //   xóa sản phẩm trong giỏ hàng
+  $(".deleteProduct").on("click", function (e) {
+    const idProduct = $(this).attr("data-bs-idProduct");
+    updateQuantity(idProduct, 0);
+  });
 });

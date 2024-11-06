@@ -1,6 +1,7 @@
 import categoryModel from "../services/CategoryModel";
 import userModel from "../services/UserModel";
 import productModel from "../services/ProductModel";
+import cartModel from "../services/CartModel";
 import bcrypt from "bcrypt";
 
 // TRANG CHU
@@ -64,7 +65,7 @@ const sendFeedback = async (req, res) => {
 // cart
 const getCartPage = async (req, res) => {
   let listAddress = await userModel.getAllAddress(req.session.user.id);
-
+  let cartProducts = await cartModel.getCartDetail(req.session.user.id);
   res.render("main", {
     data: {
       title: "Cart",
@@ -73,6 +74,7 @@ const getCartPage = async (req, res) => {
       page: "user/cart",
       script: "user/cart",
       listAddress: listAddress,
+      cartProducts: cartProducts,
     },
   });
 };
@@ -86,14 +88,22 @@ const addProductToCart = async (req, res) => {
   }
 };
 const updateQuantityCart = async (req, res) => {
-  const { idProdcut, quantity } = req.body;
+  const { idProduct, quantity } = req.body;
+  console.log(req.body);
+  console.log(idProduct, quantity);
   const user = req.session.user;
-  if (quantity == 0) {
-    await userModel.deleteProductCart(user.id, idProdcut);
-    return res.json({ success: true, message: "Xóa sản phẩm thành công" });
+  try {
+    if (quantity == 0) {
+      await userModel.deleteProductCart(user.id, idProduct);
+      return res.json({ status: true, message: "Xóa sản phẩm thành công" });
+    }
+    await userModel.updateQuantityCart(user.id, idProduct, quantity);
+    return res.json({ status: true, message: "Cập nhật số lượng thành công" });
+  } catch (error) {
+    return res
+      .status(403)
+      .json({ status: false, message: "Cập nhật số lượng thất bại" });
   }
-  await userModel.updateQuantityCart(user.id, idProdcut, quantity);
-  return res.json({ success: true, message: "Cập nhật số lượng thành công" });
 };
 // end cart
 // start profile
