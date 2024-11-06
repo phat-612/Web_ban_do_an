@@ -199,63 +199,52 @@
     class="modal fade"
     id="ModalDangNhap"
     tabindex="-1"
-    aria-labelledby="exampleModalLabel"
+    aria-labelledby="loginModalLabel"
     aria-hidden="true"
   >
-    <form
-      action="api/login"
-      data-success="Đăng nhập thành công!"
-      data-error="Email hoặc mật khẩu không đúng."
-      onsubmit="showAlert(event)"
-      method="POST"
-    >
-      <div class="modal-dialog">
-        <div class="modal-content">
-          <div class="modal-header text-center">
-            <h5 class="w-100 text-center p-2" id="exampleModalLabel">
-              ĐĂNG NHẬP
-            </h5>
-            <button
-              type="button"
-              class="btn-close"
-              data-bs-dismiss="modal"
-              aria-label="Close"
-            ></button>
-          </div>
-          <div class="modal-body">
-            <label for="staticEmail" class="col-sm-2 col-form-label"
-              >Email</label
-            >
-            <div class="col-sm-10 w-100">
+    <div class="modal-dialog">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title" id="loginModalLabel">Đăng nhập</h5>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body">
+          <form
+            id="loginForm"
+            method="POST"
+            action="/api/login"
+            data-success="Đăng nhập thành công!"
+            data-error="Email hoặc mật khẩu không đúng."
+          >
+            <div class="mb-3">
+              <label for="loginEmail" class="form-label">Email</label>
               <input
                 type="email"
-                name="email"
                 class="form-control"
-                id="staticEmail"
+                name="email"
+                id="loginEmail"
+                required
               />
             </div>
-            <label for="inputPassword" class="col-sm-2 col-form-label"
-              >Password</label
-            >
-            <div class="col-sm-10 w-100">
+            <div class="mb-3">
+              <label for="loginPassword" class="form-label">Mật khẩu</label>
               <input
                 type="password"
-                name="password"
                 class="form-control"
-                id="inputPassword"
+                id="loginPassword"
+                name="password"
+                required
               />
             </div>
-          </div>
-          <div class="modal-footer d-flex flex-column align-items-center p-4">
-            <button type="submit" class="btn btn-success w-100">
-              ĐĂNG NHẬP
-            </button>
-            <p class="text-center p-4">
-              BẠN CHƯA CÓ TÀI KHOẢN ? <a href="">ĐĂNG KÝ</a>
-            </p>
-          </div>
+            <button type="submit" class="btn btn-dark w-100">Đăng nhập</button>
+          </form>
         </div>
       </div>
-    </form>
+    </div>
   </div>
 </div>

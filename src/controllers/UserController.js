@@ -3,6 +3,7 @@ import userModel from "../services/UserModel";
 import productModel from "../services/ProductModel";
 import bcrypt from "bcrypt";
 
+// TRANG CHU
 const getUserHomePage = async (req, res) => {
   const user = req.session.user;
   const productList = await productModel.getAllProduct();
@@ -26,6 +27,7 @@ const getUserHomePage = async (req, res) => {
   });
 };
 
+// THUC DON
 const getUserMenuPage = async (req, res) => {
   const user = req.session.user;
   const { category } = req.query;
@@ -239,26 +241,32 @@ const getDeleteAccount = async (req, res) => {
 // api login
 const login = async (req, res) => {
   const { email, password } = req.body;
+
+  // Kiểm tra nếu email hoặc mật khẩu không được cung cấp
   if (!email || !password) {
-    req.session.error = "Vui lòng nhập đầy đủ email và mật khẩu";
-    return res.redirect("/");
+    return res.json({
+      success: false,
+      message: "Vui lòng nhập đầy đủ email và mật khẩu",
+    });
   }
 
   const user = await userModel.login(email);
 
-  if (!user || user.status == 3) {
-    req.session.error = "Tài khoản không tồn tại";
-    return res.redirect("/");
+  // Kiểm tra nếu người dùng không tồn tại hoặc tài khoản bị khóa
+  if (!user || user.status === 3) {
+    return res.json({ success: false, message: "Tài khoản không tồn tại" });
   }
 
-  if (user && user.status == 2) {
-    req.session.error = "Tài khoản đã bị khóa do vi phạm tiêu chuẩn cộng đồng";
-    return res.redirect("/");
+  if (user && user.status === 2) {
+    return res.json({
+      success: false,
+      message: "Tài khoản đã bị khóa do vi phạm tiêu chuẩn cộng đồng",
+    });
   }
 
   const isPassword = await bcrypt.compare(password, user.password);
 
-  if (user && user.status == 1) {
+  if (user && user.status === 1) {
     if (isPassword) {
       req.session.user = {
         id: user.id,
@@ -268,15 +276,13 @@ const login = async (req, res) => {
         status: user.status,
         role: user.role,
       };
-      req.session.success = "Đăng nhập thành công!";
+      return res.json({ success: true, message: "Đăng nhập thành công!" });
     } else {
-      req.session.error = "Mật khẩu không chính xác";
+      return res.json({ success: false, message: "Mật khẩu không chính xác" });
     }
   } else {
-    req.session.error = "Tài khoản không tồn tại";
+    return res.json({ success: false, message: "Tài khoản không tồn tại" });
   }
-
-  return res.redirect("/");
 };
 
 // desstroy session
@@ -351,6 +357,17 @@ const cancelOrder = async (req, res) => {
 
   res.redirect("back");
 };
+
+const addProductToCart = async (req, res) => {
+  const data = req.body;
+  const userId = req.session.user.id;
+  if (!userId) {
+    console.log("ban chua dang nhap");
+  } else {
+    console.log(userId, data);
+  }
+};
+
 export default {
   getUserHomePage,
   getUserMenuPage,
@@ -376,4 +393,5 @@ export default {
   changePassword,
   cancelAccount,
   cancelOrder,
+  addProductToCart,
 };

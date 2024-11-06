@@ -40,7 +40,7 @@
             </h5>
 
             <div class="d-flex justify-content-center">
-              <button data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-success d-flex justify-content-center btnShowModal" data-bs-productName="<%= product.name %>" <% if (product.itemAddMore) {%>data-bs-itemAddMore="<%= JSON.stringify(product.itemAddMore) %>" <%}%> data-bs-productCurrentPrice="<%= product.currentPrice %>" data-bs-productImage="<%= product.image %>" data-bs-productDescription="<%= product.description %>">Thêm Vào Giỏ Hàng</button>
+              <button data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-success d-flex justify-content-center btnShowModal" data-bs-productId="<%= product.id %>" data-bs-productName="<%= product.name %>" <% if (product.itemAddMore) {%>data-bs-itemAddMore="<%= JSON.stringify(product.itemAddMore) %>" <%}%> data-bs-productCurrentPrice="<%= product.currentPrice %>" data-bs-productImage="<%= product.image %>" data-bs-productDescription="<%= product.description %>">Thêm Vào Giỏ Hàng</button>
             </div>
           </div>
         </div>
@@ -60,7 +60,8 @@
 
   <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
     <div class="modal-dialog modal-xl">
-      <form action="api/" method="post">
+      <form action="/api/addProductToCart" method="post">
+        <input type="hidden" class="modal-productId" name="productId">
         <div class="modal-content">
           <div class="modal-header">
             <!-- modal title la` ten mon an  -->
@@ -80,7 +81,7 @@
                   <button class="btn btn-outline-secondary button-minus-Product" type="button">
                     <i class="bi bi-dash"></i>
                   </button>
-                  <input style="text-align: center;" type="number" class="form-control quantity-Product" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" min="0" max="100" oninput="validity.valid||(value='');" value="1" />
+                  <input name="productQuantity" style="text-align: center;" type="number" class="form-control quantity-Product" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" min="0" max="100" oninput="validity.valid||(value='');" value="1" />
                   <button class="btn btn-outline-secondary button-plus-Product" type="button">
                     <i class="bi bi-plus"></i>
                   </button>

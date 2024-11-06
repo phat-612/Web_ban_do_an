@@ -11,7 +11,7 @@ $(".quantity-Product").on("change", function () {
   const input = $(".quantity-Product");
   let inputvalue = parseInt($(".quantity-Product").val());
   if (isNaN(inputvalue)) {
-    input.val(1);
+    input.val(1); // Đặt lại giá trị về 1 nếu không phải là số
   }
 });
 
@@ -22,6 +22,7 @@ $(".btnShowModal").on("click", function (e) {
 
   const btn = e.target;
 
+  $(".modal-productId").val(btn.getAttribute("data-bs-productId"));
   $(".modal-productName").text(btn.getAttribute("data-bs-productName"));
   $(".modal-productImage").attr(
     "src",
@@ -45,6 +46,7 @@ $(".btnShowModal").on("click", function (e) {
     itemAddMore.forEach((item) => {
       eleAreaAddMoreItem.append(
         `<div class="row d-flex justify-content-around align-items-center mb-3">
+          <input type="hidden" name="productId" value="${item.id}">
           <div class="col-2">
             <img src="/imgs/products/${item.image}" alt="" width="100" />
           </div>
@@ -56,7 +58,7 @@ $(".btnShowModal").on("click", function (e) {
               <button class="btn btn-outline-secondary button-minus-Addmore" type="button">
                 <i class="bi bi-dash"></i>
               </button>
-              <input style="text-align: center;" type="number" class="form-control quantity-Addmore" aria-label="Example text with button addon" aria-describedby="button-addon1" min="0" max="100" oninput="validity.valid||(value='');" value="0" />
+              <input name="productQuantity" style="text-align: center;" type="number" class="form-control quantity-Addmore" aria-label="Example text with button addon" aria-describedby="button-addon1" min="0" max="100" oninput="validity.valid||(value='');" value="0" />
               <button class="btn btn-outline-secondary button-plus-Addmore" type="button">
                 <i class="bi bi-plus"></i>
               </button>
@@ -78,7 +80,7 @@ $(".btnShowModal").on("click", function (e) {
       .find(".quantity-Addmore");
     let inputAddmoreValue = parseInt(inputAddmore.val());
 
-    if (inputAddmoreValue > 1) {
+    if (inputAddmoreValue > 0) {
       inputAddmoreValue--;
       inputAddmore.val(inputAddmoreValue);
     }
@@ -93,6 +95,13 @@ $(".btnShowModal").on("click", function (e) {
     if (inputAddmoreValue < 100) {
       inputAddmoreValue++;
       inputAddmore.val(inputAddmoreValue);
+    }
+  });
+
+  $(".quantity-Addmore").on("change", function () {
+    let inputAddmoreValue = parseInt($(this).val());
+    if (isNaN(inputAddmoreValue)) {
+      $(this).val(0); // Đặt lại giá trị về 0 nếu không phải là số
     }
   });
 });
