@@ -74,7 +74,7 @@
         class="col-12 row d-flex justify-content-center"
         style="background-color: white; border-radius: 0 0 0 50px; height: 40px"
       >
-        <% if (!user) { %>
+        <% if (!userLogin) { %>
         <div class="col-5 d-flex justify-content-center">
           <a
             class="text-dark h5 fw-bold"
@@ -97,11 +97,11 @@
         <% } else { %>
         <div class="col-6 d-flex justify-content-center">
           <a
-            href="<%= user.role === 0 ? '/admin' : `/profile/${user.id}` %>"
+            href="<%= userLogin.role === 0 ? '/admin' : `/profile/${userLogin.id}` %>"
             class="text-dark h5 fw-bold"
             style="text-decoration: none"
           >
-            <%= user.name %>
+            <%= userLogin.name %>
           </a>
         </div>
         <form
