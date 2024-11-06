@@ -7,7 +7,7 @@ const router = express.Router();
 router.get("/", userController.getUserHomePage);
 router.get("/menu", userController.getUserMenuPage);
 router.get("/feedback", userController.getUserFeedback);
-
+router.get("/cart", userController.getCartPage);
 // profile
 router.get("/profile/:id", checkLogin, checkStatus, userController.getProfile);
 router.get("/profileAddress", userController.getProfileAddress);

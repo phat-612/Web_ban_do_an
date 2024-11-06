@@ -66,6 +66,19 @@ const sendFeedback = async (req, res) => {
   await userModel.sendFeedback(data);
   res.redirect("/");
 };
+// cart
+const getCartPage = async (req, res) => {
+  res.render("main", {
+    data: {
+      title: "Cart",
+      header: "partials/headerUser",
+      footer: "partials/footerUser",
+      page: "user/cart",
+      script: "user/cart",
+    },
+  });
+};
+// end cart
 // start profile
 const getProfile = async (req, res) => {
   const id = req.session.user.id;
@@ -342,6 +355,7 @@ export default {
   getUserHomePage,
   getUserMenuPage,
   getUserFeedback,
+  getCartPage,
   getProfile,
   getProfileAddress,
   getHistoryProduct,
