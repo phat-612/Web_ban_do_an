@@ -34,7 +34,7 @@ const login = async (email) => {
   const [users] = await pool.execute("SELECT * FROM `users` WHERE email = ?", [
     email,
   ]);
-  return users[0];
+  return users[0] || null;
 };
 
 // userModel.js

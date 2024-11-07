@@ -2,15 +2,17 @@
 
 $("#modalFormAddToCart").on("submit", function (e) {
   e.preventDefault();
-  const isLogin = $(".isLogin").getAttribute("data-bs-isLogin");
-  if (isLogin == "true") {
-    next();
+  const isLogin = $(".btnShowModal").attr("data-bs-isLogin");
+  if (isLogin === "true") {
+    e.target.submit();
   } else {
-    $(".divModalFormAddToCart").attr("aria-hidden", true);
-    $("#ModalDangNhap").attr("aria-hidden", false);
+    $(".divModalFormAddToCart").css("display", "none");
+    if ($("#ModalDangNhap")) {
+    } else {
+      console.error("khong thay modal");
+    }
   }
 });
-
 // xu ly nut dong' modal thi` refresh cac gia' tri.
 
 $(".modal-btnCloseModal").on("click", function () {
@@ -51,7 +53,6 @@ $(".btnShowModal").on("click", function (e) {
   const eleAreaAddMore = $("#areaAddMore");
   const eleAreaAddMoreItem = $("#areaAddMoreItem");
   eleAreaAddMoreItem.empty();
-  console.log(itemAddMore);
   if (itemAddMore.length === 0 || itemAddMore === null) {
     eleAreaAddMore.hide();
   } else {

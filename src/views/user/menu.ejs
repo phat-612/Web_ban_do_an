@@ -43,7 +43,7 @@
             </h5>
 
             <div class="d-flex justify-content-center">
-              <button data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-success d-flex justify-content-center btnShowModal" data-bs-productId="<%= product.id %>" data-bs-productName="<%= product.name %>" <% if (product.itemAddMore) { %> data-bs-itemAddMore="<%= JSON.stringify(product.itemAddMore) %>" <% } %> data-bs-productCurrentPrice="<%= product.currentPrice %>" data-bs-productImage="<%= product.image %>" data-bs-productDescription="<%= product.description %>">Thêm Vào
+              <button data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-success d-flex justify-content-center btnShowModal" data-bs-isLogin="<% if (userLogin) { %> true<% } else { %>false<% } %>" data-bs-productId="<%= product.id %>" data-bs-productName="<%= product.name %>" <% if (product.itemAddMore) { %> data-bs-itemAddMore="<%= JSON.stringify(product.itemAddMore) %>" <% } %> data-bs-productCurrentPrice="<%= product.currentPrice %>" data-bs-productImage="<%= product.image %>" data-bs-productDescription="<%= product.description %>">Thêm Vào
                 Giỏ Hàng
               </button>
             </div>

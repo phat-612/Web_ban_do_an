@@ -314,7 +314,11 @@ const getRegister = async (req, res) => {
 
 const apiRegister = async (req, res) => {
   const data = req.body;
-
+  const nameUser = await userModel.login(data.email);
+  if (nameUser.email == data.email) {
+    res.status(400).send("Email đã tồn tại");
+    return;
+  }
   const hashedPassword = await bcrypt.hash(data.password, 10);
 
   const userData = {
