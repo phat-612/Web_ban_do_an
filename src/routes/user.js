@@ -16,5 +16,5 @@ router.get("/historyProduct", isUser, userController.getHistoryProduct);
 router.get("/rePassword", isUser, userController.getRePassword);
 router.get("/deleteAccount", isUser, userController.getDeleteAccount);
 router.get("/register", userController.getRegister);
-
+// lấy lại mật khẩu
 export default router;

@@ -1,65 +1,67 @@
-// xy ly xem nguoi dung co dang nhập hay chưa
+$(document).ready(function () {
+  // xy ly xem nguoi dung co dang nhập hay chưa
 
-$("#modalFormAddToCart").on("submit", function (e) {
-  e.preventDefault();
-  const isLogin = $(".btnShowModal").attr("data-bs-isLogin");
-  if (isLogin === "true") {
-    e.target.submit();
-  } else {
-    $(".divModalFormAddToCart").css("display", "none");
-    if ($("#ModalDangNhap")) {
-    } else {
-      console.error("khong thay modal");
+  $("#modalFormAddToCart").on("submit", function (e) {
+    const isLogin = $(".btnShowModal").attr("data-bs-isLogin");
+    if (isLogin != "true") {
+      e.preventDefault();
+      $(".divModalFormAddToCart").hide();
+      const loginModalElement = document.getElementById("ModalDangNhap");
+      if (loginModalElement) {
+        const loginModal = new bootstrap.Modal(loginModalElement);
+        loginModal.show();
+      } else {
+        console.error("khong thay modal");
+      }
     }
-  }
-});
-// xu ly nut dong' modal thi` refresh cac gia' tri.
+  });
+  // xu ly nut dong' modal thi` refresh cac gia' tri.
 
-$(".modal-btnCloseModal").on("click", function () {
-  $(".quantity-Product").val(1);
-  $(".quantity-Addmore").val(0);
-});
+  $(".modal-btnCloseModal").on("click", function () {
+    $(".quantity-Product").val(1);
+    $(".quantity-Addmore").val(0);
+  });
 
-// xu ly input so luong san pham trong modal neu bi xoa so trong input
+  // xu ly input so luong san pham trong modal neu bi xoa so trong input
 
-$(".quantity-Product").on("change", function () {
-  const input = $(".quantity-Product");
-  let inputvalue = parseInt($(".quantity-Product").val());
-  if (isNaN(inputvalue)) {
-    input.val(1); // Đặt lại giá trị về 1 nếu không phải là số
-  }
-});
+  $(".quantity-Product").on("change", function () {
+    const input = $(".quantity-Product");
+    let inputvalue = parseInt($(".quantity-Product").val());
+    if (isNaN(inputvalue)) {
+      input.val(1); // Đặt lại giá trị về 1 nếu không phải là số
+    }
+  });
 
-// xu ly' show du lieu ra modal
+  // xu ly' show du lieu ra modal
 
-$(".btnShowModal").on("click", function (e) {
-  // refresh so luong san pham
+  $(".btnShowModal").on("click", function (e) {
+    // refresh so luong san pham
 
-  const btn = e.target;
+    const btn = e.target;
 
-  $(".modal-productId").val(btn.getAttribute("data-bs-productId"));
-  $(".modal-productName").text(btn.getAttribute("data-bs-productName"));
-  $(".modal-productImage").attr(
-    "src",
-    `imgs/products/${btn.getAttribute("data-bs-productImage")}`
-  );
-  $(".modal-productCurrentPrice").text(
-    btn.getAttribute("data-bs-productCurrentPrice")
-  );
-  $(".modal-productDescription").text(
-    btn.getAttribute("data-bs-productDescription")
-  );
-  const itemAddMore = JSON.parse(btn.getAttribute("data-bs-itemAddMore"));
-  const eleAreaAddMore = $("#areaAddMore");
-  const eleAreaAddMoreItem = $("#areaAddMoreItem");
-  eleAreaAddMoreItem.empty();
-  if (itemAddMore.length === 0 || itemAddMore === null) {
-    eleAreaAddMore.hide();
-  } else {
-    eleAreaAddMore.show();
-    itemAddMore.forEach((item) => {
-      eleAreaAddMoreItem.append(
-        `<div class="row d-flex justify-content-around align-items-center mb-3">
+    $(".modal-productId").val(btn.getAttribute("data-bs-productId"));
+    $(".modal-productName").text(btn.getAttribute("data-bs-productName"));
+    $(".modal-productImage").attr(
+      "src",
+      `imgs/products/${btn.getAttribute("data-bs-productImage")}`
+    );
+    $(".modal-productCurrentPrice").text(
+      btn.getAttribute("data-bs-productCurrentPrice")
+    );
+    $(".modal-productDescription").text(
+      btn.getAttribute("data-bs-productDescription")
+    );
+    const itemAddMore = JSON.parse(btn.getAttribute("data-bs-itemAddMore"));
+    const eleAreaAddMore = $("#areaAddMore");
+    const eleAreaAddMoreItem = $("#areaAddMoreItem");
+    eleAreaAddMoreItem.empty();
+    if (itemAddMore.length === 0 || itemAddMore === null) {
+      eleAreaAddMore.hide();
+    } else {
+      eleAreaAddMore.show();
+      itemAddMore.forEach((item) => {
+        eleAreaAddMoreItem.append(
+          `<div class="row d-flex justify-content-around align-items-center mb-3">
           <input type="hidden" name="productId" value="${item.id}">
           <div class="col-2">
             <img src="/imgs/products/${item.image}" alt="" width="100" />
@@ -82,77 +84,78 @@ $(".btnShowModal").on("click", function (e) {
             <p class="h6">${item.currentPrice}</p>
           </div>
         </div>`
-      );
+        );
+      });
+    }
+
+    // xu ly nut cong tru so luong cua mon an kem
+
+    $(".button-minus-Addmore").on("click", function (e) {
+      const inputAddmore = $(this)
+        .closest(".input-group")
+        .find(".quantity-Addmore");
+      let inputAddmoreValue = parseInt(inputAddmore.val());
+
+      if (inputAddmoreValue > 0) {
+        inputAddmoreValue--;
+        inputAddmore.val(inputAddmoreValue);
+      }
     });
-  }
 
-  // xu ly nut cong tru so luong cua mon an kem
+    $(".button-plus-Addmore").on("click", function (e) {
+      const inputAddmore = $(this)
+        .closest(".input-group")
+        .find(".quantity-Addmore");
+      let inputAddmoreValue = parseInt(inputAddmore.val());
 
-  $(".button-minus-Addmore").on("click", function (e) {
-    const inputAddmore = $(this)
-      .closest(".input-group")
-      .find(".quantity-Addmore");
-    let inputAddmoreValue = parseInt(inputAddmore.val());
+      if (inputAddmoreValue < 100) {
+        inputAddmoreValue++;
+        inputAddmore.val(inputAddmoreValue);
+      }
+    });
 
-    if (inputAddmoreValue > 0) {
-      inputAddmoreValue--;
-      inputAddmore.val(inputAddmoreValue);
+    $(".quantity-Addmore").on("change", function () {
+      let inputAddmoreValue = parseInt($(this).val());
+      if (isNaN(inputAddmoreValue)) {
+        $(this).val(0); // Đặt lại giá trị về 0 nếu không phải là số
+      }
+    });
+  });
+
+  // xu ly nut cong tru so luong san pham trong modal
+
+  $(".button-minus-Product").on("click", function (e) {
+    const input = $(".quantity-Product");
+    let inputvalue = parseInt($(".quantity-Product").val());
+
+    if (inputvalue > 1) {
+      inputvalue--;
+      input.val(inputvalue);
+    } else {
+      return;
     }
   });
 
-  $(".button-plus-Addmore").on("click", function (e) {
-    const inputAddmore = $(this)
-      .closest(".input-group")
-      .find(".quantity-Addmore");
-    let inputAddmoreValue = parseInt(inputAddmore.val());
+  $(".button-plus-Product").on("click", function (e) {
+    const input = $(".quantity-Product");
+    let inputvalue = parseInt($(".quantity-Product").val());
 
-    if (inputAddmoreValue < 100) {
-      inputAddmoreValue++;
-      inputAddmore.val(inputAddmoreValue);
+    if (inputvalue < 100) {
+      inputvalue++;
+      input.val(inputvalue);
+    } else {
+      return;
     }
   });
 
-  $(".quantity-Addmore").on("change", function () {
-    let inputAddmoreValue = parseInt($(this).val());
-    if (isNaN(inputAddmoreValue)) {
-      $(this).val(0); // Đặt lại giá trị về 0 nếu không phải là số
-    }
-  });
-});
-
-// xu ly nut cong tru so luong san pham trong modal
-
-$(".button-minus-Product").on("click", function (e) {
-  const input = $(".quantity-Product");
-  let inputvalue = parseInt($(".quantity-Product").val());
-
-  if (inputvalue > 1) {
-    inputvalue--;
-    input.val(inputvalue);
-  } else {
-    return;
+  // api :((
+  function sendFetchUpdateQuantityAddmore() {
+    fetch("", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({}),
+    }).then((response) => {});
   }
 });
-
-$(".button-plus-Product").on("click", function (e) {
-  const input = $(".quantity-Product");
-  let inputvalue = parseInt($(".quantity-Product").val());
-
-  if (inputvalue < 100) {
-    inputvalue++;
-    input.val(inputvalue);
-  } else {
-    return;
-  }
-});
-
-// api :((
-function sendFetchUpdateQuantityAddmore() {
-  fetch("", {
-    method: "POST",
-    headers: {
-      "Content-Type": "application/json",
-    },
-    body: JSON.stringify({}),
-  }).then((response) => {});
-}

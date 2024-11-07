@@ -14,10 +14,10 @@ const updateQuantityProduct = async (idUser, idProduct, quantity) => {
   );
   return row;
 };
-const addProduct = async (idUser, idProduct, quantity) => {
+const addProduct = async (cartArr) => {
   const [row, field] = await pool.execute(
-    "INSERT INTO `cart` (`idUser`, `idProduct`, `quantity`) VALUES (?, ?, ?)",
-    [idUser, idProduct, quantity]
+    "INSERT INTO `carts` (`idUser`, `idProduct`, `quantity`) VALUES ?",
+    cartArr
   );
   return row;
 };

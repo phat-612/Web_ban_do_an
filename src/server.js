@@ -7,8 +7,7 @@ import redisClient from "./config/redis";
 import session from "express-session";
 import viewEngine from "./config/viewEngine";
 import initWebRouter from "./routes/index";
-import firebase from "firebase/app";
-import "firebase/auth";
+
 dotenv.config();
 const app = express();
 const port = process.env.PORT || 3000;
@@ -26,28 +25,7 @@ app.use(
     cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 },
   })
 );
-firebase.initializeApp({
-  apiKey: "API_KEY",
-  authDomain: "AUTH_DOMAIN",
-  projectId: "PROJECT_ID",
-  storageBucket: "STORAGE_BUCKET",
-  messagingSenderId: "MESSAGING_SENDER_ID",
-  appId: "APP_ID",
-});
-const sendOTP = (phoneNumber) => {
-  const appVerifier = new firebase.auth.RecaptchaVerifier(
-    "recaptcha-container"
-  );
-  firebase
-    .auth()
-    .signInWithPhoneNumber(phoneNumber, appVerifier)
-    .then((confirmationResult) => {
-      window.confirmationResult = confirmationResult; // Lưu để xác thực OTP sau
-    })
-    .catch((error) => {
-      console.error("Lỗi khi gửi OTP:", error);
-    });
-};
+
 viewEngine(app);
 initWebRouter(app);
 app.listen(port, () => {
