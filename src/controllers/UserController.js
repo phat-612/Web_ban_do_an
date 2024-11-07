@@ -87,14 +87,15 @@ const addProductToCart = async (req, res) => {
   const cartArr = [];
 
   for (let i = 0; i < data.productQuantity.length; i++) {
-    console.log(data.productQuantity[i]);
     if (data.productQuantity[i] == 0) continue;
 
     cartArr.push([user.id, data.productId[i], data.productQuantity[i]]);
+    console.log(cartArr);
   }
   await cartModel.addProduct(cartArr);
   res.redirect("back");
 };
+
 const updateQuantityCart = async (req, res) => {
   const { idProdcut, quantity } = req.body;
   const user = req.session.user;
