@@ -1,5 +1,17 @@
 $(document).ready(function () {
+  let debounceTimer;
+  let currentIdProduct;
+  let currentQuantityProduct;
   // function
+  //  hàm debounce
+  function debounce(func, delay) {
+    return function (...args) {
+      // Xóa bộ đếm thời gian trước đó
+      clearTimeout(debounceTimer);
+      // Thiết lập bộ đếm thời gian mới
+      debounceTimer = setTimeout(() => func.apply(this, args), delay);
+    };
+  }
   const setAddress = () => {
     const eleAddressChecked = $('input[name="address"]:checked');
     $(".showAddress").text(eleAddressChecked.val());
@@ -49,18 +61,25 @@ $(document).ready(function () {
     });
     let htmlSubTotal = "";
     dataProduct.forEach((product) => {
+      let formatPrice = product.price.toLocaleString("vi-VN");
+      let formatTotal = product.total.toLocaleString("vi-VN");
       htmlSubTotal += `
         <div class="d-flex justify-content-between">
             <span>${product.name}</span>
-            <span>${product.price}</span>
+            <span>${formatPrice}</span>
             <span>${product.quantity}</span>
-            <span>${product.total}</span>
+            <span>${formatTotal}</span>
         </div>
         `;
     });
     console.log(dataProduct);
     areaSubTotal.html(htmlSubTotal);
-    $(".total").text(dataProduct.reduce((acc, cur) => acc + cur.total, 0));
+
+    $(".total").text(
+      dataProduct
+        .reduce((acc, cur) => acc + cur.total, 0)
+        .toLocaleString("vi-VN")
+    );
   };
   // xử lý khi website load
   loadTotal();
@@ -93,7 +112,10 @@ $(document).ready(function () {
       $(this).val(1);
     }
     console.log($(this).attr("data-bs-idProduct"));
-    updateQuantity($(this).attr("data-bs-idProduct"), inputvalue);
+    debounce(updateQuantity, 1000)(
+      $(this).attr("data-bs-idProduct"),
+      inputvalue
+    );
   });
   //   xóa sản phẩm trong giỏ hàng
   $(".deleteProduct").on("click", function (e) {

@@ -94,12 +94,13 @@ const updateQuantityCart = async (req, res) => {
   const user = req.session.user;
   try {
     if (quantity == 0) {
-      await userModel.deleteProductCart(user.id, idProduct);
+      await cartModel.deleteProduct(user.id, idProduct);
       return res.json({ status: true, message: "Xóa sản phẩm thành công" });
     }
-    await userModel.updateQuantityCart(user.id, idProduct, quantity);
+    await cartModel.updateQuantityProduct(user.id, idProduct, quantity);
     return res.json({ status: true, message: "Cập nhật số lượng thành công" });
   } catch (error) {
+    console.log(error);
     return res
       .status(403)
       .json({ status: false, message: "Cập nhật số lượng thất bại" });
