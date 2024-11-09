@@ -6,12 +6,12 @@
           text-overflow: ellipsis;
       }
   </style>
-  <form class="row">
+  <form action="" id="formOrder" class="row">
     <div class="col-7 p-1">
       <div class="d-flex justify-content-between align-items-center">
         <div class="d-flex align-items-center">
           <h4>Giỏ hàng của bạn</h4>
-          <span>(1 sản phẩm)</span>
+          <span class="totalProduct">(1 sản phẩm)</span>
         </div>
         <a href="/menu">Thêm sản phẩm</a>
       </div>
@@ -40,11 +40,10 @@
             <h4 class="nameProduct one-row"><%= product.name %></h4>
             <p class="one-row"><%= product.description %></p>
             <p
-              class="priceProduct"
-              data-bs-priceProduct="125000"
-              class="text-danger fs-4 fw-bold"
+              class="priceProduct text-danger fs-4 fw-bold"
+              data-bs-priceProduct="<%= product.currentPrice %>"
             >
-              <%= product.currentPrice %>
+              <%= product.formatPrice %>
             </p>
           </div>
           <div
@@ -126,7 +125,7 @@
           <span class="total">123.000đ</span>
         </div>
         <div>
-          <button type="submit" class="btn btn-primary w-100">
+          <button type="submit" class="btn btn-primary w-100 btnOrder">
             Thanh toán
           </button>
         </div>
@@ -180,7 +179,7 @@
         <% }); %>
         <!-- kết thúc -->
       </div>
-      <a href="/profileAddress" class="w-100 btn btn-primary">Thêm địa chỉ</a>
+      <a href="/profileAddress" class="w-100 btn btn-primary ">Thêm địa chỉ</a>
     </div>
   </div>
 </div>

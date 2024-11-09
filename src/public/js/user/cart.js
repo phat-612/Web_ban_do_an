@@ -64,17 +64,24 @@ $(document).ready(function () {
       let formatPrice = product.price.toLocaleString("vi-VN");
       let formatTotal = product.total.toLocaleString("vi-VN");
       htmlSubTotal += `
-        <div class="d-flex justify-content-between">
-            <span>${product.name}</span>
-            <span>${formatPrice}</span>
-            <span>${product.quantity}</span>
-            <span>${formatTotal}</span>
+        <div class="row">
+            <span class="col-5 one-row">${product.name}</span>
+            <span class="col-2 text-center">${formatPrice}</span>
+            <span class="col-1 text-center">${product.quantity}</span>
+            <span class="col-4 text-end">${formatTotal}</span>
         </div>
         `;
     });
     console.log(dataProduct);
     areaSubTotal.html(htmlSubTotal);
-
+    // cập nhật số lượng sản phẩm trong giỏ hàng
+    $(".totalProduct").text(`(${dataProduct.length} sản phẩm)`);
+    // disable btnOrder
+    if (dataProduct.length == 0) {
+      $(".btnOrder").attr("disabled", true);
+    } else {
+      $(".btnOrder").removeAttr("disabled");
+    }
     $(".total").text(
       dataProduct
         .reduce((acc, cur) => acc + cur.total, 0)
@@ -111,15 +118,29 @@ $(document).ready(function () {
     if (isNaN(inputvalue)) {
       $(this).val(1);
     }
-    console.log($(this).attr("data-bs-idProduct"));
-    debounce(updateQuantity, 1000)(
-      $(this).attr("data-bs-idProduct"),
-      inputvalue
-    );
+    const idProduct = $(this).attr("data-bs-idProduct");
+    if (currentIdProduct != idProduct && currentIdProduct != undefined) {
+      clearTimeout(debounceTimer);
+      updateQuantity(currentIdProduct, currentQuantityProduct);
+
+      currentIdProduct = idProduct;
+      currentQuantityProduct = inputvalue;
+    }
+    debounce(updateQuantity, 1000)(idProduct, inputvalue);
+    currentQuantityProduct = inputvalue;
   });
   //   xóa sản phẩm trong giỏ hàng
   $(".deleteProduct").on("click", function (e) {
     const idProduct = $(this).attr("data-bs-idProduct");
+
+    $(this).closest(".row").remove();
     updateQuantity(idProduct, 0);
+  });
+  // submit form
+  $("#formOrder").on("submit", function (e) {
+    const isEmptyAddress =
+      $('input[name="addressDelivery"]').val() &&
+      $('input[name="nameDelivery"]').val() &&
+      $('input[name="phoneDelivery"]').val();
   });
 });

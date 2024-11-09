@@ -66,6 +66,12 @@ const sendFeedback = async (req, res) => {
 const getCartPage = async (req, res) => {
   let listAddress = await userModel.getAllAddress(req.session.user.id);
   let cartProducts = await cartModel.getCartDetail(req.session.user.id);
+  cartProducts = cartProducts.map((product) => {
+    return {
+      ...product,
+      formatPrice: product.currentPrice.toLocaleString("vi-VN"),
+    };
+  });
   res.render("main", {
     data: {
       title: "Cart",
@@ -89,8 +95,6 @@ const addProductToCart = async (req, res) => {
 };
 const updateQuantityCart = async (req, res) => {
   const { idProduct, quantity } = req.body;
-  console.log(req.body);
-  console.log(idProduct, quantity);
   const user = req.session.user;
   try {
     if (quantity == 0) {

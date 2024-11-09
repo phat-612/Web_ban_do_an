@@ -165,6 +165,7 @@ const editProduct = async (data) => {
       );
     }
   }
+  x;
 };
 const deleteProduct = async (id) => {
   await pool.execute("DELETE FROM `carts` WHERE `carts`.`idProduct` = ?", [id]);
