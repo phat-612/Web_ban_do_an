@@ -115,7 +115,7 @@ $(document).ready(function () {
   });
   $(".inpQuantity").on("change", function (e) {
     let inputvalue = parseInt($(this).val());
-    if (isNaN(inputvalue)) {
+    if (isNaN(inputvalue) || inputvalue < 1) {
       $(this).val(1);
     }
     const idProduct = $(this).attr("data-bs-idProduct");
@@ -142,5 +142,22 @@ $(document).ready(function () {
       $('input[name="addressDelivery"]').val() &&
       $('input[name="nameDelivery"]').val() &&
       $('input[name="phoneDelivery"]').val();
+  });
+  // xử lý chọn sản phẩm đặt hàng
+  $(".cbxIsBuy").on("change", function (e) {
+    const idCart = $(this).attr("data-bs-idCart");
+    const isBuy = $(this).is(":checked") ? 1 : 0;
+    $.ajax({
+      url: "/api/updateIsBuyCart",
+      type: "POST",
+      data: { idCart, isBuy },
+      dataType: "json",
+      success: function (response) {
+        console.log("thành công");
+      },
+      error: function (xhr, status, error) {
+        console.log("lỗi");
+      },
+    });
   });
 });

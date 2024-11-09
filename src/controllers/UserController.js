@@ -2,11 +2,12 @@ import categoryModel from "../services/CategoryModel";
 import userModel from "../services/UserModel";
 import productModel from "../services/ProductModel";
 import cartModel from "../services/CartModel";
+import orderModel from "../services/OrderModel";
 import bcrypt from "bcrypt";
 
 // TRANG CHU
 const getUserHomePage = async (req, res) => {
-  const productList = await productModel.getAllProduct();
+  const products = await productModel.getLimitedProduct();
   req.session.success = null;
   req.session.error = null;
   res.render("main", {
@@ -16,7 +17,7 @@ const getUserHomePage = async (req, res) => {
       footer: "partials/footerUser",
       page: "user/home",
       script: "/alert",
-      products: productList,
+      products,
     },
   });
 };
@@ -84,25 +85,55 @@ const getCartPage = async (req, res) => {
     },
   });
 };
+// const addProductToCart = async (req, res) => {
+//   const data = req.body;
+//   const user = req.session.user;
+//   const cartList = await cartModel.getCart(user.id);
+//   const cartArr = [];
+
+//   if (!user) {
+//     return console.log("ban chua dang nhap");
+//   }
+
+//   for (let i = 0; i < data.productQuantity.length; i++) {
+//     if (data.productQuantity[i] == 0) continue;
+
+//     cartArr.push([user.id, data.productId[i], data.productQuantity[i]]);
+//     // console.log(cartArr);
+//   }
+//   const existsProduct = await cartModel.findProductById(user.id, cartArr);
+//   if (existsProduct.length < 0) {
+
+//   }
+
+//   await cartModel.addProduct(cartArr);
+//   res.redirect("back");
+// };
+
 const addProductToCart = async (req, res) => {
   const data = req.body;
   const user = req.session.user;
 
+  // Kiểm tra nếu người dùng chưa đăng nhập
   if (!user) {
-    return console.log("ban chua dang nhap");
+    console.log("Bạn chưa đăng nhập");
+    return res.redirect("/login");
   }
+
+  // Tạo danh sách sản phẩm và số lượng từ dữ liệu nhận được
   const cartArr = [];
-
   for (let i = 0; i < data.productQuantity.length; i++) {
-    if (data.productQuantity[i] == 0) continue;
-
-    cartArr.push([user.id, data.productId[i], data.productQuantity[i]]);
-    console.log(cartArr);
+    if (data.productQuantity[i] > 0) {
+      cartArr.push([user.id, data.productId[i], data.productQuantity[i]]);
+    }
   }
-  await cartModel.addProduct(cartArr);
+
+  // Sử dụng hàm addOrUpdateProductsInCart để cập nhật hoặc thêm sản phẩm vào giỏ hàng
+  await cartModel.addOrUpdateProductsInCart(user.id, cartArr);
+
+  // Chuyển hướng trở lại trang trước và thông báo thêm thành công
   res.redirect("back");
 };
-
 const updateQuantityCart = async (req, res) => {
   const { idProduct, quantity } = req.body;
   const user = req.session.user;
@@ -119,6 +150,41 @@ const updateQuantityCart = async (req, res) => {
       .status(403)
       .json({ status: false, message: "Cập nhật số lượng thất bại" });
   }
+};
+const updateIsBuyCart = async (req, res) => {
+  const { idCart, isBuy } = req.body;
+  await cartModel.updateIsBuyProduct(idCart, isBuy);
+  return res.json({ status: true, message: "Cập nhật thành công" });
+};
+const addOrder = async (req, res) => {
+  const data = req.body;
+  const user = req.session.user;
+  const cartProducts = await cartModel.getCartDetail(user.id);
+  const dataDetailOrder = [];
+  cartProducts.forEach((product) => {
+    if (product.isBuy) {
+      dataDetailOrder.push([
+        product.idProduct,
+        product.quantity,
+        product.currentPrice,
+      ]);
+    }
+  });
+  let total = cartProducts.reduce(
+    (acc, product) => acc + product.currentPrice * product.quantity,
+    0
+  );
+  const dataOrder = {
+    idUser: user.id,
+    name: data.nameDelivery,
+    phone: data.phoneDelivery,
+    address: data.addressDelivery,
+    note: data.description,
+    total,
+    status: 1,
+  };
+  await orderModel.addOrder(dataOrder, dataDetailOrder);
+  return res.redirect("/historyProduct");
 };
 // end cart
 // start profile
@@ -311,7 +377,7 @@ const login = async (req, res) => {
         status: user.status,
         role: user.role,
       };
-      return res.json({ success: true, message: "Đăng nhập thành công!" });
+      return res.redirect("back");
     } else {
       return res.json({ success: false, message: "Mật khẩu không chính xác" });
     }
@@ -458,4 +524,6 @@ export default {
   cancelOrder,
   addProductToCart,
   updateQuantityCart,
+  updateIsBuyCart,
+  addOrder,
 };

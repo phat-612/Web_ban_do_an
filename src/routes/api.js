@@ -29,6 +29,8 @@ router.post("/updateShopInfo", adminController.updateInfoShop);
 router.post("/addProductToCart", userController.addProductToCart);
 // cập nhật hoặc xóa sản phẩm ra khỏi giỏ hàng
 router.post("/updateQuantityCart", userController.updateQuantityCart);
+router.post("/updateIsBuyCart", userController.updateIsBuyCart);
+router.post("/addOrder", userController.addOrder);
 // feedback
 router.post("/sendFeedback", userController.sendFeedback);
 // login

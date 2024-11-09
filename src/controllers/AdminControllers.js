@@ -2,6 +2,9 @@ import categoryModel from "../services/CategoryModel";
 import shopModel from "../services/ShopModel";
 import productModel from "../services/ProductModel";
 import userModel from "../services/UserModel";
+import orderModel from "../services/OrderModel";
+import ProductModel from "../services/ProductModel";
+import feedbackModel from "../services/FeedbackModel";
 import fs from "fs";
 
 // PRODUCT ( SAN PHAM )
@@ -112,11 +115,28 @@ const deleteProduct = async (req, res) => {
 };
 // ORDER ( DON HANG)
 const getOrderPage = async (req, res) => {
+  const orderList = await orderModel.getAllOrder();
+  const detailOrders = await Promise.all(
+    orderList.map(async (element) => {
+      return await orderModel.getDetailOrder(element.id);
+    })
+  );
+  const orderDetail = detailOrders.flat();
+  const productOrderPromises = orderDetail.map(async (detail) => {
+    return await productModel.getProductById(detail.id);
+  });
+
+  const productOrders = await Promise.all(productOrderPromises);
+  const orderProducts = productOrders.flat();
+  console.log(orderProducts);
   res.render("main", {
     data: {
       title: "Order",
       header: "partials/headerAdmin",
       page: "admin/order",
+      orderList,
+      orderDetail,
+      orderProducts,
     },
   });
 };
@@ -195,11 +215,22 @@ const setRole = async (req, res) => {
 };
 // FEEDBACK ( PHAN HOI )
 const getFeedbackPage = async (req, res) => {
+  let feedbacks = await feedbackModel.getAllFeedback();
+  feedbacks = feedbacks.map((feedback) => {
+    return {
+      ...feedback,
+      created_at: new Intl.DateTimeFormat("vi-VN").format(
+        new Date(feedback.created_at)
+      ),
+    };
+  });
   res.render("main", {
     data: {
       title: "Feedback",
       header: "partials/headerAdmin",
       page: "admin/feedback",
+      feedbacks: feedbacks,
+      script: "admin/feedback",
     },
   });
 };
@@ -235,7 +266,6 @@ export default {
   getAccountPage,
   getFeedbackPage,
   getShopInforPage,
-
   // API
 
   addCategory,

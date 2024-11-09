@@ -1,21 +1,22 @@
-<div class="alert alert-success alert-dismissible fade show " role="alert">
-  <center><strong>Đã Thêm Sản Phẩm Vào Giỏ Hàng</strong></center>
-  <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-</div>
 <div class="d-flex justify-content-center row">
   <div class="col-8 row">
     <!-- danh muc -->
-
-    <ul class="row col-12 d-flex justify-content-center align-items-center" style="
+    <ul
+      class="row col-12 d-flex justify-content-center align-items-center"
+      style="
         box-shadow: 2px 2px 4px #000000;
         background-color: #198754;
         border-radius: 15px;
         list-style-type: none;
-      ">
+      "
+    >
       <!-- 1 the danh muc  -->
       <% for (var i = 0; i < data.categorys.length; i++) { %>
       <li class="my-3 col row d-flex justify-content-center">
-        <a href="/menu?category=<%= data.categorys[i].id %>" class="btn btn-light col-10">
+        <a
+          href="/menu?category=<%= data.categorys[i].id %>"
+          class="btn btn-light col-10"
+        >
           <%= data.categorys[i].name %>
         </a>
       </li>
@@ -36,100 +37,151 @@
   <div class="container row d-flex justify-content-between">
     <!-- 1 the san pham -->
     <% data.products.forEach(function (product){ %>
-      <div class="col d-flex justify-content-center my-5">
-        <div class="card" style="width: 18rem">
-          <div style="width: 287px; height: 287px" class="d-flex justify-content-center align-items-center">
-            <img src="imgs/products/<%= product.image %>" class="card-img-top" alt="Ảnh <%= product.name %>" />
-          </div>
-          <div class="card-body">
-            <h5 style="height: 50px" class="card-title d-flex justify-content-center">
-              <%= product.name %>
-            </h5>
-            <h5 class="card-title d-flex justify-content-center">
-              <%= product.currentPrice %>
-            </h5>
-
-            <div class="d-flex justify-content-center">
-              <button data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-success d-flex justify-content-center btnShowModal" data-bs-isLogin="<% if (userLogin) { %>true<% } else { %>false<% } %>" data-bs-productId="<%= product.id %>" data-bs-productName="<%= product.name %>" data-bs-itemAddMore="<%= product.itemAddMore ? JSON.stringify(product.itemAddMore) : '' %>" data-bs-productCurrentPrice="<%= product.currentPrice %>" data-bs-productImage="<%= product.image %>" data-bs-productDescription="<%= product.description %>">
-                Thêm Vào Giỏ Hàng
-              </button>
-            </div>
-          </div>
+    <div class="col d-flex justify-content-center my-5">
+      <div class="card" style="width: 18rem">
+        <div
+          style="width: 287px; height: 287px"
+          class="d-flex justify-content-center align-items-center"
+        >
+          <img
+            src="imgs/products/<%= product.image %>"
+            class="card-img-top"
+            alt="Ảnh <%= product.name %>"
+          />
         </div>
-      </div>
-      <%})%>
-      <!-- -------------- -->
-  </div>
-  </main>
-  <div class="alert alert-success d-flex align-items-center" role="alert">
-    <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Success:">
-      <use xlink:href="#check-circle-fill" />
-    </svg>
-    <div>
-      An example success alert with an icon
-    </div>
-  </div>
-  <!-- modal chi tiet mon an -->
+        <div class="card-body">
+          <h5
+            style="height: 50px"
+            class="card-title d-flex justify-content-center"
+          >
+            <%= product.name %>
+          </h5>
+          <h5 class="card-title d-flex justify-content-center">
+            <%= product.currentPrice %>
+          </h5>
 
-  <div class="modal fade divModalFormAddToCart" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
-    <div class="modal-dialog modal-xl">
-      <form id="modalFormAddToCart" action="/api/addProductToCart" method="post">
-        <input type="hidden" class="modal-productId" name="productId" />
-        <div class="modal-content">
-          <div class="modal-header">
-            <!-- modal title la` ten mon an  -->
-            <h4 class="modal-title modal-productName" id="staticBackdropLabel"></h4>
-            <button type="button" class="btn-close modal-btnCloseModal" data-bs-dismiss="modal" aria-label="Close"></button>
-          </div>
-          <div class="modal-body row">
-            <div class="col-4 row d-flex justify-content-center">
-              <img src="" class="card-img-top mb-3 modal-productImage" alt="Ảnh + tên món ăn" />
-              <div class="d-flex justify-content-center mb-3">
-                <!-- gia san pham -->
-                <h3 class="modal-productCurrentPrice"></h3>
-              </div>
-              <!-- nut cong tru so luong san pham -->
-              <div class="col-4 mb-3">
-                <div class="input-group mb-3">
-                  <button class="btn btn-outline-secondary button-minus-Product" type="button">
-                    <i class="bi bi-dash"></i>
-                  </button>
-                  <input name="productQuantity" style="text-align: center" type="number" class="form-control quantity-Product" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" min="1" max="100" oninput="validity.valid||(value='');" value="1" />
-                  <button class="btn btn-outline-secondary button-plus-Product" type="button">
-                    <i class="bi bi-plus"></i>
-                  </button>
-                </div>
-              </div>
-            </div>
-            <div class="col">
-              <div>
-                <!-- mô tả món ăn -->
-                <p class="modal-productDescription"></p>
-              </div>
-              <div id="areaAddMore">
-                <strong class="h5 mb-3">Danh Sách món ăn kèm</strong>
-                <div id="areaAddMoreItem">
-                  <!-- 1 the mon an kem -->
-
-                  <!-- ------------------------  -->
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="modal-footer">
-            <button type="submit" class="btn btn-success">
+          <div class="d-flex justify-content-center">
+            <button
+              data-bs-toggle="modal"
+              data-bs-target="#staticBackdrop"
+              class="btn btn-success d-flex justify-content-center btnShowModal"
+              data-bs-isLogin="<% if (userLogin) { %>true<% } else { %>false<% } %>"
+              data-bs-productId="<%= product.id %>"
+              data-bs-productName="<%= product.name %>"
+              data-bs-itemAddMore="<%= product.itemAddMore ? JSON.stringify(product.itemAddMore) : '' %>"
+              data-bs-productCurrentPrice="<%= product.currentPrice %>"
+              data-bs-productImage="<%= product.image %>"
+              data-bs-productDescription="<%= product.description %>"
+            >
               Thêm Vào Giỏ Hàng
             </button>
           </div>
         </div>
-      </form>
+      </div>
     </div>
+    <%})%>
+    <!-- -------------- -->
   </div>
-  <!-- CSS xoa mui ten cua input number -->
-  <style>
-    input::-webkit-outer-spin-button,
-    input::-webkit-inner-spin-button {
-      -webkit-appearance: none;
-      margin: 0;
-    }
-  </style>
+</main>
+<!-- modal chi tiet mon an -->
+
+<div
+  class="modal fade divModalFormAddToCart"
+  id="staticBackdrop"
+  data-bs-backdrop="static"
+  data-bs-keyboard="false"
+  tabindex="-1"
+  aria-labelledby="staticBackdropLabel"
+  aria-hidden="true"
+>
+  <div class="modal-dialog modal-xl">
+    <form id="modalFormAddToCart" action="/api/addProductToCart" method="post">
+      <input type="hidden" class="modal-productId" name="productId" />
+      <div class="modal-content">
+        <div class="modal-header">
+          <!-- modal title la` ten mon an  -->
+          <h4
+            class="modal-title modal-productName"
+            id="staticBackdropLabel"
+          ></h4>
+          <button
+            type="button"
+            class="btn-close modal-btnCloseModal"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
+        </div>
+        <div class="modal-body row">
+          <div class="col-4 row d-flex justify-content-center">
+            <img
+              src=""
+              class="card-img-top mb-3 modal-productImage"
+              alt="Ảnh + tên món ăn"
+            />
+            <div class="d-flex justify-content-center mb-3">
+              <!-- gia san pham -->
+              <h3 class="modal-productCurrentPrice"></h3>
+            </div>
+            <!-- nut cong tru so luong san pham -->
+            <div class="col-4 mb-3">
+              <div class="input-group mb-3">
+                <button
+                  class="btn btn-outline-secondary button-minus-Product"
+                  type="button"
+                >
+                  <i class="bi bi-dash"></i>
+                </button>
+                <input
+                  name="productQuantity"
+                  style="text-align: center"
+                  type="number"
+                  class="form-control quantity-Product"
+                  placeholder=""
+                  aria-label="Example text with button addon"
+                  aria-describedby="button-addon1"
+                  min="1"
+                  max="100"
+                  oninput="validity.valid||(value='');"
+                  value="1"
+                />
+                <button
+                  class="btn btn-outline-secondary button-plus-Product"
+                  type="button"
+                >
+                  <i class="bi bi-plus"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div>
+              <!-- mô tả món ăn -->
+              <p class="modal-productDescription"></p>
+            </div>
+            <div id="areaAddMore">
+              <strong class="h5 mb-3">Danh Sách món ăn kèm</strong>
+              <div id="areaAddMoreItem">
+                <!-- 1 the mon an kem -->
+
+                <!-- ------------------------  -->
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">
+            Thêm Vào Giỏ Hàng
+          </button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+<!-- CSS xoa mui ten cua input number -->
+<style>
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+</style>

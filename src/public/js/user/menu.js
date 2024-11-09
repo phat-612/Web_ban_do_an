@@ -1,17 +1,56 @@
 $(document).ready(function () {
-  // xy ly xem nguoi dung co dang nhập hay chưa
-
+  // Xử lý kiểm tra đăng nhập khi submit form "Thêm vào giỏ hàng"
   $("#modalFormAddToCart").on("submit", function (e) {
     const isLogin = $(".btnShowModal").attr("data-bs-isLogin");
-    if (isLogin != "true") {
+
+    if (isLogin !== "true") {
       e.preventDefault();
       $(".divModalFormAddToCart").hide();
+
       const loginModalElement = document.getElementById("ModalDangNhap");
+      const detailProductModalElement = document.getElementById(
+        "divModalFormAddToCart"
+      );
+
+      // Khởi tạo modal chi tiết sản phẩm nếu chưa được tạo
+      const detailProductModal = new bootstrap.Modal(detailProductModalElement);
+
+      // Kiểm tra và xử lý khi modal chi tiết sản phẩm đóng
+      detailProductModalElement.addEventListener(
+        "hidden.bs.modal",
+        function () {
+          // Xóa lớp modal-open và backdrop
+          document.body.classList.remove("modal-open");
+          $(".modal-backdrop").remove();
+          $("body").css({
+            overflow: "auto",
+            "padding-right": "0px",
+          });
+        }
+      );
+
       if (loginModalElement) {
         const loginModal = new bootstrap.Modal(loginModalElement);
+
+        // Hiển thị modal đăng nhập
         loginModal.show();
+
+        // Xử lý sự kiện khi modal đăng nhập đóng
+        loginModalElement.addEventListener("hidden.bs.modal", function () {
+          // Sau khi modal đăng nhập đóng, kiểm tra xem chi tiết sản phẩm có cần mở lại không
+          if (!detailProductModalElement.classList.contains("show")) {
+            // Giải phóng modal đăng nhập và thiết lập lại
+            document.body.classList.remove("modal-open");
+            $(".modal-backdrop").remove();
+            $("body").css({
+              overflow: "auto",
+              "padding-right": "0px",
+            });
+            loginModal.dispose();
+          }
+        });
       } else {
-        console.error("khong thay modal");
+        console.error("Không thấy modal đăng nhập");
       }
     }
   });

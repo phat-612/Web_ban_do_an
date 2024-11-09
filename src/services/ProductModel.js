@@ -179,6 +179,14 @@ const deleteProduct = async (id) => {
   );
   await pool.execute("DELETE FROM `products` WHERE `products`.`id` = ?", [id]);
 };
+
+const getLimitedProduct = async (req, res) => {
+  const [row, fields] = await pool.execute(
+    "SELECT * FROM `products` ORDER BY `sold` DESC LIMIT 4"
+  );
+  return row;
+};
+
 export default {
   addProduct,
   getAllProduct,
@@ -189,4 +197,5 @@ export default {
   getItemAddMore,
   getProductByCategory,
   getFullProduct,
+  getLimitedProduct,
 };

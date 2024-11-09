@@ -5,39 +5,64 @@
   </div>
   <div class="row col-3">
     <div class="col-12">
-      <a href="/" class="h1 text-white fst-italic fw-bold" style="
+      <a
+        href="/"
+        class="h1 text-white fst-italic fw-bold"
+        style="
           letter-spacing: 10px;
           text-decoration: none;
           text-shadow: 2px 2px 4px #000000;
-        "><%= infoShop.name %></a>
+        "
+        ><%= infoShop.name %></a
+      >
     </div>
     <div class="col d-flex align-items-end">
-      <a href="/" class="btn btn-outline-light h5 btn-lg fw-bold" style="
+      <a
+        href="/"
+        class="btn btn-outline-light h5 btn-lg fw-bold"
+        style="
           text-decoration: none;
           margin-bottom: 0;
           border: none;
           border-radius: 10px 10px 0 0;
-        ">TRANG CHỦ</a>
+        "
+        >TRANG CHỦ</a
+      >
     </div>
     <div class="col d-flex align-items-end">
-      <a href="/menu" class="btn btn-outline-light h5 btn-lg fw-bold" style="
+      <a
+        href="/menu"
+        class="btn btn-outline-light h5 btn-lg fw-bold"
+        style="
           text-decoration: none;
           margin-bottom: 0;
           border: none;
           border-radius: 10px 10px 0 0;
-        ">THỰC ĐƠN</a>
+        "
+        >THỰC ĐƠN</a
+      >
     </div>
   </div>
   <div class="col-4 row d-flex justify-content-center align-items-center">
     <div class="col-7 container-fluid">
       <form class="d-flex">
-        <input style="
+        <input
+          style="
             background-color: white;
             color: black;
             border: 1px solid white;
             box-shadow: 2px 2px 4px #303030;
-          " class="form-control me-2" type="search" placeholder="Search" aria-label="Search" />
-        <button style="background-color: white; box-shadow: 2px 2px 4px #303030" class="btn btn-warning" type="submit">
+          "
+          class="form-control me-2"
+          type="search"
+          placeholder="Search"
+          aria-label="Search"
+        />
+        <button
+          style="background-color: white; box-shadow: 2px 2px 4px #303030"
+          class="btn btn-warning"
+          type="submit"
+        >
           <i class="bi bi-search"></i>
         </button>
       </form>
@@ -45,72 +70,120 @@
   </div>
   <div class="col d-flex justify-content-end">
     <div class="row col-10">
-      <div class="col-12 row d-flex justify-content-center" style="background-color: white; border-radius: 0 0 0 50px; height: 40px">
+      <div
+        class="col-12 row d-flex justify-content-center"
+        style="background-color: white; border-radius: 0 0 0 50px; height: 40px"
+      >
         <% if (!userLogin) { %>
         <div class="col-5 d-flex justify-content-center">
-          <a type="button" class="text-dark h5 fw-bold" style="text-decoration: none" data-bs-toggle="modal" data-bs-target="#ModalDangNhap">
+          <a
+            type="button"
+            class="text-dark h5 fw-bold"
+            style="text-decoration: none"
+            data-bs-toggle="modal"
+            data-bs-target="#ModalDangNhap"
+          >
             ĐĂNG NHẬP
           </a>
         </div>
         <div class="col-5 d-flex justify-content-center">
-          <a href="/register" class="text-dark h5 fw-bold" style="text-decoration: none">
+          <a
+            href="/register"
+            class="text-dark h5 fw-bold"
+            style="text-decoration: none"
+          >
             ĐĂNG KÝ
           </a>
         </div>
         <% } else { %>
         <div class="col-6 d-flex justify-content-center">
-          <a href="<%= userLogin.role === 0 ? '/admin' : '/profile' %>" class="text-dark h5 fw-bold" style="text-decoration: none">
+          <a
+            href="<%= userLogin.role === 0 ? '/admin' : '/profile' %>"
+            class="text-dark h5 fw-bold"
+            style="text-decoration: none"
+          >
             Chào, <%= userLogin.name %>
           </a>
         </div>
         <div class="col-2 d-flex justify-content-center">
           <a href="/cart"><i class="bi bi-cart h4 text-dark"></i></a>
         </div>
-        <form action="/api/destroy" method="POST" class="col-2 d-flex justify-content-center">
+        <form
+          action="/api/destroy"
+          method="POST"
+          class="col-2 d-flex justify-content-center"
+        >
           <input type="submit" id="inpLogout" hidden />
-          <label type="button" for="inpLogout" class="text-dark h4 fw-bold"><i class="bi bi-box-arrow-right"></i></label>
+          <label type="button" for="inpLogout" class="text-dark h4 fw-bold"
+            ><i class="bi bi-box-arrow-right"></i
+          ></label>
         </form>
 
         <% } %>
 
-        <div class="col-12 row d-flex justify-content-center align-items-center mt-2" style="padding-bottom: 10px">
+        <div
+          class="col-12 row d-flex justify-content-center align-items-center mt-2"
+          style="padding-bottom: 10px"
+        >
           <div class="col-12 d-flex justify-content-center align-items-center">
-            <a href="tel:<%= infoShop.phone %>" class="text-white h5" style="
+            <a
+              href="tel:<%= infoShop.phone %>"
+              class="text-white h5"
+              style="
                 margin-bottom: 5px;
                 text-decoration: none;
                 text-shadow: 2px 2px 4px #000000;
-              "><%= infoShop.phone %></a>
+              "
+              ><%= infoShop.phone %></a
+            >
           </div>
-          <div style="
+          <div
+            style="
               background-color: white;
               border-radius: 40px;
               height: 20px;
               box-shadow: 2px 2px 4px #000000;
-            " class="col-7 d-flex justify-content-center align-items-center">
+            "
+            class="col-7 d-flex justify-content-center align-items-center"
+          >
             <span class="text-dark fw-bold">GIAO HÀNG TẬN NƠI</span>
           </div>
         </div>
       </div>
       <div style="display: none" class="row col-10" style="--bs-gutter-x: 0rem">
-        <div class="col-12 row d-flex justify-content-center" style="
+        <div
+          class="col-12 row d-flex justify-content-center"
+          style="
             background-color: white;
             border-radius: 0 0 0 50px;
             height: 40px;
-          "></div>
-        <div style="padding-bottom: 15px" class="col-12 row d-flex justify-content-center align-items-center">
+          "
+        ></div>
+        <div
+          style="padding-bottom: 15px"
+          class="col-12 row d-flex justify-content-center align-items-center"
+        >
           <div class="col-12 d-flex justify-content-center align-items-center">
-            <a href="tel:19001533" class="text-white h5" style="
+            <a
+              href="tel:19001533"
+              class="text-white h5"
+              style="
                 margin-bottom: -10px;
                 text-decoration: none;
                 text-shadow: 2px 2px 4px #000000;
-              ">1900-1533</a>
+              "
+              >1900-1533</a
+            >
           </div>
-          <div style="
+          <div
+            style="
               background-color: rgb(166 182 65);
               border-radius: 40px;
               height: 20px;
               box-shadow: 2px 2px 4px #000000;
-            " class="col-7 d-flex justify-content-center align-items-center">
+            "
+            class="col-7 d-flex justify-content-center align-items-center"
+          >
             <span class="text-dark fw-bold">GIAO HÀNG TẬN NƠI</span>
           </div>
         </div>
@@ -118,26 +191,54 @@
     </div>
   </div>
 
-  <!-- Modal dang nhap -->
   <!-- Modal Đăng Nhập -->
-  <div class="modal fade" id="ModalDangNhap" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+  <div
+    class="modal fade"
+    id="ModalDangNhap"
+    tabindex="-1"
+    aria-labelledby="loginModalLabel"
+    aria-hidden="true"
+  >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="loginModalLabel">Đăng nhập</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
         <div class="modal-body">
-          <form id="loginForm" method="POST" action="/api/login" data-success="Đăng nhập thành công!" data-error="Email hoặc mật khẩu không đúng.">
+          <form
+            id="loginForm"
+            method="POST"
+            action="/api/login"
+            data-success="Đăng nhập thành công!"
+            data-error="Email hoặc mật khẩu không đúng."
+          >
             <!-- Nhập email -->
             <div class="mb-3">
               <label for="loginEmail" class="form-label">Email</label>
-              <input type="email" class="form-control" name="email" id="loginEmail" required />
+              <input
+                type="email"
+                class="form-control"
+                name="email"
+                id="loginEmail"
+                required
+              />
             </div>
             <!-- Nhập mật khẩu -->
             <div class="mb-3">
               <label for="loginPassword" class="form-label">Mật khẩu</label>
-              <input type="password" class="form-control" id="loginPassword" name="password" required />
+              <input
+                type="password"
+                class="form-control"
+                id="loginPassword"
+                name="password"
+                required
+              />
             </div>
             <!-- Nút đăng nhập -->
             <button type="submit" class="btn btn-dark w-100">Đăng nhập</button>
@@ -145,20 +246,38 @@
 
           <!-- Link quên mật khẩu -->
           <div class="mt-3 text-center">
-            <a href="#" data-bs-toggle="modal" data-bs-target="#ModalQuenMatKhau" data-bs-dismiss="modal" id="forgotPasswordLink">Quên mật khẩu?</a>
+            <a
+              href="#"
+              data-bs-toggle="modal"
+              data-bs-target="#ModalQuenMatKhau"
+              data-bs-dismiss="modal"
+              id="forgotPasswordLink"
+              >Quên mật khẩu?</a
+            >
           </div>
         </div>
       </div>
     </div>
   </div>
-  <div class="modal fade" id="ModalQuenMatKhau" tabindex="-1" aria-labelledby="forgotPasswordModalLabel" aria-hidden="true">
+  <div
+    class="modal fade"
+    id="ModalQuenMatKhau"
+    tabindex="-1"
+    aria-labelledby="forgotPasswordModalLabel"
+    aria-hidden="true"
+  >
     <div class="modal-dialog">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title" id="forgotPasswordModalLabel">
             Quên mật khẩu
           </h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+          <button
+            type="button"
+            class="btn-close"
+            data-bs-dismiss="modal"
+            aria-label="Close"
+          ></button>
         </div>
         <div class="modal-body">
           <!-- Form Quên mật khẩu -->
@@ -166,17 +285,35 @@
             <!-- Nhập email -->
             <div class="mb-3">
               <label for="forgotEmail" class="form-label">Email</label>
-              <input type="email" class="form-control" id="forgotEmail" name="email" required placeholder="Nhập email của bạn" />
+              <input
+                type="email"
+                class="form-control"
+                id="forgotEmail"
+                name="email"
+                required
+                placeholder="Nhập email của bạn"
+              />
             </div>
 
             <!-- Nhập số điện thoại -->
             <div class="mb-3">
               <label for="forgotPhone" class="form-label">Số điện thoại</label>
-              <input type="tel" class="form-control" id="forgotPhone" name="phone" required placeholder="Nhập số điện thoại của bạn" />
+              <input
+                type="tel"
+                class="form-control"
+                id="forgotPhone"
+                name="phone"
+                required
+                placeholder="Nhập số điện thoại của bạn"
+              />
             </div>
 
             <!-- Nút gửi OTP -->
-            <button type="submit" class="btn btn-primary w-100" id="sendOtpButton">
+            <button
+              type="submit"
+              class="btn btn-primary w-100"
+              id="sendOtpButton"
+            >
               Gửi OTP
             </button>
           </form>
