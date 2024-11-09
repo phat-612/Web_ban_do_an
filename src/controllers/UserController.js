@@ -87,12 +87,22 @@ const getCartPage = async (req, res) => {
 const addProductToCart = async (req, res) => {
   const data = req.body;
   const user = req.session.user;
+
   if (!user) {
-    console.log("ban chua dang nhap");
-  } else {
-    console.log(user.id, data);
+    return console.log("ban chua dang nhap");
   }
+  const cartArr = [];
+
+  for (let i = 0; i < data.productQuantity.length; i++) {
+    if (data.productQuantity[i] == 0) continue;
+
+    cartArr.push([user.id, data.productId[i], data.productQuantity[i]]);
+    console.log(cartArr);
+  }
+  await cartModel.addProduct(cartArr);
+  res.redirect("back");
 };
+
 const updateQuantityCart = async (req, res) => {
   const { idProduct, quantity } = req.body;
   const user = req.session.user;
@@ -267,7 +277,7 @@ const getDeleteAccount = async (req, res) => {
 // api login
 const login = async (req, res) => {
   const { email, password } = req.body;
-
+  console.log(email, password);
   if (!email || !password) {
     return res.json({
       success: false,
@@ -329,7 +339,10 @@ const getRegister = async (req, res) => {
 
 const apiRegister = async (req, res) => {
   const data = req.body;
-
+  const emailUser = await userModel.login(data.email);
+  if (emailUser) {
+    return res.status(400).send("Email đã tồn tại");
+  }
   const hashedPassword = await bcrypt.hash(data.password, 10);
 
   const userData = {
@@ -384,7 +397,39 @@ const cancelOrder = async (req, res) => {
 
   res.redirect("back");
 };
+// lấy lại mật khẩu
+const reset = async (req, res) => {
+  const { email, token, password } = req.body;
+  return console.log(email, token, password);
+  try {
+    // Tìm user trong cơ sở dữ liệu bằng email
+    const user = await userModel.login(email);
+    if (!user) {
+      return res.redirect("/password/reset?error=user_not_found");
+    }
 
+    // So sánh token trong cơ sở dữ liệu với token người dùng gửi lên
+    const isTokenValid = await bcrypt.compare(token, user.passwordResetToken);
+    if (!isTokenValid) {
+      return res.redirect("/password/reset?error=invalid_token");
+    }
+
+    // Hash mật khẩu mới
+    const hashedPassword = await bcrypt.hash(
+      password,
+      parseInt(process.env.BCRYPT_SALT_ROUND)
+    );
+
+    // Cập nhật mật khẩu mới cho người dùng
+    await userModel.resetPassword(email, hashedPassword);
+
+    // Chuyển hướng về trang đăng nhập sau khi thay đổi mật khẩu thành công
+    res.redirect("/login?success=password_reset");
+  } catch (err) {
+    console.error("Error during password reset:", err);
+    res.redirect("/500"); // Có thể tạo một trang lỗi để hiển thị lỗi hệ thống
+  }
+};
 export default {
   getUserHomePage,
   getUserMenuPage,
@@ -398,6 +443,7 @@ export default {
   getRegister,
   getListAddress,
   // api
+  reset,
   login,
   sendFeedback,
   apiRegister,

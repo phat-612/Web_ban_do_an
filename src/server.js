@@ -25,15 +25,6 @@ app.use(
     cookie: { secure: false, maxAge: 1000 * 60 * 60 * 24 },
   })
 );
-app.get("/check-session", (req, res) => {
-  if (req.session.user && req.session.user.isLoggedIn) {
-    res.send(`Session tồn tại. Xin chào, ${req.session.user.currentUrl}`);
-  } else {
-    res
-      .status(401)
-      .send("Session không tồn tại hoặc người dùng chưa đăng nhập");
-  }
-});
 
 viewEngine(app);
 initWebRouter(app);

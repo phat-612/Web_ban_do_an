@@ -53,5 +53,7 @@ router.post("/changePassword", userController.changePassword);
 router.post("/cancelAccount", userController.cancelAccount);
 // hủy đơn hàng
 router.get("/cancelOrder/:id", userController.cancelOrder);
+// lay mat khauz
+router.post("/reset", userController.reset);
 
 export default router;
