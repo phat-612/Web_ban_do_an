@@ -65,7 +65,13 @@ const sendFeedback = async (req, res) => {
 // cart
 const getCartPage = async (req, res) => {
   let listAddress = await userModel.getAllAddress(req.session.user.id);
-
+  let cartProducts = await cartModel.getCartDetail(req.session.user.id);
+  cartProducts = cartProducts.map((product) => {
+    return {
+      ...product,
+      formatPrice: product.currentPrice.toLocaleString("vi-VN"),
+    };
+  });
   res.render("main", {
     data: {
       title: "Cart",
@@ -74,6 +80,7 @@ const getCartPage = async (req, res) => {
       page: "user/cart",
       script: "user/cart",
       listAddress: listAddress,
+      cartProducts: cartProducts,
     },
   });
 };
@@ -97,14 +104,21 @@ const addProductToCart = async (req, res) => {
 };
 
 const updateQuantityCart = async (req, res) => {
-  const { idProdcut, quantity } = req.body;
+  const { idProduct, quantity } = req.body;
   const user = req.session.user;
-  if (quantity == 0) {
-    await userModel.deleteProductCart(user.id, idProdcut);
-    return res.json({ success: true, message: "Xóa sản phẩm thành công" });
+  try {
+    if (quantity == 0) {
+      await cartModel.deleteProduct(user.id, idProduct);
+      return res.json({ status: true, message: "Xóa sản phẩm thành công" });
+    }
+    await cartModel.updateQuantityProduct(user.id, idProduct, quantity);
+    return res.json({ status: true, message: "Cập nhật số lượng thành công" });
+  } catch (error) {
+    console.log(error);
+    return res
+      .status(403)
+      .json({ status: false, message: "Cập nhật số lượng thất bại" });
   }
-  await userModel.updateQuantityCart(user.id, idProdcut, quantity);
-  return res.json({ success: true, message: "Cập nhật số lượng thành công" });
 };
 // end cart
 // start profile
