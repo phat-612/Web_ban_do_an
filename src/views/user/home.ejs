@@ -1,55 +1,26 @@
-<div
-  class="d-flex justify-content-center"
-  style="
+<div class="d-flex justify-content-center" style="
     background-image: url(/imgs/static/bg-bottom.png);
     background-size: contain;
-  "
->
+  ">
   <div class="container">
     <div class="slider">
-      <div
-        id="carouselExampleControls"
-        class="carousel slide"
-        data-bs-ride="carousel"
-      >
+      <div id="carouselExampleControls" class="carousel slide" data-bs-ride="carousel">
         <div class="carousel-inner">
           <div class="carousel-item active">
-            <img
-              src="/imgs/banner/banner1.jpg"
-              class="d-block w-100"
-              alt="banner1"
-            />
+            <img src="/imgs/banner/banner1.jpg" class="d-block w-100" alt="banner1" />
           </div>
           <div class="carousel-item">
-            <img
-              src="/imgs/banner/banner2.jpg"
-              class="d-block w-100"
-              alt="banner2"
-            />
+            <img src="/imgs/banner/banner2.jpg" class="d-block w-100" alt="banner2" />
           </div>
           <div class="carousel-item">
-            <img
-              src="/imgs/banner/banner3.jpg"
-              class="d-block w-100"
-              alt="banner3"
-            />
+            <img src="/imgs/banner/banner3.jpg" class="d-block w-100" alt="banner3" />
           </div>
         </div>
-        <button
-          class="carousel-control-prev"
-          type="button"
-          data-bs-target="#carouselExampleControls"
-          data-bs-slide="prev"
-        >
+        <button class="carousel-control-prev" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="prev">
           <span class="carousel-control-prev-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Previous</span>
         </button>
-        <button
-          class="carousel-control-next"
-          type="button"
-          data-bs-target="#carouselExampleControls"
-          data-bs-slide="next"
-        >
+        <button class="carousel-control-next" type="button" data-bs-target="#carouselExampleControls" data-bs-slide="next">
           <span class="carousel-control-next-icon" aria-hidden="true"></span>
           <span class="visually-hidden">Next</span>
         </button>
@@ -71,39 +42,18 @@
           <% data.topProducts.forEach(function(product){ %>
           <div class="col my-5 mx-2">
             <div class="card" style="width: 18rem">
-              <div
-                class="d-flex justify-content-center align-content-center"
-                style="width: 287px; height: 287px"
-              >
-                <img
-                  src="imgs/products/<%= product.image %>"
-                  class="card-img-top"
-                  alt="Ảnh + tên món ăn"
-                />
+              <div class="d-flex justify-content-center align-content-center" style="width: 287px; height: 287px">
+                <img src="imgs/products/<%= product.image %>" class="card-img-top" alt="Ảnh + tên món ăn" />
               </div>
               <div class="card-body">
-                <h5
-                  class="card-title d-flex justify-content-center"
-                  style="height: 50px"
-                >
+                <h5 class="card-title d-flex justify-content-center" style="height: 50px">
                   <%= product.name %>
                 </h5>
                 <h5 class="card-title d-flex justify-content-center">
                   <%= product.currentPrice %>
                 </h5>
                 <div class="d-flex justify-content-center">
-                  <button
-                    data-bs-toggle="modal"
-                    data-bs-target="#staticBackdrop"
-                    class="btn btn-success d-flex justify-content-center btnShowModal"
-                    data-bs-isLogin="<% if (userLogin) { %>true<% } else { %>false<% } %>"
-                    data-bs-productId="<%= product.id %>"
-                    data-bs-productName="<%= product.name %>"
-                    data-bs-itemAddMore="<%= product.itemAddMore ? JSON.stringify(product.itemAddMore) : '' %>"
-                    data-bs-productCurrentPrice="<%= product.currentPrice %>"
-                    data-bs-productImage="<%= product.image %>"
-                    data-bs-productDescription="<%= product.description %>"
-                  >
+                  <button data-bs-toggle="modal" data-bs-target="#staticBackdrop" class="btn btn-success d-flex justify-content-center btnShowModal" data-bs-isLogin="<% if (userLogin) { %>true<% } else { %>false<% } %>" data-bs-productId="<%= product.id %>" data-bs-productName="<%= product.name %>" data-bs-itemAddMore="<%= product.itemAddMore ? JSON.stringify(product.itemAddMore) : '' %>" data-bs-productCurrentPrice="<%= product.currentPrice %>" data-bs-productImage="<%= product.image %>" data-bs-productDescription="<%= product.description %>">
                     Thêm Vào Giỏ Hàng
                   </button>
                 </div>
@@ -121,15 +71,13 @@
       <div class="swiper mySwiper my-5">
         <div class="swiper-wrapper">
           <!-- 1 thẻ feedback  -->
-          <div class="swiper-slide row">
-            <h6 class="col-12">Cam Đại Hưng</h6>
-            <p class="col-12">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Quaerat,
-              numquam voluptas ducimus harum vel aliquam error dolores porro
-              explicabo distinctio quidem architecto doloribus neque dignissimos
-              quos sapiente hic placeat ea?
-            </p>
+          <% data.topNewFeedback.forEach(function(feedback) { %>
+          <div class="swiper-slide row" style="background-color: rgb(52, 133, 89); padding: 2%; border-radius: 35px;">
+            <h6 class="col-12 text-white"><%= feedback.name %></h6>
+            <p class="col-12 text-white"><%= feedback.content %></p>
           </div>
+          <% } ) %>
+
           <!-- -------------  -->
         </div>
         <div class="swiper-pagination"></div>
@@ -140,39 +88,19 @@
 
 <!-- modal chi tiet mon an -->
 
-<div
-  class="modal fade divModalFormAddToCart"
-  id="staticBackdrop"
-  data-bs-backdrop="static"
-  data-bs-keyboard="false"
-  tabindex="-1"
-  aria-labelledby="staticBackdropLabel"
-  aria-hidden="true"
->
+<div class="modal fade divModalFormAddToCart" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
   <div class="modal-dialog modal-xl">
     <form id="modalFormAddToCart" action="/api/addProductToCart" method="post">
       <input type="hidden" class="modal-productId" name="productId" />
       <div class="modal-content">
         <div class="modal-header">
           <!-- modal title la` ten mon an  -->
-          <h4
-            class="modal-title modal-productName"
-            id="staticBackdropLabel"
-          ></h4>
-          <button
-            type="button"
-            class="btn-close modal-btnCloseModal"
-            data-bs-dismiss="modal"
-            aria-label="Close"
-          ></button>
+          <h4 class="modal-title modal-productName" id="staticBackdropLabel"></h4>
+          <button type="button" class="btn-close modal-btnCloseModal" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body row">
           <div class="col-4 row d-flex justify-content-center">
-            <img
-              src=""
-              class="card-img-top mb-3 modal-productImage"
-              alt="Ảnh + tên món ăn"
-            />
+            <img src="" class="card-img-top mb-3 modal-productImage" alt="Ảnh + tên món ăn" />
             <div class="d-flex justify-content-center mb-3">
               <!-- gia san pham -->
               <h3 class="modal-productCurrentPrice"></h3>
@@ -180,29 +108,11 @@
             <!-- nut cong tru so luong san pham -->
             <div class="col-4 mb-3">
               <div class="input-group mb-3">
-                <button
-                  class="btn btn-outline-secondary button-minus-Product"
-                  type="button"
-                >
+                <button class="btn btn-outline-secondary button-minus-Product" type="button">
                   <i class="bi bi-dash"></i>
                 </button>
-                <input
-                  name="productQuantity"
-                  style="text-align: center"
-                  type="number"
-                  class="form-control quantity-Product"
-                  placeholder=""
-                  aria-label="Example text with button addon"
-                  aria-describedby="button-addon1"
-                  min="1"
-                  max="100"
-                  oninput="validity.valid||(value='');"
-                  value="1"
-                />
-                <button
-                  class="btn btn-outline-secondary button-plus-Product"
-                  type="button"
-                >
+                <input name="productQuantity" style="text-align: center" type="number" class="form-control quantity-Product" placeholder="" aria-label="Example text with button addon" aria-describedby="button-addon1" min="1" max="100" oninput="validity.valid||(value='');" value="1" />
+                <button class="btn btn-outline-secondary button-plus-Product" type="button">
                   <i class="bi bi-plus"></i>
                 </button>
               </div>
