@@ -115,30 +115,47 @@ const deleteProduct = async (req, res) => {
 };
 // ORDER ( DON HANG)
 const getOrderPage = async (req, res) => {
-  const orderList = await orderModel.getAllOrder();
-  const detailOrders = await Promise.all(
-    orderList.map(async (element) => {
-      return await orderModel.getDetailOrder(element.id);
+  const orders = await orderModel.getOrders();
+
+  const orderFull = await Promise.all(
+    orders.map(async (order) => {
+      const orderDetails = await orderModel.getAllOrderFull(order.id);
+
+      // Khởi tạo mảng chứa tên món ăn
+      const productNames = orderDetails.map((detail) => detail.name);
+      // Ghép tất cả tên món ăn lại với nhau
+      const productName = productNames.join("+ "); // Bạn có thể thay đổi dấu phân cách nếu cần
+
+      // Duyệt qua các chi tiết sản phẩm của đơn hàng và thêm tên món ăn đã ghép vào
+      const products = orderDetails.map((detail) => ({
+        productName: detail.name,
+        quantity: detail.quantity,
+        price: detail.price,
+      }));
+
+      return {
+        ...order,
+        productName, // Thêm chuỗi tên món ăn đã ghép vào đơn hàng
+        products,
+      };
     })
   );
-  const orderDetail = detailOrders.flat();
-  const productOrderPromises = orderDetail.map(async (detail) => {
-    return await productModel.getProductById(detail.id);
-  });
+  console.log(orderFull);
 
-  const productOrders = await Promise.all(productOrderPromises);
-  const orderProducts = productOrders.flat();
-  console.log(orderProducts);
   res.render("main", {
     data: {
       title: "Order",
       header: "partials/headerAdmin",
       page: "admin/order",
-      orderList,
-      orderDetail,
-      orderProducts,
+      orderFull: orderFull,
     },
   });
+};
+// cập nhật trạng thái đơn hàng
+const getOrderStatus = async (req, res) => {
+  const status = req.body.status;
+  await orderModel.updateStatus(status);
+  res.redirect("back");
 };
 
 // BANNER ( BANNER )
@@ -267,7 +284,7 @@ export default {
   getFeedbackPage,
   getShopInforPage,
   // API
-
+  getOrderStatus,
   addCategory,
   deleteCategory,
   addProduct,

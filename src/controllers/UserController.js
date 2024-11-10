@@ -7,17 +7,19 @@ import bcrypt from "bcrypt";
 
 // TRANG CHU
 const getUserHomePage = async (req, res) => {
-  const products = await productModel.getLimitedProduct();
-  req.session.success = null;
-  req.session.error = null;
+  const topProducts = await productModel.getLimitedProduct();
+  const user = req.session.user;
+  // req.session.success = null;
+  // req.session.error = null;
   res.render("main", {
     data: {
       title: "Home",
       header: "partials/headerUser",
       footer: "partials/footerUser",
       page: "user/home",
-      script: "/alert",
-      products,
+      script: "user/menu",
+      user: user,
+      topProducts,
     },
   });
 };

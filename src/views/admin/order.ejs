@@ -1,4 +1,3 @@
-<!-- lấy coppy form tiêu đề này qua mấy trang khác cho đồng bộ -->
 <div class="d-flex justify-content-center mt-3">
   <h3>QUẢN LÝ ĐƠN HÀNG</h3>
 </div>
@@ -31,12 +30,11 @@
         </tr>
       </thead>
       <tbody>
-        <% if (data.orderList && data.orderList.length > 0) { %> <%
-        data.orderList.forEach((order, index) => { %> <%
-        data.orderDetail.forEach((product, productIndex) => { %>
+        <% data.orderFull.forEach(function(order, index) { %>
         <tr>
           <td><%= index + 1 %></td>
-          <td><%= product.id %></td>
+
+          <td><%= order.productName %></td>
           <td><%= order.name %></td>
           <td><%= order.created_at %></td>
           <td><%= order.total %></td>
@@ -47,22 +45,27 @@
               class="btn btn-success"
               data-bs-toggle="modal"
               data-bs-target="#ModalXemOrder"
+              data-id="<%= order.id %>"
+              data-created-at="<%= order.created_at %>"
+              data-name="<%= order.name %>"
+              data-phone="<%= order.phone %>"
+              data-address="<%= order.address %>"
+              data-note="<%= order.note %>"
+              data-total="<%= order.total %>"
+              data-status="<%= order.status %>"
+              data-products="<%= JSON.stringify(order.products) %>"
             >
               <i class="bi bi-eye-fill"></i>
             </button>
           </td>
         </tr>
-        %> <% }) %> <% }) %> <% } else { %>
-        <tr>
-          <td colspan="7" class="text-center">Không có đơn hàng nào</td>
-        </tr>
-        <% } %>
+        <% }) %>
       </tbody>
     </table>
   </div>
 </div>
 
-<!-- Modal Xem Chi Tiet Don Hang -->
+<!-- Modal Xem Chi Tiết Đơn Hàng -->
 <div
   class="modal fade"
   id="ModalXemOrder"
@@ -71,7 +74,7 @@
   aria-hidden="true"
 >
   <div class="modal-dialog modal-lg">
-    <div class="modal-content" style="background-color: rgb(200, 238, 200);">
+    <div class="modal-content" style="background-color: rgb(200, 238, 200)">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Chi Tiết Đơn Hàng</h5>
         <button
@@ -86,39 +89,32 @@
           <div class="col-6 mb-3">
             <label class="fw-bold" for="">Mã Đơn Hàng:</label>
             <br />
-            <span>1</span>
+            <span id="order-id"></span>
           </div>
           <div class="col-6 mb-3">
             <label class="fw-bold" for="">Thời gian đặt hàng:</label>
             <br />
-            <span>06/10/2024</span>
+            <span id="order-created-at"></span>
           </div>
           <div class="col-6 mb-3">
             <label class="fw-bold" for="">Họ và Tên:</label>
             <br />
-            <span>Dương Minh Luân</span>
+            <span id="order-name"></span>
           </div>
           <div class="col-6 mb-3">
             <label class="fw-bold" for="">Số điện thoại:</label>
             <br />
-            <span>0382909902</span>
+            <span id="order-phone"></span>
           </div>
           <div class="col-12 mb-3">
             <label class="fw-bold" for="">Địa chỉ:</label>
             <br />
-            <span
-              >26/10, hẻm 9, Lê hồng phong, Bình thủy, Bình thủy, Cần thơ</span
-            >
+            <span id="order-address"></span>
           </div>
           <div class="col-12 mb-3">
             <label class="fw-bold" for="">Ghi chú:</label>
             <br />
-            <span
-              >Lorem ipsum dolor sit amet consectetur, adipisicing elit.
-              Consequatur enim, eligendi perspiciatis sunt velit soluta alias
-              sint veritatis autem magnam totam illo distinctio accusamus
-              corporis aliquid in neque incidunt deserunt?</span
-            >
+            <span id="order-note"></span>
           </div>
           <div class="col-12 mb-3">
             <table class="table">
@@ -127,29 +123,15 @@
                 <th>Số Lượng</th>
                 <th class="col-2">Giá</th>
               </thead>
-              <tbody>
-                <tr>
-                  <td>Cơm Gà</td>
-                  <td>1</td>
-                  <td>30.000</td>
-                </tr>
-                <tr>
-                  <td>Cơm Gà</td>
-                  <td>1</td>
-                  <td>30.000</td>
-                </tr>
-                <tr>
-                  <td>Cơm Gà</td>
-                  <td>1</td>
-                  <td>30.000</td>
-                </tr>
+              <tbody id="order-products-body">
+                <!-- Các dòng sản phẩm sẽ được thêm vào đây -->
               </tbody>
             </table>
             <div>
               <hr />
             </div>
             <div class="d-flex justify-content-end">
-              <span class="me-4">90.000</span>
+              <span id="order-total" class="me-4"></span>
             </div>
           </div>
           <div class="col-12 mb-3">
@@ -158,60 +140,89 @@
           <div class="container">
             <div class="row">
               <div class="col-12 mb-3 d-flex justify-content-center">
-                <div
-                  class="btn-group"
-                  role="group"
-                  aria-label="Basic checkbox toggle button group"
+                <!-- Các checkbox cho trạng thái đơn hàng -->
+                <form
+                  action="/api/updateOrderStatus"
+                  method="POST"
+                  id="orderStatusForm"
                 >
-                  <input
-                    type="checkbox"
-                    class="btn-check"
-                    id="btncheck1"
-                    autocomplete="off"
-                    checked
-                  />
-                  <label
-                    class="btn btn-outline-warning text-dark"
-                    for="btncheck1"
-                    >Đặt Hàng</label
+                  <div
+                    class="btn-group"
+                    role="group"
+                    aria-label="Basic checkbox toggle button group"
                   >
+                    <input
+                      type="checkbox"
+                      class="btn-check"
+                      id="orderStatus1"
+                      name="status"
+                      value="1"
+                      autocomplete="off"
+                    />
+                    <label
+                      class="btn btn-outline-warning text-dark"
+                      for="orderStatus1"
+                      >Đặt Hàng</label
+                    >
 
-                  <input
-                    type="checkbox"
-                    class="btn-check"
-                    id="btncheck2"
-                    autocomplete="off"
-                  />
-                  <label
-                    class="btn btn-outline-warning text-dark"
-                    for="btncheck2"
-                    >Tiếp Nhận</label
-                  >
+                    <input
+                      type="checkbox"
+                      class="btn-check"
+                      id="orderStatus2"
+                      name="status"
+                      value="2"
+                      autocomplete="off"
+                    />
+                    <label
+                      class="btn btn-outline-warning text-dark"
+                      for="orderStatus2"
+                      >Tiếp Nhận</label
+                    >
 
-                  <input
-                    type="checkbox"
-                    class="btn-check"
-                    id="btncheck3"
-                    autocomplete="off"
-                  />
-                  <label
-                    class="btn btn-outline-warning text-dark"
-                    for="btncheck3"
-                    >Đang Vận Chuyển</label
-                  >
+                    <input
+                      type="checkbox"
+                      class="btn-check"
+                      id="orderStatus3"
+                      name="status"
+                      value="3"
+                      autocomplete="off"
+                    />
+                    <label
+                      class="btn btn-outline-warning text-dark"
+                      for="orderStatus3"
+                      >Đang Vận Chuyển</label
+                    >
 
-                  <input
-                    type="checkbox"
-                    class="btn-check"
-                    id="btncheck4"
-                    autocomplete="off"
-                  />
-                  <label
-                    class="btn btn-outline-warning text-dark"
-                    for="btncheck4"
-                    >Thành Công</label
-                  >
-                </div>
+                    <input
+                      type="checkbox"
+                      class="btn-check"
+                      id="orderStatus4"
+                      name="status"
+                      value="4"
+                      autocomplete="off"
+                    />
+                    <label
+                      class="btn btn-outline-warning text-dark"
+                      for="orderStatus4"
+                      >Thành Công</label
+                    >
+
+                    <input
+                      type="checkbox"
+                      class="btn-check"
+                      id="orderStatus5"
+                      name="status"
+                      value="5"
+                      autocomplete="off"
+                      hidden
+                    />
+                    <label
+                      class="btn btn-outline-warning text-dark"
+                      for="orderStatus5"
+                      >Bị Hủy</label
+                    >
+                  </div>
+                </form>
               </div>
             </div>
           </div>
@@ -220,17 +231,82 @@
     </div>
   </div>
 </div>
-<script>
-  // JavaScript for updating the progress bar width based on the selected stage
-  const stages = ["btncheck1", "btncheck2", "btncheck3", "btncheck4"];
-  const progressBar = document.getElementById("orderProgressBar");
 
-  stages.forEach((stage, index) => {
-    document.getElementById(stage).addEventListener("change", function () {
-      // Update progress bar width based on the stage index
-      const progressPercentage = (index + 1) * 25;
-      progressBar.style.width = `${progressPercentage}%`;
-      progressBar.setAttribute("aria-valuenow", progressPercentage);
+<script>
+  document.querySelectorAll(".btn-success").forEach((button) => {
+    button.addEventListener("click", function () {
+      // Lấy dữ liệu từ các thuộc tính data-*
+      const orderId = this.getAttribute("data-id");
+      const orderCreatedAt = this.getAttribute("data-created-at");
+      const orderName = this.getAttribute("data-name");
+      const orderPhone = this.getAttribute("data-phone");
+      const orderAddress = this.getAttribute("data-address");
+      const orderNote = this.getAttribute("data-note");
+      const orderTotal = this.getAttribute("data-total");
+      const orderProducts = JSON.parse(this.getAttribute("data-products"));
+      const orderStatus = parseInt(this.getAttribute("data-status"), 10);
+
+      // Cập nhật thông tin trong modal
+      document.getElementById("order-id").innerText = orderId;
+      document.getElementById("order-created-at").innerText = orderCreatedAt;
+      document.getElementById("order-name").innerText = orderName;
+      document.getElementById("order-phone").innerText = orderPhone;
+      document.getElementById("order-address").innerText = orderAddress;
+      document.getElementById("order-note").innerText = orderNote;
+      document.getElementById(
+        "order-total"
+      ).innerText = `Tổng tiền: ${orderTotal}`;
+
+      // Cập nhật danh sách sản phẩm
+      const productsBody = document.getElementById("order-products-body");
+      productsBody.innerHTML = ""; // Xóa các dòng cũ
+      orderProducts.forEach((product) => {
+        const row = document.createElement("tr");
+        row.innerHTML = `
+          <td>${product.name}</td>
+          <td>${product.quantity}</td>
+          <td>${product.price}</td>
+        `;
+        productsBody.appendChild(row);
+      });
+
+      // Cập nhật trạng thái checkbox theo trạng thái đơn hàng
+      document.querySelectorAll('input[name="status"]').forEach((checkbox) => {
+        checkbox.checked = parseInt(checkbox.value, 10) <= orderStatus;
+      });
+    });
+  });
+  // Lấy tất cả các checkbox trạng thái
+  document.querySelectorAll('input[name="status"]').forEach((checkbox) => {
+    checkbox.addEventListener("change", function () {
+      // Khi người dùng chọn một trạng thái, lấy giá trị trạng thái đã chọn
+      const selectedStatus = this.value;
+      const orderId = document.getElementById("order-id").innerText;
+
+      // Gửi yêu cầu cập nhật trạng thái ngay lập tức khi chọn
+      fetch(`/api/updateOrderStatus`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          id: orderId,
+          status: selectedStatus,
+        }),
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          if (data.success) {
+            alert("Cập nhật trạng thái thành công!");
+            // Cập nhật lại giao diện nếu cần
+          } else {
+            alert("Cập nhật trạng thái thất bại!");
+          }
+        })
+        .catch((error) => {
+          console.error("Lỗi:", error);
+          alert("Đã xảy ra lỗi trong quá trình cập nhật!");
+        });
     });
   });
 </script>
