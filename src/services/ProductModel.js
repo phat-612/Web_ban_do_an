@@ -11,7 +11,7 @@ const getAllProduct = async (filter = null) => {
   let query =
     "SELECT products.*, categories.id idCategory, categories.name nameCategory, productAdd.id idProductAdd, productAdd.name nameProductAdd, productAdd.currentPrice currentPriceProductAdd, productAdd.image imageProductAdd, productAdd.isExit isExitProductAdd , productAdd.isBussiness isBussinessProductAdd from products left JOIN categories on categories.id = products.idCategory left JOIN itemAddMore on products.id = itemAddMore.idProduct left JOIN products as productAdd on productAdd.id = itemAddMore.idProductAdd";
   if (filter) {
-    query += ` WHERE products.name LIKE '%${filter}%' OR categories.name LIKE '%${filter}%'`;
+    query += ` WHERE products.name LIKE '%${filter}%' OR categories.id LIKE '%${filter}%'`;
   }
   const [row, fields] = await pool.execute(query);
 
@@ -196,7 +196,7 @@ const getLimitedProduct = async (filter = null) => {
   ORDER BY products.sold DESC \
   LIMIT 4";
   if (filter) {
-    query += ` WHERE products.name LIKE '%${filter}%' OR categories.name LIKE '%${filter}%'`;
+    query += ` WHERE products.name LIKE '%${filter}%' OR categories.id LIKE '%${filter}%'`;
   }
   const [row, fields] = await pool.execute(query);
   let products = [];
