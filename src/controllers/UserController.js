@@ -21,7 +21,7 @@ const getUserHomePage = async (req, res) => {
       page: "user/home",
       script: "user/menu",
       user: user,
-      topProducts,
+      products: topProducts,
       topNewFeedback,
     },
   });
