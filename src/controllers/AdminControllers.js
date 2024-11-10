@@ -3,7 +3,7 @@ import shopModel from "../services/ShopModel";
 import productModel from "../services/ProductModel";
 import userModel from "../services/UserModel";
 import orderModel from "../services/OrderModel";
-import ProductModel from "../services/ProductModel";
+import bannerModel from "../services/BannerModel";
 import feedbackModel from "../services/FeedbackModel";
 import fs from "fs";
 
@@ -169,15 +169,26 @@ const getOrderStatus = async (req, res) => {
 
 // BANNER ( BANNER )
 const getBannerPage = async (req, res) => {
+  const banners = await bannerModel.getAllBanner();
   res.render("main", {
     data: {
       title: "Banner",
       header: "partials/headerAdmin",
       page: "admin/banner",
+      banners,
     },
   });
 };
+const addBanner = async (req, res) => {
+  const { image, link } = req.body;
+  console.log({ image, link });
+  if (!image || !link) {
+    res.status(400).send("Image và Link là bắt buộc");
+  }
 
+  await bannerModel.addBanner({ image, link });
+  res.redirect("/admin/banner");
+};
 // CATEGORY ( DANH MỤC )
 const getCategoryPage = async (req, res) => {
   const { name } = req.query;
@@ -303,4 +314,5 @@ export default {
   updateInfoShop,
   setStatus,
   setRole,
+  addBanner,
 };

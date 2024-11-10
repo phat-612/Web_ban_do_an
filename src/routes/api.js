@@ -7,6 +7,7 @@ const router = express.Router();
 // danh mục sản phẩm bên admin
 router.post("/addCategory", adminController.addCategory);
 router.post("/deleteCategory", adminController.deleteCategory);
+router.post("/addBanner", adminController.addBanner);
 router.post(
   "/addProduct",
   upload.single("productImage"),
@@ -23,6 +24,7 @@ router.post(
 router.post("/deleteProduct", adminController.deleteProduct);
 // cập nhật thông tin của hàng
 router.post("/updateShopInfo", adminController.updateInfoShop);
+
 // USER API-------------------------------------------------------------------------------
 
 // thêm sản phẩm vào gio hang
