@@ -29,15 +29,12 @@
             Xóa
           </span>
           <div class="col-1 align-self-center text-center">
-            <input class="cbxIsBuy" type="checkbox" data-bs-idCart="<%= cart.id
-            %>" <%= cart.isBuy ? 'checked' : '' %> />
+            <input class="cbxIsBuy form-check-input" type="checkbox"
+            data-bs-idCart="<%= cart.id %>" <%= cart.isBuy ? 'checked' : '' %>
+            />
           </div>
           <div class="col-2 align-self-center">
-            <img
-              src="https://cdn.tgdd.vn/Files/2019/11/15/1219188/3-cong-thuc-lam-salad-ca-ngu-cuc-don-gian-giau-dinh-duong-lam-nhanh-6.jpg"
-              alt=""
-              class="w-100"
-            />
+            <img src="/imgs/products/<%= cart.image %>" alt="" class="w-100" />
           </div>
           <div class="col-6 align-self-center">
             <h4 class="nameProduct one-row"><%= cart.name %></h4>
@@ -60,7 +57,7 @@
             </button>
             <input
               type="number"
-              class="inpQuantity w-50"
+              class="inpQuantity w-50 text-center"
               value="<%= cart.quantity %>"
               name="products[index][quantity]"
               data-bs-idProduct="<%= cart.idProduct %>"
@@ -112,6 +109,10 @@
           style="resize: none;"
         >
         </textarea>
+      </div>
+      <div class="rounded border p-1 mb-2">
+        <h4>Phương thức thanh toán</h4>
+        <p>Trả tiền khi nhận hàng</p>
       </div>
       <div class="rounded border p-1 mb-2">
         <!-- tong phu -->

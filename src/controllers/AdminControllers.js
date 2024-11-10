@@ -7,6 +7,15 @@ import ProductModel from "../services/ProductModel";
 import feedbackModel from "../services/FeedbackModel";
 import fs from "fs";
 
+// đăng nhập
+const getLoginPage = (req, res) => {
+  res.render("main", {
+    data: {
+      title: "Login",
+      page: "admin/login",
+    },
+  });
+};
 // PRODUCT ( SAN PHAM )
 const getProductPage = async (req, res) => {
   const productList = await productModel.getAllProduct();
@@ -273,6 +282,7 @@ const updateInfoShop = async (req, res) => {
 
 export default {
   // GET PAGE
+  getLoginPage,
   getProductPage,
   getAddProductPage,
   getEditProductPage,

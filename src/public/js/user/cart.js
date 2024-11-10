@@ -25,7 +25,6 @@ $(document).ready(function () {
   };
   //   hàm update số lượng lên server và total
   const updateQuantity = (idProduct, quantity) => {
-    console.log(idProduct, quantity);
     loadTotal();
     // fetch data lên server
     $.ajax({
@@ -34,10 +33,10 @@ $(document).ready(function () {
       data: { idProduct, quantity },
       dataType: "json",
       success: function (response) {
-        console.log("thành công");
+        console.log("thành công cập nhật số lượng");
       },
       error: function (xhr, status, error) {
-        console.log("lỗi");
+        console.log("lỗi cập nhật số lượng");
       },
     });
   };
@@ -51,19 +50,22 @@ $(document).ready(function () {
       const name = $(ele).find(".nameProduct").text();
       const price = $(ele).find(".priceProduct").attr("data-bs-priceProduct");
       const quantity = $(ele).find(".inpQuantity").val();
+      const isBuy = $(ele).find(".cbxIsBuy").is(":checked") ? 1 : 0;
       const total = price * quantity;
       dataProduct.push({
         name,
         price,
         quantity,
         total,
+        isBuy,
       });
     });
     let htmlSubTotal = "";
     dataProduct.forEach((product) => {
-      let formatPrice = product.price.toLocaleString("vi-VN");
-      let formatTotal = product.total.toLocaleString("vi-VN");
-      htmlSubTotal += `
+      if (product.isBuy) {
+        let formatPrice = product.price.toLocaleString("vi-VN");
+        let formatTotal = product.total.toLocaleString("vi-VN");
+        htmlSubTotal += `
         <div class="row">
             <span class="col-5 one-row">${product.name}</span>
             <span class="col-2 text-center">${formatPrice}</span>
@@ -71,20 +73,21 @@ $(document).ready(function () {
             <span class="col-4 text-end">${formatTotal}</span>
         </div>
         `;
+      }
     });
-    console.log(dataProduct);
     areaSubTotal.html(htmlSubTotal);
     // cập nhật số lượng sản phẩm trong giỏ hàng
     $(".totalProduct").text(`(${dataProduct.length} sản phẩm)`);
     // disable btnOrder
-    if (dataProduct.length == 0) {
+    const countProductBuy = dataProduct.filter((item) => item.isBuy).length;
+    if (countProductBuy == 0) {
       $(".btnOrder").attr("disabled", true);
     } else {
       $(".btnOrder").removeAttr("disabled");
     }
     $(".total").text(
       dataProduct
-        .reduce((acc, cur) => acc + cur.total, 0)
+        .reduce((acc, cur) => (cur.isBuy ? acc + cur.total : acc), 0)
         .toLocaleString("vi-VN")
     );
   };
@@ -126,8 +129,9 @@ $(document).ready(function () {
       currentIdProduct = idProduct;
       currentQuantityProduct = inputvalue;
     }
-    debounce(updateQuantity, 1000)(idProduct, inputvalue);
+    debounce(updateQuantity, 500)(idProduct, inputvalue);
     currentQuantityProduct = inputvalue;
+    currentIdProduct = idProduct;
   });
   //   xóa sản phẩm trong giỏ hàng
   $(".deleteProduct").on("click", function (e) {
@@ -153,10 +157,11 @@ $(document).ready(function () {
       data: { idCart, isBuy },
       dataType: "json",
       success: function (response) {
-        console.log("thành công");
+        console.log("thành công cập nhật isBuy");
+        loadTotal();
       },
       error: function (xhr, status, error) {
-        console.log("lỗi");
+        console.log("lỗi check isBuy");
       },
     });
   });

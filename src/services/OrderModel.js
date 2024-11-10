@@ -12,6 +12,7 @@ const getOrders = async () => {
   return rows;
 };
 const addOrder = async (order, orderDetail) => {
+  // thêm sản dữ liệu vào bảng orders
   const [rows, fields] = await pool.execute(
     "INSERT INTO `orders` (`idUser`, `name`, `phone`, `address`, `note`, `total`, `status` ) VALUES (?, ?, ?, ?, ?, ?, ?)",
     [
@@ -26,7 +27,7 @@ const addOrder = async (order, orderDetail) => {
   );
   const idOrder = rows.insertId;
   console.log("idOrder", idOrder);
-
+  // thêm dữ liệu vào bảng orderDetail
   if (orderDetail) {
     const values = orderDetail.map((item) => [idOrder, ...item]);
     await pool.query(
@@ -34,7 +35,10 @@ const addOrder = async (order, orderDetail) => {
       [values]
     );
   }
-
+  // xóa sản phẩm đã đặt trong giỏ hàng người dùng
+  await pool.execute("DELETE FROM `carts` WHERE `idUser` = ? AND isBuy=1", [
+    order.idUser,
+  ]);
   return;
 };
 const updateStatus = async (status) => {

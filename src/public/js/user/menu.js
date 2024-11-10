@@ -5,49 +5,21 @@ $(document).ready(function () {
 
     if (isLogin !== "true") {
       e.preventDefault();
-      $(".divModalFormAddToCart").hide();
+      $(".divModalFormAddToCart").hide(); // Ẩn modal chi tiết sản phẩm nếu chưa đăng nhập
 
       const loginModalElement = document.getElementById("ModalDangNhap");
-      const detailProductModalElement = document.getElementById(
-        "divModalFormAddToCart"
-      );
+      if (loginModalElement) {
+        const loginModal = new bootstrap.Modal(loginModalElement);
+        loginModal.show();
 
-      // Khởi tạo modal chi tiết sản phẩm nếu chưa được tạo
-      const detailProductModal = new bootstrap.Modal(detailProductModalElement);
-
-      // Kiểm tra và xử lý khi modal chi tiết sản phẩm đóng
-      detailProductModalElement.addEventListener(
-        "hidden.bs.modal",
-        function () {
-          // Xóa lớp modal-open và backdrop
+        // Xóa lớp backdrop và lớp khóa cuộn khi modal đăng nhập đóng
+        loginModalElement.addEventListener("hidden.bs.modal", function () {
           document.body.classList.remove("modal-open");
           $(".modal-backdrop").remove();
           $("body").css({
             overflow: "auto",
             "padding-right": "0px",
           });
-        }
-      );
-
-      if (loginModalElement) {
-        const loginModal = new bootstrap.Modal(loginModalElement);
-
-        // Hiển thị modal đăng nhập
-        loginModal.show();
-
-        // Xử lý sự kiện khi modal đăng nhập đóng
-        loginModalElement.addEventListener("hidden.bs.modal", function () {
-          // Sau khi modal đăng nhập đóng, kiểm tra xem chi tiết sản phẩm có cần mở lại không
-          if (!detailProductModalElement.classList.contains("show")) {
-            // Giải phóng modal đăng nhập và thiết lập lại
-            document.body.classList.remove("modal-open");
-            $(".modal-backdrop").remove();
-            $("body").css({
-              overflow: "auto",
-              "padding-right": "0px",
-            });
-            loginModal.dispose();
-          }
         });
       } else {
         console.error("Không thấy modal đăng nhập");
@@ -186,15 +158,4 @@ $(document).ready(function () {
       return;
     }
   });
-
-  // api :((
-  function sendFetchUpdateQuantityAddmore() {
-    fetch("", {
-      method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
-      body: JSON.stringify({}),
-    }).then((response) => {});
-  }
 });

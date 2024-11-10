@@ -1,8 +1,10 @@
 import express from "express";
 import adminController from "../controllers/AdminControllers";
-import { isAdmin } from "../middlewares/login";
+import { isAdmin, isLogin } from "../middlewares/login";
 const router = express.Router();
 
+// đăng nhập
+router.get("/login", isLogin, adminController.getLoginPage);
 // PRODUCT ( SAN PHAM )
 router.get("/", isAdmin, adminController.getProductPage);
 router.get("/product/addProduct", isAdmin, adminController.getAddProductPage);

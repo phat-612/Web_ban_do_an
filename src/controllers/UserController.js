@@ -3,11 +3,13 @@ import userModel from "../services/UserModel";
 import productModel from "../services/ProductModel";
 import cartModel from "../services/CartModel";
 import orderModel from "../services/OrderModel";
+import FeedbackModel from "../services/FeedbackModel";
 import bcrypt from "bcrypt";
 
 // TRANG CHU
 const getUserHomePage = async (req, res) => {
   const topProducts = await productModel.getLimitedProduct();
+  const topNewFeedback = await FeedbackModel.getTopNewFeedback();
   const user = req.session.user;
   // req.session.success = null;
   // req.session.error = null;
@@ -20,6 +22,7 @@ const getUserHomePage = async (req, res) => {
       script: "user/menu",
       user: user,
       topProducts,
+      topNewFeedback,
     },
   });
 };
@@ -27,10 +30,13 @@ const getUserHomePage = async (req, res) => {
 // THUC DON
 const getUserMenuPage = async (req, res) => {
   const user = req.session.user;
-  const { category } = req.query;
+  const { category, find } = req.query;
   let productList;
-  if (category) {
-    productList = await productModel.getProductByCategory(category);
+  // ưu tiên tìm kiếm hơn danh mục
+  if (find) {
+    productList = await productModel.getAllProduct(find);
+  } else if (category) {
+    productList = await productModel.getAllProduct(category);
   } else {
     productList = await productModel.getAllProduct();
   }
@@ -186,6 +192,7 @@ const addOrder = async (req, res) => {
     status: 1,
   };
   await orderModel.addOrder(dataOrder, dataDetailOrder);
+
   return res.redirect("/historyProduct");
 };
 // end cart
@@ -379,6 +386,9 @@ const login = async (req, res) => {
         status: user.status,
         role: user.role,
       };
+      if (user.role === 0) {
+        return res.redirect("/admin");
+      }
       return res.redirect("back");
     } else {
       return res.json({ success: false, message: "Mật khẩu không chính xác" });

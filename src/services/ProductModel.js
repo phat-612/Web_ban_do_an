@@ -7,10 +7,13 @@ const formatter = new Intl.NumberFormat("vi-VN", {
   trailingZeroDisplay: "stripIfInteger",
 });
 
-const getAllProduct = async () => {
-  const [row, fields] = await pool.execute(
-    "SELECT products.*, categories.id idCategory, categories.name nameCategory, productAdd.id idProductAdd, productAdd.name nameProductAdd, productAdd.currentPrice currentPriceProductAdd, productAdd.image imageProductAdd, productAdd.isExit isExitProductAdd , productAdd.isBussiness isBussinessProductAdd from products left JOIN categories on categories.id = products.idCategory left JOIN itemAddMore on products.id = itemAddMore.idProduct left JOIN products as productAdd on productAdd.id = itemAddMore.idProductAdd"
-  );
+const getAllProduct = async (filter = null) => {
+  let query =
+    "SELECT products.*, categories.id idCategory, categories.name nameCategory, productAdd.id idProductAdd, productAdd.name nameProductAdd, productAdd.currentPrice currentPriceProductAdd, productAdd.image imageProductAdd, productAdd.isExit isExitProductAdd , productAdd.isBussiness isBussinessProductAdd from products left JOIN categories on categories.id = products.idCategory left JOIN itemAddMore on products.id = itemAddMore.idProduct left JOIN products as productAdd on productAdd.id = itemAddMore.idProductAdd";
+  if (filter) {
+    query += ` WHERE products.name LIKE '%${filter}%' OR categories.name LIKE '%${filter}%'`;
+  }
+  const [row, fields] = await pool.execute(query);
 
   // const [row, fields] = await pool.execute(
   //   "SELECT products.id, products.name, currentPrice, description, products.image, categories.name as nameCategory FROM products JOIN categories on products.idCategory = categories.id"
