@@ -11,7 +11,7 @@ const getAllProduct = async (filter = null) => {
   let query =
     "SELECT products.*, categories.id idCategory, categories.name nameCategory, productAdd.id idProductAdd, productAdd.name nameProductAdd, productAdd.currentPrice currentPriceProductAdd, productAdd.image imageProductAdd, productAdd.isExit isExitProductAdd , productAdd.isBussiness isBussinessProductAdd from products left JOIN categories on categories.id = products.idCategory left JOIN itemAddMore on products.id = itemAddMore.idProduct left JOIN products as productAdd on productAdd.id = itemAddMore.idProductAdd";
   if (filter) {
-    query += ` WHERE products.name LIKE '%${filter}%' OR categories.name LIKE '%${filter}%'`;
+    query += ` WHERE products.name LIKE '%${filter}%' OR categories.id LIKE '%${filter}%'`;
   }
   const [row, fields] = await pool.execute(query);
 
@@ -183,11 +183,50 @@ const deleteProduct = async (id) => {
   await pool.execute("DELETE FROM `products` WHERE `products`.`id` = ?", [id]);
 };
 
-const getLimitedProduct = async (req, res) => {
-  const [row, fields] = await pool.execute(
-    "SELECT * FROM `products` ORDER BY `sold` DESC LIMIT 4"
-  );
-  return row;
+const getLimitedProduct = async (filter = null) => {
+  let query =
+    "SELECT products.*, categories.id AS idCategory, categories.name AS nameCategory, \
+  productAdd.id AS idProductAdd, productAdd.name AS nameProductAdd, \
+  productAdd.currentPrice AS currentPriceProductAdd, productAdd.image AS imageProductAdd, \
+  productAdd.isExit AS isExitProductAdd, productAdd.isBussiness AS isBussinessProductAdd \
+  FROM products \
+  LEFT JOIN categories ON categories.id = products.idCategory \
+  LEFT JOIN itemAddMore ON products.id = itemAddMore.idProduct \
+  LEFT JOIN products AS productAdd ON productAdd.id = itemAddMore.idProductAdd \
+  ORDER BY products.sold DESC \
+  LIMIT 4";
+  if (filter) {
+    query += ` WHERE products.name LIKE '%${filter}%' OR categories.id LIKE '%${filter}%'`;
+  }
+  const [row, fields] = await pool.execute(query);
+  let products = [];
+  row.forEach((product) => {
+    let index = products.findIndex((item) => item.id === product.id);
+    if (index === -1) {
+      products.push({
+        id: product.id,
+        name: product.name,
+        currentPrice: formatter.format(product.currentPrice),
+        description: product.description,
+        image: product.image,
+        idCategory: product.idCategory,
+        nameCategory: product.nameCategory,
+        itemAddMore: [],
+      });
+      index = products.length - 1;
+    }
+    if (product.idProductAdd)
+      products[index].itemAddMore.push({
+        id: product.idProductAdd,
+        name: product.nameProductAdd,
+        currentPrice: formatter.format(product.currentPriceProductAdd),
+        image: product.imageProductAdd,
+        isExit: product.isExitProductAdd,
+        isBussiness: product.isBussinessProductAdd,
+      });
+  });
+
+  return products;
 };
 
 export default {

@@ -19,11 +19,12 @@
         <th>Hành Động</th>
       </thead>
       <tbody>
-        <th>1</th>
+        <% data.banners.forEach(function(banner,ind){ %>
+        <th><%= ind+1 %></th>
         <td>
           <img src="" alt="ảnh banner">
         </td>
-        <td>/product/?id=123827513589</td>
+        <td><%= banner.link %></td>
         <td>
           <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalSuaBanner">
             Sửa
@@ -33,6 +34,8 @@
             <button type="submit" class="btn btn-danger">Xóa</button>
           </form>
         </td>
+        <% }) %>
+
       </tbody>
     </table>
   </div>
@@ -45,23 +48,25 @@
 <div class="modal fade" id="ModalThemBanner" tabindex="-1" aria-labelledby="ModalThemBanner" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Thêm Banner</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label for="formFile" class="form-label">Chọn Ảnh</label>
-          <input class="form-control" type="file" id="formFile">
+      <form action="/api/addBanner" method="post">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Thêm Banner</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="mb-3">
-          <label for="">Đường Dẫn</label>
-          <input type="text" class="form-control" placeholder="Nhập Đường Dẫn">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="formFile" class="form-label">Chọn Ảnh</label>
+            <input required name="image" class="form-control" type="file" id="formFile">
+          </div>
+          <div class="mb-3">
+            <label for="">Đường Dẫn</label>
+            <input required name="link" type="text" class="form-control" placeholder="Nhập Đường Dẫn">
+          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success">Thêm</button>
-      </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Thêm</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
