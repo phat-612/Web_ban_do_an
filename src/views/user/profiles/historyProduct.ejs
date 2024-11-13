@@ -67,14 +67,26 @@
           <!-- Order details -->
           <p><strong>Tổng tiền:</strong> <%= order.total %> VND</p>
           <p>
+            <strong>Trạng thái:</strong> <%= order.status === 6 ? "Đã hủy" :
+            "Đang xử lý" %>
+          </p>
+          <p>
             <strong>Tên các món ăn:</strong> <%= order.products.map(product =>
             product.productName).join(', ') %>
           </p>
 
-          <!-- Cancel order button -->
+          <!-- Conditional Cancel or Undo Order button based on status -->
+          <% if (order.status !== 6) { %>
           <a href="/api/cancelOrder/<%= order.id %>" class="btn btn-danger mt-2"
             >Hủy đơn hàng</a
           >
+          <% } else { %>
+          <a
+            href="/api/restoreOrder/<%= order.id %>"
+            class="btn btn-secondary mt-2"
+            >Hoàn tác</a
+          >
+          <% } %>
 
           <!-- Order items collapse -->
           <div class="collapse" id="orderItems<%= index %>">

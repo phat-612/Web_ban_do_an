@@ -185,7 +185,11 @@ const getOrderPage = async (req, res) => {
 
     return acc;
   }, []);
-  console.log(orderFull);
+  orderFull.sort((a, b) => {
+    if (a.status === 6 && b.status !== 6) return 1;
+    if (a.status !== 6 && b.status === 6) return -1;
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
   res.render("main", {
     data: {
       title: "Order",

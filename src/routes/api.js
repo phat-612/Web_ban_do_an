@@ -75,9 +75,8 @@ router.post("/changePassword", userController.changePassword);
 router.post("/cancelAccount", userController.cancelAccount);
 // hủy đơn hàng
 router.get("/cancelOrder/:id", userController.cancelOrder);
-// lay mat khauz
-router.post("/reset", userController.reset);
 // trạng thái đơn hàng
-
 router.post("/updateOrderStatus", adminController.updateStatusOrder);
+// hoàn tác đơn hàng đã hủy
+router.get("/restoreOrder/:id", userController.restoreOrder);
 export default router;

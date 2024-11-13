@@ -13,8 +13,6 @@ const getUserHomePage = async (req, res) => {
   const topNewFeedback = await feedbackModel.getTopNewFeedback();
   const user = req.session.user;
   const banners = await bannerModel.getAllBanner();
-  // req.session.success = null;
-  // req.session.error = null;
   res.render("main", {
     data: {
       title: "Home",
@@ -296,11 +294,8 @@ const getHistoryProduct = async (req, res) => {
   // Lấy tất cả đơn hàng
   const orders = await orderModel.getAllOrderFull();
 
-  // Lọc các đơn hàng có status khác 6
-  const filteredOrders = orders.filter((order) => order.status !== 6);
-
   // Nhóm các sản phẩm theo id đơn hàng
-  const orderFull = filteredOrders.reduce((acc, item) => {
+  const orderFull = orders.reduce((acc, item) => {
     const existingOrder = acc.find((order) => order.id === item.id);
 
     if (existingOrder) {
@@ -339,6 +334,13 @@ const getHistoryProduct = async (req, res) => {
     return acc;
   }, []);
 
+  // Sắp xếp: trạng thái trước (status !== 6) và ngày mới nhất trước
+  orderFull.sort((a, b) => {
+    if (a.status === 6 && b.status !== 6) return 1;
+    if (a.status !== 6 && b.status === 6) return -1;
+    return new Date(b.createdAt) - new Date(a.createdAt);
+  });
+
   // Trả về dữ liệu và render ra view
   res.render("main", {
     data: {
@@ -351,7 +353,12 @@ const getHistoryProduct = async (req, res) => {
     },
   });
 };
-
+// hoàn tác đơn hàng
+const restoreOrder = async (req, res, next) => {
+  const orderId = req.params.id;
+  await orderModel.restoreOrder(orderId);
+  res.redirect("back");
+};
 // trang đổi mật khẩu
 const getRePassword = async (req, res) => {
   const user = req.session.user;
@@ -397,24 +404,18 @@ const login = async (req, res) => {
   const { email, password } = req.body;
   console.log(email, password);
   if (!email || !password) {
-    return res.json({
-      success: false,
-      message: "Vui lòng nhập đầy đủ email và mật khẩu",
-    });
+    return res.s;
   }
 
   const user = await userModel.login(email);
 
   // Kiểm tra nếu người dùng không tồn tại hoặc tài khoản bị khóa
   if (!user || user.status === 3) {
-    return res.json({ success: false, message: "Tài khoản không tồn tại" });
+    return res.status(400).send("Tài khoản không tồn tại");
   }
 
   if (user && user.status === 2) {
-    return res.json({
-      success: false,
-      message: "Tài khoản đã bị khóa do vi phạm tiêu chuẩn cộng đồng",
-    });
+    return res.status(400).send("Tài khoản bị vô hiểu hóa");
   }
 
   const isPassword = await bcrypt.compare(password, user.password);
@@ -434,10 +435,10 @@ const login = async (req, res) => {
       }
       return res.redirect("back");
     } else {
-      return res.json({ success: false, message: "Mật khẩu không chính xác" });
+      return res.status(400).send("Thông tin đăng nhập không chính xác");
     }
   } else {
-    return res.json({ success: false, message: "Tài khoản không tồn tại" });
+    return res.status(400).send("Tài khoản không tồn tại");
   }
 };
 
@@ -516,39 +517,7 @@ const cancelOrder = async (req, res) => {
   await userModel.cancelOrderDetail(id);
   res.redirect("back");
 };
-// lấy lại mật khẩu
-const reset = async (req, res) => {
-  const { email, token, password } = req.body;
-  return console.log(email, token, password);
-  try {
-    // Tìm user trong cơ sở dữ liệu bằng email
-    const user = await userModel.login(email);
-    if (!user) {
-      return res.redirect("/password/reset?error=user_not_found");
-    }
 
-    // So sánh token trong cơ sở dữ liệu với token người dùng gửi lên
-    const isTokenValid = await bcrypt.compare(token, user.passwordResetToken);
-    if (!isTokenValid) {
-      return res.redirect("/password/reset?error=invalid_token");
-    }
-
-    // Hash mật khẩu mới
-    const hashedPassword = await bcrypt.hash(
-      password,
-      parseInt(process.env.BCRYPT_SALT_ROUND)
-    );
-
-    // Cập nhật mật khẩu mới cho người dùng
-    await userModel.resetPassword(email, hashedPassword);
-
-    // Chuyển hướng về trang đăng nhập sau khi thay đổi mật khẩu thành công
-    res.redirect("/login?success=password_reset");
-  } catch (err) {
-    console.error("Error during password reset:", err);
-    res.redirect("/500"); // Có thể tạo một trang lỗi để hiển thị lỗi hệ thống
-  }
-};
 export default {
   getUserHomePage,
   getUserMenuPage,
@@ -562,7 +531,7 @@ export default {
   getRegister,
   getListAddress,
   // api
-  reset,
+
   login,
   sendFeedback,
   apiRegister,
@@ -579,4 +548,5 @@ export default {
   updateQuantityCart,
   updateIsBuyCart,
   addOrder,
+  restoreOrder,
 };

@@ -50,5 +50,18 @@ const updateStatusOrder = async (status, id) => {
   );
   return rows;
 };
+const restoreOrder = async (id) => {
+  const [rows, fields] = await pool.execute(
+    "UPDATE `orders` SET `status` = 1 WHERE `status` = 6 AND `id` = ?",
+    [id]
+  );
+  return rows;
+};
 
-export default { getAllOrderFull, addOrder, getOrders, updateStatusOrder };
+export default {
+  getAllOrderFull,
+  addOrder,
+  getOrders,
+  updateStatusOrder,
+  restoreOrder,
+};
