@@ -6,9 +6,12 @@ const getAllOrderFull = async () => {
   );
   return rows;
 };
-const getOrders = async () => {
-  const [rows, fields] = await pool.execute("SELECT * FROM `orders`");
-  return rows;
+const getOrders = async (id) => {
+  const [rows, fields] = await pool.execute(
+    "SELECT * FROM `orders` WHERE `id` = ?",
+    [id]
+  );
+  return rows[0];
 };
 const addOrder = async (order, orderDetail) => {
   // thêm sản dữ liệu vào bảng orders
@@ -40,10 +43,10 @@ const addOrder = async (order, orderDetail) => {
   ]);
   return;
 };
-const updateStatusOrder = async (id, status) => {
+const updateStatusOrder = async (status, id) => {
   const [rows, fields] = await pool.execute(
-    "UPDATE `orders` SET `status` = ? WHERE `id` = ? AND `status` = ?",
-    [id, status]
+    "UPDATE `orders` SET `status` = ? WHERE `id` = ?",
+    [status, id]
   );
   return rows;
 };

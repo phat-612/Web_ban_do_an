@@ -123,9 +123,28 @@ const deleteProduct = async (req, res) => {
   res.redirect("/admin");
 };
 // ORDER ( DON HANG)
+const getStatusText = (status) => {
+  switch (status) {
+    case 1:
+      return "Đặt Hàng";
+    case 2:
+      return "Tiếp Nhận";
+    case 3:
+      return "Đang Vận Chuyển";
+    case 4:
+      return "Thành Công";
+    case 5:
+    case 6:
+      return "Bị Hủy";
+    default:
+      return "Không Xác Định";
+  }
+};
+
 const getOrderPage = async (req, res) => {
   const orders = await orderModel.getAllOrderFull();
 
+  // Nhóm các sản phẩm theo đơn hàng
   const orderFull = orders.reduce((acc, item) => {
     const existingOrder = acc.find((order) => order.id === item.id);
 
@@ -139,6 +158,7 @@ const getOrderPage = async (req, res) => {
         currentPrice: item.currentPrice,
         description: item.description,
       });
+      console.log(existingOrder);
     } else {
       // Nếu chưa có, tạo mới đơn hàng và thêm sản phẩm đầu tiên vào
       acc.push({
@@ -149,6 +169,7 @@ const getOrderPage = async (req, res) => {
         address: item.address,
         total: item.total,
         status: item.status,
+        statusText: getStatusText(item.status), // Chuyển trạng thái thành chữ
         products: [
           {
             productName: item.name,
@@ -164,24 +185,33 @@ const getOrderPage = async (req, res) => {
 
     return acc;
   }, []);
+  console.log(orderFull);
   res.render("main", {
     data: {
       title: "Order",
       header: "partials/headerAdmin",
       page: "admin/order",
-      orderFull: orderFull,
+      orderFull: orderFull, // Dữ liệu đã xử lý
     },
   });
 };
 
 // cập nhật trạng thái đơn hàng
-const getOrderStatus = async (req, res) => {
-  return console.log(req.body);
-  const { id, status } = req.body;
-  await orderModel.updateStatusOrder(id, status);
-  res.redirect("back");
-};
+const updateStatusOrder = async (req, res) => {
+  const { status, orderId } = req.body;
+  const currentOrder = await orderModel.getOrders(orderId);
+  const currentStatus = currentOrder.status;
 
+  if (parseInt(status) > parseInt(currentStatus)) {
+    if (currentStatus == 4 && status == 5) {
+      return res.status(400).send("Đơn hàng đã thanh toán , không thể hủy");
+    }
+    await orderModel.updateStatusOrder(status, orderId);
+    res.redirect("back");
+  } else {
+    return res.status(400).send("Không thể đổi trạng thái.");
+  }
+};
 // BANNER ( BANNER )
 const getBannerPage = async (req, res) => {
   const banners = await bannerModel.getAllBanner();
@@ -327,12 +357,6 @@ const updateInfoShop = async (req, res) => {
   await shopModel.updateInfoShop(data);
   res.redirect("/admin/shopInfor");
 };
-// trang thái đơn hàng
-const updateStatusOrder = async (req, res) => {
-  const { id, status } = req.body;
-  await orderModel.updateStatusOrder(id, status);
-  res.redirect("/admin/order");
-};
 export default {
   // GET PAGE
   getLoginPage,
@@ -346,8 +370,8 @@ export default {
   getAccountPage,
   getFeedbackPage,
   getShopInforPage,
+  getStatusText,
   // API
-  getOrderStatus,
   addCategory,
   deleteCategory,
   addProduct,

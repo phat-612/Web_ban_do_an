@@ -292,34 +292,54 @@ const deleteAddress = async (req, res) => {
 // lịch sử đơn hàng
 const getHistoryProduct = async (req, res) => {
   const user = req.session.user;
-  const orderList = await userModel.getAllOrder(user.id); //đơn hàng
-  // sản phẩm trong đơn hàng
-  const orderFull = await Promise.all(
-    orderList.map(async (order) => {
-      const orderDetails = await orderModel.getAllOrderFull(order.id);
 
-      // Khởi tạo mảng chứa tên món ăn
-      const productNames = orderDetails.map((detail) => detail.name);
-      // Ghép tất cả tên món ăn lại với nhau
-      const productName = productNames.join("+ "); // Bạn có thể thay đổi dấu phân cách nếu cần
+  // Lấy tất cả đơn hàng
+  const orders = await orderModel.getAllOrderFull();
 
-      // Duyệt qua các chi tiết sản phẩm của đơn hàng và thêm tên món ăn đã ghép vào
-      const products = orderDetails.map((detail) => ({
-        productName: detail.name,
-        quantity: detail.quantity,
-        price: detail.price,
-        image: detail.image,
-      }));
+  // Lọc các đơn hàng có status khác 6
+  const filteredOrders = orders.filter((order) => order.status !== 6);
 
-      return {
-        id: order.id,
-        total: order.total,
-        productName, // Thêm chuỗi tên món ăn đã ghép vào đơn hàng
-        products,
-      };
-    })
-  );
+  // Nhóm các sản phẩm theo id đơn hàng
+  const orderFull = filteredOrders.reduce((acc, item) => {
+    const existingOrder = acc.find((order) => order.id === item.id);
 
+    if (existingOrder) {
+      // Nếu đơn hàng đã tồn tại, chỉ cần thêm sản phẩm vào mảng products
+      existingOrder.products.push({
+        productName: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        image: item.image,
+        currentPrice: item.currentPrice,
+        description: item.description,
+      });
+    } else {
+      // Nếu chưa có đơn hàng, tạo mới đơn hàng và thêm sản phẩm đầu tiên vào
+      acc.push({
+        id: item.id,
+        createdAt: item.created_at,
+        customerName: item.customerName,
+        phone: item.phone,
+        address: item.address,
+        total: item.total,
+        status: item.status,
+        products: [
+          {
+            productName: item.name,
+            quantity: item.quantity,
+            price: item.price,
+            image: item.image,
+            currentPrice: item.currentPrice,
+            description: item.description,
+          },
+        ],
+      });
+    }
+
+    return acc;
+  }, []);
+
+  // Trả về dữ liệu và render ra view
   res.render("main", {
     data: {
       title: "Profile",
@@ -494,8 +514,6 @@ const cancelAccount = async (req, res) => {
 const cancelOrder = async (req, res) => {
   const id = req.params.id;
   await userModel.cancelOrderDetail(id);
-  await userModel.cancelOrder(id);
-
   res.redirect("back");
 };
 // lấy lại mật khẩu

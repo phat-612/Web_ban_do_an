@@ -1,10 +1,10 @@
 <div class="container">
   <style>
     .one-row {
-          white-space: nowrap;
-          overflow: hidden;
-          text-overflow: ellipsis;
-      }
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
   </style>
   <form action="/api/addOrder" method="post" id="formOrder" class="row">
     <div class="col-7 p-1">
@@ -95,9 +95,9 @@
 
         <p class="showAddress"></p>
         <!-- input ẩn vận chuyển -->
-        <input type="text" hidden name="nameDelivery" />
-        <input type="text" hidden name="phoneDelivery" />
-        <input type="text" hidden name="addressDelivery" />
+        <input type="text" hidden name="nameDelivery" required />
+        <input type="text" hidden name="phoneDelivery" required />
+        <input type="text" hidden name="addressDelivery" required />
         <!-- kết thúc -->
       </div>
       <div class="rounded border p-1 mb-2">
@@ -105,8 +105,8 @@
         <textarea
           name="description"
           id=""
-          class="w-100 rounded "
-          style="resize: none;"
+          class="w-100 rounded"
+          style="resize: none"
         >
         </textarea>
       </div>
@@ -184,7 +184,7 @@
         <% }); %>
         <!-- kết thúc -->
       </div>
-      <a href="/profileAddress" class="w-100 btn btn-primary ">Thêm địa chỉ</a>
+      <a href="/profileAddress" class="w-100 btn btn-primary">Thêm địa chỉ</a>
     </div>
   </div>
 </div>

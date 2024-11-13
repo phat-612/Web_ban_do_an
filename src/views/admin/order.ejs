@@ -1,12 +1,13 @@
-<div class="d-flex justify-content-center mt-3">
-  <h3>QUẢN LÝ ĐƠN HÀNG</h3>
-</div>
-<!-- ----- -->
 <div class="container">
   <!-- Tìm kiếm -->
   <div class="searchbox w-100 d-flex justify-content-end mb-3">
     <form class="d-flex">
-      <input class="form-control me-2" type="search" placeholder="Nhập Tên Người Dùng" aria-label="Search" />
+      <input
+        class="form-control me-2"
+        type="search"
+        placeholder="Nhập Tên Người Dùng"
+        aria-label="Search"
+      />
       <button class="btn btn-outline-success" type="submit">TÌM</button>
     </form>
   </div>
@@ -28,38 +29,62 @@
         <% data.orderFull.forEach(function(order, index) { %>
         <tr>
           <td><%= index + 1 %></td>
+
           <td>
             <!-- Hiển thị các món ăn của đơn hàng -->
-            <%= order.products.map(function(product) {
-        return product.productName + " (x" + product.quantity + ")";
-      }).join(", ") %>
+            <%= order.products.map(function(product) { return `
+            ${product.productName} (x${product.quantity}) `; }).join(", ") %>
           </td>
           <td><%= order.customerName %></td>
           <td><%= order.createdAt %></td>
           <td><%= order.total %></td>
-          <td><%= order.status %></td>
+          <td><%= order.statusText %></td>
           <td>
-            <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalXemOrder" data-id="<%= order.id %>" data-created-at="<%= order.created_at %>" data-name="<%= order.customerName %>" data-phone="<%= order.phone %>" data-address="<%= order.address %>" data-note="<%= order.note %>" data-total="<%= order.total %>" data-status="<%= order.status %>" data-products="<%= JSON.stringify(order.products) %>">
+            <% if (order.status !== 6) { %>
+            <button
+              type="button"
+              class="btn btn-success"
+              data-bs-toggle="modal"
+              data-bs-target="#ModalXemOrder"
+              data-id="<%= order.id %>"
+              data-created-at="<%= order.created_at %>"
+              data-name="<%= order.customerName %>"
+              data-phone="<%= order.phone %>"
+              data-address="<%= order.address %>"
+              data-note="<%= order.note %>"
+              data-total="<%= order.total %>"
+              data-status="<%= order.status %>"
+              data-products="<%= JSON.stringify(order.products) %>"
+            >
               <i class="bi bi-eye-fill"></i>
             </button>
+            <% } %>
           </td>
         </tr>
         <% }) %>
-
-
-
       </tbody>
     </table>
   </div>
 </div>
 
 <!-- Modal Xem Chi Tiết Đơn Hàng -->
-<div class="modal fade" id="ModalXemOrder" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div
+  class="modal fade"
+  id="ModalXemOrder"
+  tabindex="-1"
+  aria-labelledby="exampleModalLabel"
+  aria-hidden="true"
+>
   <div class="modal-dialog modal-lg">
     <div class="modal-content" style="background-color: rgb(200, 238, 200)">
       <div class="modal-header">
         <h5 class="modal-title" id="exampleModalLabel">Chi Tiết Đơn Hàng</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <button
+          type="button"
+          class="btn-close"
+          data-bs-dismiss="modal"
+          aria-label="Close"
+        ></button>
       </div>
       <div class="modal-body">
         <div class="row">
@@ -118,27 +143,103 @@
             <div class="row">
               <div class="col-12 mb-3 d-flex justify-content-center">
                 <!-- Các checkbox cho trạng thái đơn hàng -->
-                <form action="/api/updateOrderStatus" method="POST" id="orderStatusForm">
+                <form
+                  action="/api/updateOrderStatus"
+                  method="POST"
+                  id="orderStatusForm"
+                >
                   <input type="hidden" name="orderId" id="hiddenOrderId" />
-                  <div class="btn-group" role="group" aria-label="Basic radio toggle button group">
-                    <input type="radio" class="btn-check" id="orderStatus1" name="status" value="1" autocomplete="off" />
-                    <label class="btn btn-outline-warning text-dark" for="orderStatus1">Đặt Hàng</label>
+                  <div
+                    class="btn-group"
+                    role="group"
+                    aria-label="Basic radio toggle button group"
+                  >
+                    <input
+                      type="radio"
+                      class="btn-check"
+                      id="orderStatus1"
+                      name="status"
+                      value="1"
+                      autocomplete="off"
+                    />
+                    <label
+                      class="btn btn-outline-warning text-dark"
+                      for="orderStatus1"
+                      >Đặt Hàng</label
+                    >
 
-                    <input type="radio" class="btn-check" id="orderStatus2" name="status" value="2" autocomplete="off" />
-                    <label class="btn btn-outline-warning text-dark" for="orderStatus2">Tiếp Nhận</label>
+                    <input
+                      type="radio"
+                      class="btn-check"
+                      id="orderStatus2"
+                      name="status"
+                      value="2"
+                      autocomplete="off"
+                    />
+                    <label
+                      class="btn btn-outline-warning text-dark"
+                      for="orderStatus2"
+                      >Tiếp Nhận</label
+                    >
 
-                    <input type="radio" class="btn-check" id="orderStatus3" name="status" value="3" autocomplete="off" />
-                    <label class="btn btn-outline-warning text-dark" for="orderStatus3">Đang Vận Chuyển</label>
+                    <input
+                      type="radio"
+                      class="btn-check"
+                      id="orderStatus3"
+                      name="status"
+                      value="3"
+                      autocomplete="off"
+                    />
+                    <label
+                      class="btn btn-outline-warning text-dark"
+                      for="orderStatus3"
+                      >Đang Vận Chuyển</label
+                    >
 
-                    <input type="radio" class="btn-check" id="orderStatus4" name="status" value="4" autocomplete="off" />
-                    <label class="btn btn-outline-warning text-dark" for="orderStatus4">Thành Công</label>
+                    <input
+                      type="radio"
+                      class="btn-check"
+                      id="orderStatus4"
+                      name="status"
+                      value="4"
+                      autocomplete="off"
+                    />
+                    <label
+                      class="btn btn-outline-warning text-dark"
+                      for="orderStatus4"
+                      >Thành Công</label
+                    >
 
-                    <input type="radio" class="btn-check" id="orderStatus5" name="status" value="5" autocomplete="off" hidden />
-                    <label class="btn btn-outline-warning text-dark" for="orderStatus5">Bị Hủy</label>
+                    <input
+                      type="radio"
+                      class="btn-check"
+                      id="orderStatus5"
+                      name="status"
+                      value="5"
+                      autocomplete="off"
+                    />
+                    <label
+                      class="btn btn-outline-warning text-dark"
+                      for="orderStatus5"
+                      >Bị Hủy</label
+                    >
+                    <input
+                      type="radio"
+                      class="btn-check hidden"
+                      id="orderStatus6"
+                      name="status"
+                      value="6"
+                      autocomplete="off"
+                    />
+                    <label
+                      class="btn btn-outline-warning text-dark"
+                      for="orderStatus6"
+                      hidden
+                    >
+                      Đã Hủy
+                    </label>
                   </div>
-
                 </form>
-
               </div>
             </div>
           </div>
@@ -150,7 +251,7 @@
 
 <script>
   document.querySelectorAll(".btn-success").forEach((button) => {
-    button.addEventListener("click", function() {
+    button.addEventListener("click", function () {
       // Lấy dữ liệu từ các thuộc tính data-*
       const orderId = this.getAttribute("data-id");
       document.getElementById("hiddenOrderId").value = orderId; // Cập nhật orderId vào input ẩn
@@ -172,33 +273,31 @@
       document.getElementById("order-phone").innerText = orderPhone;
       document.getElementById("order-address").innerText = orderAddress;
       document.getElementById("order-note").innerText = orderNote;
-      document.getElementById("order-total").innerText = `Tổng tiền: ${orderTotal}`;
+      document.getElementById("order-total").innerText =
+        "Tổng tiền: " + orderTotal;
 
-      // Cập nhật danh sách sản phẩm
+      // Cập nhật danh sách sản phẩm trong modal
       const productsBody = document.getElementById("order-products-body");
       productsBody.innerHTML = "";
       orderProducts.forEach((product) => {
         const row = document.createElement("tr");
         row.innerHTML = `
-          <td>${product.productName}</td>
+          <td class="text-truncate" style="max-width: 200px;">${product.productName}</td>
           <td>${product.quantity}</td>
           <td>${product.price}</td>
         `;
         productsBody.appendChild(row);
       });
 
-      // Cập nhật trạng thái
-      const statusElements = document.querySelectorAll('[name="status"]');
-      statusElements.forEach((el) => {
-        el.checked = parseInt(el.value) === orderStatus;
+      // Cập nhật trạng thái đơn hàng trong modal
+      const statusRadioButtons = document.querySelectorAll(
+        "input[name='status']"
+      );
+      statusRadioButtons.forEach((radioButton) => {
+        if (parseInt(radioButton.value) === orderStatus) {
+          radioButton.checked = true;
+        }
       });
-    });
-  });
-
-  // Xử lý submit khi thay đổi trạng thái
-  document.querySelectorAll('[name="status"]').forEach((checkbox) => {
-    checkbox.addEventListener("change", function() {
-      document.getElementById("orderStatusForm").submit(); // Gửi form khi chọn trạng thái mới
     });
   });
 </script>

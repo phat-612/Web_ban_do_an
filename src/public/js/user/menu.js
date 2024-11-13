@@ -85,30 +85,51 @@ $(document).ready(function () {
         );
       });
     }
+    // xu ly nut cong tru so luong cua mon an kem
+    $(".button-minus-Addmore").on("click", function () {
+      const inputAddmore = $(this)
+        .closest(".input-group")
+        .find(".quantity-Addmore");
+      let inputAddmoreValue = parseInt(inputAddmore.val());
+      if (inputAddmoreValue > 0) {
+        inputAddmoreValue--;
+        inputAddmore.val(inputAddmoreValue);
+      }
+    });
+    $(".button-plus-Addmore").on("click", function () {
+      const inputAddmore = $(this)
+        .closest(".input-group")
+        .find(".quantity-Addmore");
+      let inputAddmoreValue = parseInt(inputAddmore.val());
+      if (inputAddmoreValue < 100) {
+        inputAddmoreValue++;
+        inputAddmore.val(inputAddmoreValue);
+      }
+    });
+    $(".quantity-Addmore").on("change", function () {
+      let inputAddmoreValue = parseInt($(this).val());
+      if (isNaN(inputAddmoreValue)) {
+        $(this).val(0); // Đặt lại giá trị về 0 nếu không phải là số
+      }
+    });
+
+    // Xử lý thay đổi giá trị trực tiếp trong ô số lượng
+    $(".quantity-Product, .quantity-Addmore").on("change", function () {
+      let inputValue = parseInt($(this).val());
+      if (isNaN(inputValue)) {
+        $(this).val($(this).hasClass("quantity-Product") ? 1 : 0);
+      }
+    });
   });
 
-  // Sự kiện điều chỉnh số lượng món ăn kèm và sản phẩm chính
-  $(
-    ".button-minus-Product, .button-plus-Product, .button-minus-Addmore, .button-plus-Addmore"
-  ).on("click", function () {
+  // Sự kiện điều chỉnh số lượng sản phẩm chính
+  $(".button-minus-Product, .button-plus-Product").on("click", function () {
     const input = $(this).siblings("input");
     let inputValue = parseInt(input.val());
     if ($(this).hasClass("button-minus-Product") && inputValue > 1) {
       input.val(--inputValue);
     } else if ($(this).hasClass("button-plus-Product") && inputValue < 100) {
       input.val(++inputValue);
-    } else if ($(this).hasClass("button-minus-Addmore") && inputValue > 0) {
-      input.val(--inputValue);
-    } else if ($(this).hasClass("button-plus-Addmore") && inputValue < 100) {
-      input.val(++inputValue);
-    }
-  });
-
-  // Xử lý thay đổi giá trị trực tiếp trong ô số lượng
-  $(".quantity-Product, .quantity-Addmore").on("change", function () {
-    let inputValue = parseInt($(this).val());
-    if (isNaN(inputValue)) {
-      $(this).val($(this).hasClass("quantity-Product") ? 1 : 0);
     }
   });
 });

@@ -79,5 +79,5 @@ router.get("/cancelOrder/:id", userController.cancelOrder);
 router.post("/reset", userController.reset);
 // trạng thái đơn hàng
 
-router.post("/updateOrderStatus", adminController.getOrderStatus);
+router.post("/updateOrderStatus", adminController.updateStatusOrder);
 export default router;

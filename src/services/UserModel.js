@@ -171,11 +171,12 @@ const cancelOrder = async (idOrder) => {
   return row[0];
 };
 // hủy sản phẩm trong đơn hàng
-const cancelOrderDetail = async (idOrderDetail) => {
+const cancelOrderDetail = async (idOrder) => {
   const [row, field] = await pool.execute(
-    "DELETE FROM `orderDetail` WHERE `idOrder` =?",
-    [idOrderDetail]
+    "UPDATE `orders` SET `status` = 6 WHERE `id` = ?",
+    [idOrder]
   );
+  return row;
 };
 export default {
   getAllUser,
