@@ -1,9 +1,8 @@
 import pool from "../config/db";
 
-const getAllOrderFull = async (orderId) => {
+const getAllOrderFull = async () => {
   const [rows, fields] = await pool.execute(
-    "SELECT od.id, od.created_at, od.name, od.phone, od.address, od.total, od.status, dt.quantity, dt.price, p.name, p.currentPrice, p.description FROM orders od JOIN orderDetail dt ON od.id = dt.idOrder JOIN products p ON dt.idProduct = p.id WHERE od.id = ?",
-    [orderId]
+    "SELECT od.id, od.created_at, od.name, od.phone,od.name AS customerName , od.address, od.total, od.status, dt.quantity, dt.price, pr.name,pr.image, pr.currentPrice, pr.description FROM orders od JOIN orderDetail dt ON od.id = dt.idOrder JOIN products pr ON dt.idProduct = pr.id"
   );
   return rows;
 };
@@ -41,12 +40,12 @@ const addOrder = async (order, orderDetail) => {
   ]);
   return;
 };
-const updateStatus = async (status) => {
+const updateStatusOrder = async (id, status) => {
   const [rows, fields] = await pool.execute(
-    "UPDATE `orders` SET `status` WHERE `status` = ?",
-    [status]
+    "UPDATE `orders` SET `status` = ? WHERE `id` = ? AND `status` = ?",
+    [id, status]
   );
   return rows;
 };
 
-export default { getAllOrderFull, addOrder, getOrders, updateStatus };
+export default { getAllOrderFull, addOrder, getOrders, updateStatusOrder };

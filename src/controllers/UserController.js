@@ -3,14 +3,16 @@ import userModel from "../services/UserModel";
 import productModel from "../services/ProductModel";
 import cartModel from "../services/CartModel";
 import orderModel from "../services/OrderModel";
-import FeedbackModel from "../services/FeedbackModel";
+import bannerModel from "../services/BannerModel";
+import feedbackModel from "../services/FeedbackModel";
 import bcrypt from "bcrypt";
 
 // TRANG CHU
 const getUserHomePage = async (req, res) => {
   const topProducts = await productModel.getLimitedProduct();
-  const topNewFeedback = await FeedbackModel.getTopNewFeedback();
+  const topNewFeedback = await feedbackModel.getTopNewFeedback();
   const user = req.session.user;
+  const banners = await bannerModel.getAllBanner();
   // req.session.success = null;
   // req.session.error = null;
   res.render("main", {
@@ -23,6 +25,7 @@ const getUserHomePage = async (req, res) => {
       user: user,
       products: topProducts,
       topNewFeedback,
+      banners,
     },
   });
 };
@@ -291,12 +294,32 @@ const getHistoryProduct = async (req, res) => {
   const user = req.session.user;
   const orderList = await userModel.getAllOrder(user.id); //đơn hàng
   // sản phẩm trong đơn hàng
-  const orders = await Promise.all(
+  const orderFull = await Promise.all(
     orderList.map(async (order) => {
-      const productList = await userModel.getAllOrderDetail(order.id);
-      return { ...order, productList };
+      const orderDetails = await orderModel.getAllOrderFull(order.id);
+
+      // Khởi tạo mảng chứa tên món ăn
+      const productNames = orderDetails.map((detail) => detail.name);
+      // Ghép tất cả tên món ăn lại với nhau
+      const productName = productNames.join("+ "); // Bạn có thể thay đổi dấu phân cách nếu cần
+
+      // Duyệt qua các chi tiết sản phẩm của đơn hàng và thêm tên món ăn đã ghép vào
+      const products = orderDetails.map((detail) => ({
+        productName: detail.name,
+        quantity: detail.quantity,
+        price: detail.price,
+        image: detail.image,
+      }));
+
+      return {
+        id: order.id,
+        total: order.total,
+        productName, // Thêm chuỗi tên món ăn đã ghép vào đơn hàng
+        products,
+      };
     })
   );
+
   res.render("main", {
     data: {
       title: "Profile",
@@ -304,7 +327,7 @@ const getHistoryProduct = async (req, res) => {
       footer: "partials/footerUser",
       page: "user/profiles/historyProduct",
       user,
-      orders,
+      orderFull,
     },
   });
 };

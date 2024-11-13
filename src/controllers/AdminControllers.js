@@ -124,33 +124,46 @@ const deleteProduct = async (req, res) => {
 };
 // ORDER ( DON HANG)
 const getOrderPage = async (req, res) => {
-  const orders = await orderModel.getOrders();
+  const orders = await orderModel.getAllOrderFull();
 
-  const orderFull = await Promise.all(
-    orders.map(async (order) => {
-      const orderDetails = await orderModel.getAllOrderFull(order.id);
+  const orderFull = orders.reduce((acc, item) => {
+    const existingOrder = acc.find((order) => order.id === item.id);
 
-      // Khởi tạo mảng chứa tên món ăn
-      const productNames = orderDetails.map((detail) => detail.name);
-      // Ghép tất cả tên món ăn lại với nhau
-      const productName = productNames.join("+ "); // Bạn có thể thay đổi dấu phân cách nếu cần
+    if (existingOrder) {
+      // Nếu đã có, chỉ cần thêm sản phẩm vào mảng products
+      existingOrder.products.push({
+        productName: item.name,
+        quantity: item.quantity,
+        price: item.price,
+        image: item.image,
+        currentPrice: item.currentPrice,
+        description: item.description,
+      });
+    } else {
+      // Nếu chưa có, tạo mới đơn hàng và thêm sản phẩm đầu tiên vào
+      acc.push({
+        id: item.id,
+        createdAt: item.created_at,
+        customerName: item.customerName,
+        phone: item.phone,
+        address: item.address,
+        total: item.total,
+        status: item.status,
+        products: [
+          {
+            productName: item.name,
+            quantity: item.quantity,
+            price: item.price,
+            image: item.image,
+            currentPrice: item.currentPrice,
+            description: item.description,
+          },
+        ],
+      });
+    }
 
-      // Duyệt qua các chi tiết sản phẩm của đơn hàng và thêm tên món ăn đã ghép vào
-      const products = orderDetails.map((detail) => ({
-        productName: detail.name,
-        quantity: detail.quantity,
-        price: detail.price,
-      }));
-
-      return {
-        ...order,
-        productName, // Thêm chuỗi tên món ăn đã ghép vào đơn hàng
-        products,
-      };
-    })
-  );
-  console.log(orderFull);
-
+    return acc;
+  }, []);
   res.render("main", {
     data: {
       title: "Order",
@@ -160,10 +173,12 @@ const getOrderPage = async (req, res) => {
     },
   });
 };
+
 // cập nhật trạng thái đơn hàng
 const getOrderStatus = async (req, res) => {
-  const status = req.body.status;
-  await orderModel.updateStatus(status);
+  return console.log(req.body);
+  const { id, status } = req.body;
+  await orderModel.updateStatusOrder(id, status);
   res.redirect("back");
 };
 
@@ -180,15 +195,37 @@ const getBannerPage = async (req, res) => {
   });
 };
 const addBanner = async (req, res) => {
-  const { image, link } = req.body;
-  console.log({ image, link });
-  if (!image || !link) {
-    res.status(400).send("Image và Link là bắt buộc");
-  }
-
-  await bannerModel.addBanner({ image, link });
+  const data = req.body;
+  const bannerImage = req.file.filename;
+  data.image = bannerImage;
+  await bannerModel.addBanner(data);
   res.redirect("/admin/banner");
 };
+
+const editBanner = async (req, res) => {
+  const data = req.body;
+  console.log(data);
+  console.log(req.file);
+  const bannerImage = req.file ? req.file.filename : null;
+  if (bannerImage) {
+    data.image = bannerImage;
+    if (fs.existsSync(`src/public/imgs/banners/${data.oldImage}`)) {
+      fs.unlinkSync(`src/public/imgs/banners/${data.oldImage}`);
+    }
+  } else {
+    data.image = data.oldImage;
+  }
+  await bannerModel.editBanner(data);
+  res.redirect("back");
+};
+
+const deleteBanner = async (req, res) => {
+  const { id, image } = req.body;
+  fs.unlinkSync(`src/public/imgs/banners/${image}`);
+  await bannerModel.deletebanner(id);
+  return res.redirect("/admin");
+};
+
 // CATEGORY ( DANH MỤC )
 const getCategoryPage = async (req, res) => {
   const { name } = req.query;
@@ -290,7 +327,12 @@ const updateInfoShop = async (req, res) => {
   await shopModel.updateInfoShop(data);
   res.redirect("/admin/shopInfor");
 };
-
+// trang thái đơn hàng
+const updateStatusOrder = async (req, res) => {
+  const { id, status } = req.body;
+  await orderModel.updateStatusOrder(id, status);
+  res.redirect("/admin/order");
+};
 export default {
   // GET PAGE
   getLoginPage,
@@ -315,4 +357,7 @@ export default {
   setStatus,
   setRole,
   addBanner,
+  editBanner,
+  deleteBanner,
+  updateStatusOrder,
 };

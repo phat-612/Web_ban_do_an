@@ -20,22 +20,24 @@
       </thead>
       <tbody>
         <% data.banners.forEach(function(banner,ind){ %>
-        <th><%= ind+1 %></th>
-        <td>
-          <img src="" alt="ảnh banner">
-        </td>
-        <td><%= banner.link %></td>
-        <td>
-          <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#ModalSuaBanner">
-            Sửa
-          </button>
-          <form action="" method="post" class="d-inline-block">
-            <input type="hidden" value="">
-            <button type="submit" class="btn btn-danger">Xóa</button>
-          </form>
-        </td>
+        <tr>
+          <th><%= ind+1 %></th>
+          <td>
+            <img height="100" src="/imgs/banners/<%= banner.image %>" alt="ảnh banner">
+          </td>
+          <td><%= banner.link %></td>
+          <td>
+            <button type="button" class="btn btn-success editBannerBtn" data-bs-toggle="modal" data-bs-target="#ModalSuaBanner" data-bs-id="<%= banner.id %>" data-bs-image="<%= banner.image %>" data-bs-link="<%= banner.link %>">
+              Sửa
+            </button>
+            <form action="/api/deleteBanner" method="post" class="d-inline-block">
+              <input type="hidden" name="id" value="<%= banner.id %>">
+              <input type="text" hidden name="image" value="<%= banner.image %>">
+              <button type="submit" class="btn btn-danger">Xóa</button>
+            </form>
+          </td>
+        </tr>
         <% }) %>
-
       </tbody>
     </table>
   </div>
@@ -48,7 +50,7 @@
 <div class="modal fade" id="ModalThemBanner" tabindex="-1" aria-labelledby="ModalThemBanner" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <form action="/api/addBanner" method="post">
+      <form action="/api/addBanner" method="post" enctype="multipart/form-data">
         <div class="modal-header">
           <h5 class="modal-title" id="exampleModalLabel">Thêm Banner</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -56,7 +58,7 @@
         <div class="modal-body">
           <div class="mb-3">
             <label for="formFile" class="form-label">Chọn Ảnh</label>
-            <input required name="image" class="form-control" type="file" id="formFile">
+            <input required name="bannerImage" class="form-control" type="file" id="formFile">
           </div>
           <div class="mb-3">
             <label for="">Đường Dẫn</label>
@@ -75,23 +77,36 @@
 <div class="modal fade" id="ModalSuaBanner" tabindex="-1" aria-labelledby="ModalSuaBanner" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="exampleModalLabel">Sửa Banner</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <div class="modal-body">
-        <div class="mb-3">
-          <label for="formFile" class="form-label">Chọn Ảnh</label>
-          <input class="form-control" type="file" id="formFile">
+      <form action="/api/editBanner" method="post" enctype="multipart/form-data">
+        <input type="hidden" name="id" class="editIdInput">
+        <div class="modal-header">
+          <h5 class="modal-title" id="exampleModalLabel">Sửa Banner</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="mb-3">
-          <label for="">Đường Dẫn</label>
-          <input type="text" class="form-control" placeholder="Nhập Đường Dẫn">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="formFile" class="form-label">Chọn Ảnh</label>
+            <input class="form-control editImageInput" name="bannerImage" type="file" id="formFile">
+            <input type="text" hidden name="oldImage" class="editOldImageInput">
+          </div>
+          <div class="mb-3">
+            <label for="">Đường Dẫn</label>
+            <input type="text" name="link" class="form-control editLinkInput" placeholder="Nhập Đường Dẫn">
+          </div>
         </div>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-success">Lưu</button>
-      </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Lưu</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>
+
+<script>
+  $(".editBannerBtn").on("click", function(e) {
+    const btn = e.target;
+    $(".editIdInput").val(btn.getAttribute("data-bs-id"))
+    $(".editOldImageInput").val(btn.getAttribute("data-bs-image"));
+    $(".editLinkInput").val(btn.getAttribute("data-bs-link"));
+  })
+</script>

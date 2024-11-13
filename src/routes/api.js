@@ -11,21 +11,35 @@ const uploadBannerImages = createStorage("banners");
 // danh mục sản phẩm bên admin
 router.post("/addCategory", adminController.addCategory);
 router.post("/deleteCategory", adminController.deleteCategory);
-router.post("/addBanner", adminController.addBanner);
+// banner admin
+router.post(
+  "/addBanner",
+  uploadBannerImages.single("bannerImage"),
+  adminController.addBanner
+);
+router.post(
+  "/editBanner",
+  uploadBannerImages.single("bannerImage"),
+  adminController.editBanner
+);
+router.post("/deleteBanner", adminController.deleteBanner);
+// product admin
 router.post(
   "/addProduct",
   uploadProductImages.single("productImage"),
   adminController.addProduct
 );
-// account admin
-router.post("/updateStatusUser", adminController.setStatus);
-router.post("/updateRoleUser", adminController.setRole);
 router.post(
   "/editProduct",
   uploadProductImages.single("productImage"),
   adminController.editProduct
 );
 router.post("/deleteProduct", adminController.deleteProduct);
+
+// account admin
+router.post("/updateStatusUser", adminController.setStatus);
+router.post("/updateRoleUser", adminController.setRole);
+
 // cập nhật thông tin của hàng
 router.post("/updateShopInfo", adminController.updateInfoShop);
 
