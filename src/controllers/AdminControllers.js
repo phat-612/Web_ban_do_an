@@ -158,7 +158,6 @@ const getOrderPage = async (req, res) => {
         currentPrice: item.currentPrice,
         description: item.description,
       });
-      console.log(existingOrder);
     } else {
       // Nếu chưa có, tạo mới đơn hàng và thêm sản phẩm đầu tiên vào
       acc.push({
@@ -169,7 +168,7 @@ const getOrderPage = async (req, res) => {
         address: item.address,
         total: item.total,
         status: item.status,
-        statusText: getStatusText(item.status), // Chuyển trạng thái thành chữ
+        statusText: getStatusText(item.status),
         products: [
           {
             productName: item.name,
@@ -208,14 +207,26 @@ const updateStatusOrder = async (req, res) => {
 
   if (parseInt(status) > parseInt(currentStatus)) {
     if (currentStatus == 4 && status == 5) {
-      return res.status(400).send("Đơn hàng đã thanh toán , không thể hủy");
+      return res.status(400).send("Đơn hàng đã thanh toán, không thể hủy");
     }
+    if (status == 4) {
+      const orderProducts = await orderModel.getAllOrderFullById(orderId);
+      if (orderProducts) {
+        for (const product of orderProducts) {
+          const { idProduct, quantity } = product;
+          await orderModel.updateSold(quantity, idProduct);
+        }
+      }
+    }
+
+    // Cập nhật trạng thái của đơn hàng
     await orderModel.updateStatusOrder(status, orderId);
     res.redirect("back");
   } else {
     return res.status(400).send("Không thể đổi trạng thái.");
   }
 };
+
 // BANNER ( BANNER )
 const getBannerPage = async (req, res) => {
   const banners = await bannerModel.getAllBanner();

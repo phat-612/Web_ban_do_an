@@ -2,10 +2,29 @@ import pool from "../config/db";
 
 const getAllOrderFull = async () => {
   const [rows, fields] = await pool.execute(
-    "SELECT od.id, od.created_at, od.name, od.phone,od.name AS customerName , od.address, od.total, od.status, dt.quantity, dt.price, pr.name,pr.image, pr.currentPrice, pr.description FROM orders od JOIN orderDetail dt ON od.id = dt.idOrder JOIN products pr ON dt.idProduct = pr.id"
+    "SELECT od.id, od.created_at, od.name, od.phone,od.name AS customerName , od.address, od.total, od.status, dt.quantity, dt.price,pr.id as idProduct, pr.name, pr.sold ,pr.image, pr.currentPrice, pr.description FROM orders od JOIN orderDetail dt ON od.id = dt.idOrder JOIN products pr ON dt.idProduct = pr.id"
   );
   return rows;
 };
+const getAllOrderFullById = async (id) => {
+  const [rows, fields] = await pool.execute(
+    "SELECT od.id, od.created_at, od.name, od.phone,od.name AS customerName , od.address, od.total, od.status, dt.quantity, dt.price,pr.id as idProduct, pr.name, pr.sold ,pr.image, pr.currentPrice, pr.description FROM orders od JOIN orderDetail dt ON od.id = dt.idOrder JOIN products pr ON dt.idProduct = pr.id WHERE od.id=?",
+    [id]
+  );
+  return rows;
+};
+const updateSold = async (quantity, id) => {
+  try {
+    await pool.query("UPDATE `products` SET sold = sold + ? WHERE id = ?", [
+      quantity,
+      id,
+    ]);
+  } catch (error) {
+    console.error("Lỗi khi cập nhật số lượng bán:", error);
+    throw new Error("Không thể cập nhật số lượng bán.");
+  }
+};
+
 const getOrders = async (id) => {
   const [rows, fields] = await pool.execute(
     "SELECT * FROM `orders` WHERE `id` = ?",
@@ -64,4 +83,6 @@ export default {
   getOrders,
   updateStatusOrder,
   restoreOrder,
+  updateSold,
+  getAllOrderFullById,
 };

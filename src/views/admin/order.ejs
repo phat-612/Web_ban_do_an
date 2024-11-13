@@ -299,5 +299,20 @@
         }
       });
     });
+    document.querySelectorAll("input[name='status']").forEach((radioButton) => {
+      radioButton.addEventListener("change", function () {
+        // Lấy giá trị của trạng thái đã chọn
+        const status = this.value;
+
+        // Lấy id đơn hàng từ input ẩn
+        const orderId = document.getElementById("hiddenOrderId").value;
+
+        // Cập nhật giá trị cho input ẩn nếu cần thiết
+        document.getElementById("hiddenOrderId").value = orderId;
+
+        // Submit form khi trạng thái thay đổi
+        document.getElementById("orderStatusForm").submit();
+      });
+    });
   });
 </script>

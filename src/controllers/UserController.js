@@ -290,7 +290,6 @@ const deleteAddress = async (req, res) => {
 // lịch sử đơn hàng
 const getHistoryProduct = async (req, res) => {
   const user = req.session.user;
-
   // Lấy tất cả đơn hàng
   const orders = await orderModel.getAllOrderFull();
 
@@ -514,6 +513,15 @@ const cancelAccount = async (req, res) => {
 // hủy đơn hàng
 const cancelOrder = async (req, res) => {
   const id = req.params.id;
+  const statusOrder = await orderModel.getAllOrderFullById(id);
+  for (const status of statusOrder) {
+    if (status.status === 4 || status.status === 5) {
+      return res
+        .status(400)
+        .send("Đơn hàng đã thanh toán hoặc đã giao hàng không thể hủy");
+    }
+  }
+
   await userModel.cancelOrderDetail(id);
   res.redirect("back");
 };
