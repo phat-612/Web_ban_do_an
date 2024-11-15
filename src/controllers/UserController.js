@@ -291,7 +291,7 @@ const deleteAddress = async (req, res) => {
 const getHistoryProduct = async (req, res) => {
   const user = req.session.user;
   // Lấy tất cả đơn hàng
-  const orders = await orderModel.getAllOrderFull();
+  const orders = await orderModel.getAllOrderFullById(user.id);
 
   // Nhóm các sản phẩm theo id đơn hàng
   const orderFull = orders.reduce((acc, item) => {
