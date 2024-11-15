@@ -23,6 +23,13 @@ const addCategory = async (nameCategory) => {
   );
   return row;
 };
+const editCategory = async (data) => {
+  const [row, field] = await pool.execute(
+    "UPDATE `categories` SET `name` = ? WHERE `id` = ?",
+    [data.name, data.id]
+  );
+  return row;
+};
 const deleteCategory = async (id) => {
   const [row, field] = await pool.execute(
     "DELETE FROM `categories` WHERE `id` = ?",
@@ -31,18 +38,19 @@ const deleteCategory = async (id) => {
   return row;
 };
 // sản phẩm
-const addProduct = async (product) => {
-  const [row, field] = await pool.execute(
-    "INSERT INTO `products` (`name`, `price`, `image`, `categoryId`) VALUES (?, ?, ?, ?)",
-    [product.name, product.price, product.image, product.categoryId]
-  );
-  return row;
-};
+// const addProduct = async (product) => {
+//   const [row, field] = await pool.execute(
+//     "INSERT INTO `products` (`name`, `price`, `image`, `categoryId`) VALUES (?, ?, ?, ?)",
+//     [product.name, product.price, product.image, product.categoryId]
+//   );
+//   return row;
+// };
 
 export default {
   addCategory,
   getAllCategory,
   deleteCategory,
   getCategoryByName,
-  addProduct,
+  editCategory,
+  // addProduct,
 };

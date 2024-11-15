@@ -13,6 +13,13 @@ const getAllOrderFullById = async (id) => {
   );
   return rows[0];
 };
+const getAllOrderFullByIdUser = async (id) => {
+  const [rows, fields] = await pool.execute(
+    "SELECT od.id, od.created_at, od.name, od.phone,od.name AS customerName , od.address, od.total, od.status, dt.quantity, dt.price,pr.id as idProduct, pr.name, pr.sold ,pr.image, pr.currentPrice, pr.description FROM orders od JOIN orderDetail dt ON od.id = dt.idOrder JOIN products pr ON dt.idProduct = pr.id WHERE od.idUser=?",
+    [id]
+  );
+  return rows;
+};
 const updateSold = async (quantity, id) => {
   try {
     await pool.query("UPDATE `products` SET sold = sold + ? WHERE id = ?", [
@@ -85,4 +92,5 @@ export default {
   restoreOrder,
   updateSold,
   getAllOrderFullById,
+  getAllOrderFullByIdUser,
 };

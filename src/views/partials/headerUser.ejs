@@ -99,11 +99,11 @@
         <% } else { %>
         <div class="col-6 d-flex justify-content-center">
           <a
-            href="<%= userLogin.role === 0 ? '/admin' : '/profile' %>"
+            href="/profile"
             class="text-dark h5 fw-bold"
             style="text-decoration: none"
           >
-            Chào, <%= userLogin.name %>
+            <%= userLogin.name %>
           </a>
         </div>
         <div class="col-2 d-flex justify-content-center">

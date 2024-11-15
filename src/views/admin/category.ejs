@@ -45,9 +45,11 @@
           <td>
             <button
               type="button"
-              class="btn btn-success"
+              class="btn btn-success editCategoryBtn"
               data-bs-toggle="modal"
               data-bs-target="#ModalSuaDanhMuc"
+              data-bs-id="<%= data.categorys[i].id %>"
+              data-bs-name="<%= data.categorys[i].name %>"
             >
               Sửa
             </button>
@@ -135,21 +137,21 @@
           aria-label="Close"
         ></button>
       </div>
-      <div class="modal-body">
-        <label for="tenDanhMuc">Tên Danh Mục</label>
-        <input
-          type="text"
-          class="form-control mt-3"
-          id="tenDanhMuc"
-          placeholder="Nhập Tên Danh Mục"
-        />
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
-          Close
-        </button>
-        <button type="button" class="btn btn-success">Thêm</button>
-      </div>
+      <form action="/api/editCategory" method="post">
+        <input type="hidden" name="id" class="idDanhMucInput" />
+        <div class="modal-body">
+          <label for="tenDanhMuc">Tên Danh Mục</label>
+          <input
+            type="text"
+            class="form-control mt-3 tenDanhMucInput"
+            placeholder="Nhập Tên Danh Mục"
+            name="name"
+          />
+        </div>
+        <div class="modal-footer">
+          <button type="submit" class="btn btn-success">Sửa</button>
+        </div>
+      </form>
     </div>
   </div>
 </div>

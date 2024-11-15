@@ -10,6 +10,7 @@ const uploadBannerImages = createStorage("banners");
 
 // danh mục sản phẩm bên admin
 router.post("/addCategory", adminController.addCategory);
+router.post("/editCategory", adminController.editCategory);
 router.post("/deleteCategory", adminController.deleteCategory);
 // banner admin
 router.post(

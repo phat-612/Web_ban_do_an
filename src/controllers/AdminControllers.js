@@ -143,11 +143,11 @@ const getStatusText = (status) => {
 
 const getOrderPage = async (req, res) => {
   const orders = await orderModel.getAllOrderFull();
-
   // Nhóm các sản phẩm theo đơn hàng
+  // accumulator là mảng rổng []
+  console.log(orders);
   const orderFull = orders.reduce((acc, item) => {
     const existingOrder = acc.find((order) => order.id === item.id);
-    console.log(existingOrder);
     if (existingOrder) {
       // Nếu đã có, chỉ cần thêm sản phẩm vào mảng products
       existingOrder.products.push({
@@ -184,6 +184,7 @@ const getOrderPage = async (req, res) => {
 
     return acc;
   }, []);
+  // 6 đã hủy
   orderFull.sort((a, b) => {
     if (a.status === 6 && b.status !== 6) return 1;
     if (a.status !== 6 && b.status === 6) return -1;
@@ -211,10 +212,8 @@ const updateStatusOrder = async (req, res) => {
     }
     if (status == 4) {
       const orderProducts = await orderModel.getAllOrderFullById(orderId);
-      if (orderProducts) {
-        const { idProduct, quantity } = orderProducts;
-        await orderModel.updateSold(quantity, idProduct);
-      }
+      const { idProduct, quantity } = orderProducts;
+      await orderModel.updateSold(quantity, idProduct);
     }
 
     // Cập nhật trạng thái của đơn hàng
@@ -284,6 +283,7 @@ const getCategoryPage = async (req, res) => {
       title: "Category",
       header: "partials/headerAdmin",
       page: "admin/category",
+      script: "admin/category",
       categorys: categoryList,
     },
   });
@@ -292,6 +292,12 @@ const getCategoryPage = async (req, res) => {
 const addCategory = async (req, res) => {
   const { nameCategory } = req.body;
   await categoryModel.addCategory(nameCategory);
+  res.redirect("/admin/category");
+};
+const editCategory = async (req, res) => {
+  const data = req.body;
+  console.log(data);
+  await categoryModel.editCategory(data);
   res.redirect("/admin/category");
 };
 const deleteCategory = async (req, res) => {
@@ -387,6 +393,7 @@ export default {
   // API
   addCategory,
   deleteCategory,
+  editCategory,
   addProduct,
   editProduct,
   deleteProduct,

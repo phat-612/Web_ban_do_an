@@ -291,7 +291,7 @@ const deleteAddress = async (req, res) => {
 const getHistoryProduct = async (req, res) => {
   const user = req.session.user;
   // Lấy tất cả đơn hàng
-  const orders = await orderModel.getAllOrderFullById(user.id);
+  const orders = await orderModel.getAllOrderFullByIdUser(user.id);
 
   // Nhóm các sản phẩm theo id đơn hàng
   const orderFull = orders.reduce((acc, item) => {
@@ -429,9 +429,6 @@ const login = async (req, res) => {
         status: user.status,
         role: user.role,
       };
-      if (user.role === 0) {
-        return res.redirect("/admin");
-      }
       return res.redirect("back");
     } else {
       return res.status(400).send("Thông tin đăng nhập không chính xác");
