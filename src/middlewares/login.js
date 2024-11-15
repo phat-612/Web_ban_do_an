@@ -10,7 +10,7 @@ const isAdmin = async (req, res, next) => {
   const user = req.session.user;
   // console.log(user);
   if (!user || user.role !== 0) {
-    return res.status(403).send("Bạn không có quyền truy cập trang này");
+    return res.redirect("/admin/login");
   } else {
     next();
   }
