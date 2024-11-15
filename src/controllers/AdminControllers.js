@@ -145,7 +145,6 @@ const getOrderPage = async (req, res) => {
   const orders = await orderModel.getAllOrderFull();
   // Nhóm các sản phẩm theo đơn hàng
   // accumulator là mảng rổng []
-  console.log(orders);
   const orderFull = orders.reduce((acc, item) => {
     const existingOrder = acc.find((order) => order.id === item.id);
     if (existingOrder) {
