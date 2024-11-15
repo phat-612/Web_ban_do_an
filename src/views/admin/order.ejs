@@ -29,7 +29,6 @@
         <% data.orderFull.forEach(function(order, index) { %>
         <tr>
           <td><%= index + 1 %></td>
-
           <td>
             <!-- Hiển thị các món ăn của đơn hàng -->
             <%= order.products.map(function(product) { return `
@@ -256,7 +255,6 @@
       const orderId = this.getAttribute("data-id");
       document.getElementById("hiddenOrderId").value = orderId; // Cập nhật orderId vào input ẩn
 
-      // Phần còn lại giữ nguyên như cũ
       const orderCreatedAt = this.getAttribute("data-created-at");
       const orderName = this.getAttribute("data-name");
       const orderPhone = this.getAttribute("data-phone");

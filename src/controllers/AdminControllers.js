@@ -147,7 +147,7 @@ const getOrderPage = async (req, res) => {
   // Nhóm các sản phẩm theo đơn hàng
   const orderFull = orders.reduce((acc, item) => {
     const existingOrder = acc.find((order) => order.id === item.id);
-
+    console.log(existingOrder);
     if (existingOrder) {
       // Nếu đã có, chỉ cần thêm sản phẩm vào mảng products
       existingOrder.products.push({
@@ -212,10 +212,8 @@ const updateStatusOrder = async (req, res) => {
     if (status == 4) {
       const orderProducts = await orderModel.getAllOrderFullById(orderId);
       if (orderProducts) {
-        for (const product of orderProducts) {
-          const { idProduct, quantity } = product;
-          await orderModel.updateSold(quantity, idProduct);
-        }
+        const { idProduct, quantity } = orderProducts;
+        await orderModel.updateSold(quantity, idProduct);
       }
     }
 
