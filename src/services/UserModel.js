@@ -12,7 +12,12 @@ const updateStatus = async (idUser, status) => {
   );
   return row;
 };
-
+const findUserEmail = async (email) => {
+  const [row] = await pool.execute("SELECT * FROM `users` WHERE `email` =?", [
+    email,
+  ]);
+  return row[0];
+};
 const updateRole = async (idUser, role) => {
   const [row, field] = await pool.execute(
     "UPDATE `users` SET `role` = ? WHERE `id` = ?",
@@ -201,4 +206,5 @@ export default {
   getAllOrderDetail,
   cancelOrder,
   cancelOrderDetail,
+  findUserEmail,
 };

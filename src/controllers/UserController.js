@@ -67,11 +67,14 @@ const getUserFeedback = async (req, res) => {
     },
   });
 };
+
 const sendFeedback = async (req, res) => {
   const data = req.body;
   await userModel.sendFeedback(data);
+  req.session.messageSuccess = "Gửi Phản Hồi Thành Công";
   res.redirect("/");
 };
+
 // cart
 const getCartPage = async (req, res) => {
   let listAddress = await userModel.getAllAddress(req.session.user.id);
@@ -94,38 +97,13 @@ const getCartPage = async (req, res) => {
     },
   });
 };
-// const addProductToCart = async (req, res) => {
-//   const data = req.body;
-//   const user = req.session.user;
-//   const cartList = await cartModel.getCart(user.id);
-//   const cartArr = [];
-
-//   if (!user) {
-//     return console.log("ban chua dang nhap");
-//   }
-
-//   for (let i = 0; i < data.productQuantity.length; i++) {
-//     if (data.productQuantity[i] == 0) continue;
-
-//     cartArr.push([user.id, data.productId[i], data.productQuantity[i]]);
-//     // console.log(cartArr);
-//   }
-//   const existsProduct = await cartModel.findProductById(user.id, cartArr);
-//   if (existsProduct.length < 0) {
-
-//   }
-
-//   await cartModel.addProduct(cartArr);
-//   res.redirect("back");
-// };
 
 const addProductToCart = async (req, res) => {
   const data = req.body;
   const user = req.session.user;
 
   // Kiểm tra nếu người dùng chưa đăng nhập
-  if (!user) {
-    console.log("Bạn chưa đăng nhập");
+  if (!user.id) {
     return res.redirect("/login");
   }
 
@@ -140,7 +118,7 @@ const addProductToCart = async (req, res) => {
   // Sử dụng hàm addOrUpdateProductsInCart để cập nhật hoặc thêm sản phẩm vào giỏ hàng
   await cartModel.addOrUpdateProductsInCart(user.id, cartArr);
 
-  // Chuyển hướng trở lại trang trước và thông báo thêm thành công
+  req.session.messageSuccess = "Thêm sản phẩm vào giỏ hàng thành công";
   res.redirect("back");
 };
 const updateQuantityCart = async (req, res) => {
@@ -149,15 +127,15 @@ const updateQuantityCart = async (req, res) => {
   try {
     if (quantity == 0) {
       await cartModel.deleteProduct(user.id, idProduct);
-      return res.json({ status: true, message: "Xóa sản phẩm thành công" });
+      req.session.messageSuccess = "Xóa sản phẩm thành công";
+      res.redirect("back");
     }
     await cartModel.updateQuantityProduct(user.id, idProduct, quantity);
-    return res.json({ status: true, message: "Cập nhật số lượng thành công" });
+    req.session.messageSuccess = "Cập nhật số lượng sản phẩm thành công";
+    res.redirect("back");
   } catch (error) {
-    console.log(error);
-    return res
-      .status(403)
-      .json({ status: false, message: "Cập nhật số lượng thất bại" });
+    req.session.messageError = "Cập nhật sản phẩm thành công";
+    res.redirect("back");
   }
 };
 const updateIsBuyCart = async (req, res) => {
@@ -233,6 +211,9 @@ const getProfileAddress = async (req, res) => {
 const addAddress = async (req, res) => {
   const userId = req.session.user.id;
   const data = req.body;
+  if (data.phone.length < 10) {
+    return res.status(400).send("Số điện thoại không hợp lệ");
+  }
   await userModel.address(data, userId);
   res.redirect("/listAddress");
 };
@@ -248,6 +229,27 @@ const getListAddress = async (req, res) => {
       page: "user/profiles/listAddress",
       user,
       addresses,
+    },
+  });
+};
+// trang site
+const getGuideOrderPage = (req, res) => {
+  res.render("main", {
+    data: {
+      title: "Hướng dẫn đặt hàng",
+      header: "partials/headerUser",
+      footer: "partials/footerUser",
+      page: "user/guideOrder",
+    },
+  });
+};
+const getPaymentAndOrderPolicyPage = (req, res) => {
+  res.render("main", {
+    data: {
+      title: "Chính sách đặt hàng và thanh toán",
+      header: "partials/headerUser",
+      footer: "partials/footerUser",
+      page: "user/paymentAndOrderPolicy",
     },
   });
 };
@@ -268,6 +270,9 @@ const setDefaultAddress = async (req, res) => {
 // sửa địa chỉ
 const editAddress = async (req, res) => {
   const data = req.body;
+  if (data.phone.length < 10) {
+    return res.status(400).send("Số điện thoại không hợp lệ");
+  }
   await userModel.editAddress(data.id, data);
   res.redirect("/listAddress");
 };
@@ -286,6 +291,23 @@ const deleteAddress = async (req, res) => {
     await userModel.deleteAddress(addressId.id, userId);
   }
   res.redirect("/listAddress");
+};
+const getStatusText = (status) => {
+  switch (status) {
+    case 1:
+      return "Đặt Hàng";
+    case 2:
+      return "Tiếp Nhận";
+    case 3:
+      return "Đang Vận Chuyển";
+    case 4:
+      return "Thành Công";
+    case 5:
+    case 6:
+      return "Bị Hủy";
+    default:
+      return "Không Xác Định";
+  }
 };
 // lịch sử đơn hàng
 const getHistoryProduct = async (req, res) => {
@@ -401,24 +423,20 @@ const getDeleteAccount = async (req, res) => {
 // api login
 const login = async (req, res) => {
   const { email, password } = req.body;
-  console.log(email, password);
   if (!email || !password) {
-    return res.s;
+    req.session.messageError = "Vui lòng điền đầy đủ thông tin";
+    return res.redirect("back");
   }
-
   const user = await userModel.login(email);
-
-  // Kiểm tra nếu người dùng không tồn tại hoặc tài khoản bị khóa
   if (!user || user.status === 3) {
-    return res.status(400).send("Tài khoản không tồn tại");
+    req.session.messageError = "Tài khoản không tồn tại";
+    return res.redirect("back");
   }
-
   if (user && user.status === 2) {
-    return res.status(400).send("Tài khoản bị vô hiểu hóa");
+    req.session.messageError = "Tài khoản bị khóa";
+    return res.redirect("back");
   }
-
   const isPassword = await bcrypt.compare(password, user.password);
-
   if (user && user.status === 1) {
     if (isPassword) {
       req.session.user = {
@@ -429,12 +447,9 @@ const login = async (req, res) => {
         status: user.status,
         role: user.role,
       };
+      req.session.messageSuccess = "Đăng nhập thành công";
       return res.redirect("back");
-    } else {
-      return res.status(400).send("Thông tin đăng nhập không chính xác");
     }
-  } else {
-    return res.status(400).send("Tài khoản không tồn tại");
   }
 };
 
@@ -469,7 +484,7 @@ const apiRegister = async (req, res) => {
   };
 
   await userModel.apiRegister(userData);
-
+  req.session.messageSuccess = "Đăng ký thành công";
   return res.redirect("/");
 };
 
@@ -477,9 +492,12 @@ const apiRegister = async (req, res) => {
 
 const editProfile = async (req, res) => {
   const data = req.body;
-  const user = req.session.user;
+  const currentUser = req.session.user;
+
   if (!data.name || !data.email || !data.phone || !data.sex || !data.date) {
-    return res.status(400).send("Vui lòng điền đầy đủ thông tin");
+    req.session.messageError = "Vui lòng điền đầy đủ thông tin";
+    return res.redirect("back");
+    // return res.status(400).send("Vui lòng điền đầy đủ thông tin");
   }
 
   const updatedData = {
@@ -490,15 +508,29 @@ const editProfile = async (req, res) => {
     date: data.date,
   };
 
-  await userModel.editProfile(user.id, updatedData);
+  const dataUser = await userModel.getAllUser();
+
+  // Kiểm tra email đã tồn tại, ngoại trừ user hiện tại
+  const isDuplicate = dataUser.some(
+    (user) => user.email === data.email && user.id !== currentUser.id
+  );
+
+  if (isDuplicate) {
+    req.session.messageError = "Email đã tồn tại";
+    return res.redirect("back");
+    // return res.status(400).send("Email đã tồn tại");
+  }
+
+  await userModel.editProfile(currentUser.id, updatedData);
+
   req.session.user = {
-    ...user,
-    email: updatedData.email,
-    name: updatedData.name,
-    phone: updatedData.phone,
+    ...currentUser,
+    ...updatedData, // Cập nhật các thông tin mới
   };
-  res.redirect("/profile/");
+  req.session.messageSuccess = "Cập nhật thông tin thành công";
+  return res.redirect("/profile/");
 };
+
 // người dùng hủy tài khoản
 const cancelAccount = async (req, res) => {
   const user = req.session.user;
@@ -511,15 +543,13 @@ const cancelAccount = async (req, res) => {
 const cancelOrder = async (req, res) => {
   const id = req.params.id;
   const statusOrder = await orderModel.getAllOrderFullById(id);
-  for (const status of statusOrder) {
-    if (status.status === 4 || status.status === 5) {
-      return res
-        .status(400)
-        .send("Đơn hàng đã thanh toán hoặc đã giao hàng không thể hủy");
-    }
+  if (statusOrder.status === 4 || statusOrder.status === 5) {
+    req.session.messageError =
+      "Đơn hàng đã thanh toán hoặc đã giao hàng không thể hủy";
+    return res.redirect("back");
   }
-
   await userModel.cancelOrderDetail(id);
+  req.session.messageSuccess = "Hủy đơn hàng thành công";
   res.redirect("back");
 };
 
@@ -535,6 +565,8 @@ export default {
   getDeleteAccount,
   getRegister,
   getListAddress,
+  getGuideOrderPage,
+  getPaymentAndOrderPolicyPage,
   // api
 
   login,
@@ -554,4 +586,5 @@ export default {
   updateIsBuyCart,
   addOrder,
   restoreOrder,
+  getStatusText,
 };

@@ -16,5 +16,11 @@ router.get("/historyProduct", isUser, userController.getHistoryProduct);
 router.get("/rePassword", isUser, userController.getRePassword);
 router.get("/deleteAccount", isUser, userController.getDeleteAccount);
 router.get("/register", userController.getRegister);
+// site
+router.get("/guideOrder", userController.getGuideOrderPage);
+router.get(
+  "/paymentAndOrderPolicy",
+  userController.getPaymentAndOrderPolicyPage
+);
 // lấy lại mật khẩu
 export default router;

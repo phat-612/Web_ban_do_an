@@ -7,7 +7,7 @@ const getAllOrderFull = async () => {
   return rows;
 };
 const getAllOrderFullById = async (id) => {
-  const [rows, fields] = await pool.execute(
+  const [rows] = await pool.execute(
     "SELECT od.id, od.created_at, od.name, od.phone,od.name AS customerName , od.address, od.total, od.status, dt.quantity, dt.price,pr.id as idProduct, pr.name, pr.sold ,pr.image, pr.currentPrice, pr.description FROM orders od JOIN orderDetail dt ON od.id = dt.idOrder JOIN products pr ON dt.idProduct = pr.id WHERE od.id=?",
     [id]
   );

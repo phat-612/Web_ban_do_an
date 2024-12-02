@@ -1,35 +1,23 @@
 <div class="container-fluid">
   <div class="row">
-    <nav
-      class="col-md-3 col-lg-2 bg-success d-md-block text-white min-vh-100 p-4 rounded"
-      
-    >
+    <nav class="col-md-3 col-lg-2 bg-success d-md-block text-white min-vh-100 p-4 rounded">
       <h6 class="text-center">THÔNG TIN TÀI KHOẢN</h6>
+      <h1><%= messageError %></h1>
       <ul class="nav flex-column text-center p-3">
         <li class="nav-item">
-          <a class="nav-link text-white active" href="/profile"
-            ><i class="bi bi-person-circle"></i> Quản lý tài khoản</a
-          >
+          <a class="nav-link text-white active" href="/profile"><i class="bi bi-person-circle"></i> Quản lý tài khoản</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="/listAddress"
-            ><i class="bi bi-gear"></i> Quản lý địa chỉ</a
-          >
+          <a class="nav-link text-white" href="/listAddress"><i class="bi bi-gear"></i> Quản lý địa chỉ</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="/historyProduct"
-            ><i class="bi bi-chat-dots"></i> Lịch sử đặt hàng</a
-          >
+          <a class="nav-link text-white" href="/historyProduct"><i class="bi bi-chat-dots"></i> Lịch sử đặt hàng</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="/rePassword"
-            ><i class="bi bi-bell"></i> Đặt lại mật khẩu</a
-          >
+          <a class="nav-link text-white" href="/rePassword"><i class="bi bi-bell"></i> Đặt lại mật khẩu</a>
         </li>
         <li class="nav-item">
-          <a class="nav-link text-white" href="/deleteAccount"
-            ><i class="bi bi-box-arrow-right"></i> Xóa tài khoản</a
-          >
+          <a class="nav-link text-white" href="/deleteAccount"><i class="bi bi-box-arrow-right"></i> Xóa tài khoản</a>
         </li>
       </ul>
     </nav>
@@ -39,40 +27,19 @@
       <form method="POST" action="/api/editProfile/<%= data.user.id %>">
         <div class="mb-2">
           <label for="hovaten" class="form-label">Họ và tên *</label>
-          <input
-            type="text"
-            class="form-control"
-            id="hovaten"
-            name="name"
-            value="<%= item.name %>"
-            required
-          />
+          <input type="text" class="form-control" id="hovaten" name="name" value="<%= item.name %>" required />
         </div>
 
         <div class="mb-2">
           <label for="sodienthoai" class="form-label">Số điện thoại *</label>
-          <input
-            type="text"
-            class="form-control"
-            id="sodienthoai"
-            name="phone"
-            value="<%= item.phone %>"
-            required
-          />
+          <input type="number" class="form-control" id="sodienthoai" name="phone" value="<%= item.phone %>" required />
         </div>
-        
+
         <div class="mb-2">
           <label for="email" class="form-label">Địa chỉ email của bạn *</label>
-          <input
-            type="email"
-            class="form-control"
-            id="email"
-            name="email"
-            value="<%= item.email %>"
-            required
-          />
+          <input type="email" class="form-control" id="email" name="email" value="<%= item.email %>" required />
         </div>
-        
+
         <div class="mb-2">
           <label for="inputState" class="form-label">Giới tính *</label>
           <select id="inputState" class="form-select" name="sex" required>
@@ -80,16 +47,9 @@
             <option value="Nữ" <%= item.sex == 'nữ' ? 'selected' : '' %>>Nữ</option>
           </select>
         </div>
-       <div class="mb-2">
+        <div class="mb-2">
           <label for="date" class="col-form-label">Ngày sinh của bạn *</label>
-          <input
-            type="date"
-            class="form-control"
-            id="date"
-            name="date"
-            required
-            value="<%= new Date(item.date).toISOString().split('T')[0] %>" 
-          />
+          <input type="date" class="form-control" id="date" name="date" required value="<%= new Date(item.date).toISOString().split('T')[0] %>" />
         </div>
 
 
@@ -104,4 +64,3 @@
     </div>
   </div>
 </div>
-

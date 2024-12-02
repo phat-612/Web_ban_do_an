@@ -31,6 +31,8 @@ const getAllProduct = async (filter = null) => {
         image: product.image,
         idCategory: product.idCategory,
         nameCategory: product.nameCategory,
+        isExit: product.isExit,
+        isBussiness: product.isBussiness,
         itemAddMore: [],
       });
       index = products.length - 1;
@@ -87,11 +89,7 @@ const isProductDelete = async (id) => {
     "SELECT idProduct FROM orderDetail WHERE idProduct = ?",
     [id]
   );
-  const [row2, fields2] = await pool.execute(
-    "SELECT idProduct FROM itemAddMore WHERE idProductAdd = ?",
-    [id]
-  );
-  if (row.length > 0 || row2.length > 0) {
+  if (row.length > 0) {
     return false;
   }
   return true;

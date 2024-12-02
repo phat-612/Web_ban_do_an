@@ -91,6 +91,7 @@ const addProduct = async (req, res) => {
   const productImage = req.file.filename;
   data.image = productImage;
   await productModel.addProduct(data);
+  req.session.messageSuccess = "Thêm sản phẩm thành công";
   res.redirect("/admin");
 };
 const editProduct = async (req, res) => {
@@ -108,6 +109,8 @@ const editProduct = async (req, res) => {
     data.image = data.oldImage;
   }
   await productModel.editProduct(data);
+  req.session.messageSuccess = "Cập nhật sản phẩm thành công";
+  // req.session.messageError = "Cập nhật sản phẩm thành công";
   res.redirect("/admin");
 };
 const deleteProduct = async (req, res) => {
@@ -117,9 +120,11 @@ const deleteProduct = async (req, res) => {
     // xóa ảnh sản phẩm
     fs.unlinkSync(`src/public/imgs/products/${image}`);
     await productModel.deleteProduct(id);
+    req.session.messageSuccess = "Xóa sản phẩm thành công";
     return res.redirect("/admin");
   }
   //  thông báo lỗi
+  req.session.messageError = "Không thể xóa sản phẩm đã được đặt hàng";
   res.redirect("/admin");
 };
 // ORDER ( DON HANG)
@@ -207,7 +212,9 @@ const updateStatusOrder = async (req, res) => {
 
   if (parseInt(status) > parseInt(currentStatus)) {
     if (currentStatus == 4 && status == 5) {
-      return res.status(400).send("Đơn hàng đã thanh toán, không thể hủy");
+      req.session.messageError = "Đơn hàng đã hoàn thành, không thể hủy";
+      // return res.status(400).send("Đơn hàng đã thanh toán, không thể hủy");
+      return res.redirect("back");
     }
     if (status == 4) {
       const orderProducts = await orderModel.getAllOrderFullById(orderId);
@@ -217,9 +224,12 @@ const updateStatusOrder = async (req, res) => {
 
     // Cập nhật trạng thái của đơn hàng
     await orderModel.updateStatusOrder(status, orderId);
+    req.session.messageSuccess = "Cập nhật trạng thái đơn hàng thành công";
     res.redirect("back");
   } else {
-    return res.status(400).send("Không thể đổi trạng thái.");
+    req.session.messageError = "Không thể đổi trạng thái.";
+    res.redirect("back");
+    // return res.status(400).send("Không thể đổi trạng thái.");
   }
 };
 
@@ -240,6 +250,7 @@ const addBanner = async (req, res) => {
   const bannerImage = req.file.filename;
   data.image = bannerImage;
   await bannerModel.addBanner(data);
+  req.session.messageSuccess = "Thêm banner thành công";
   res.redirect("/admin/banner");
 };
 
@@ -257,6 +268,7 @@ const editBanner = async (req, res) => {
     data.image = data.oldImage;
   }
   await bannerModel.editBanner(data);
+  req.session.messageSuccess = "Cập nhật banner thành công";
   res.redirect("back");
 };
 
@@ -264,6 +276,7 @@ const deleteBanner = async (req, res) => {
   const { id, image } = req.body;
   fs.unlinkSync(`src/public/imgs/banners/${image}`);
   await bannerModel.deletebanner(id);
+  req.session.messageSuccess = "Xóa banner thành công";
   return res.redirect("/admin");
 };
 
@@ -290,18 +303,48 @@ const getCategoryPage = async (req, res) => {
 
 const addCategory = async (req, res) => {
   const { nameCategory } = req.body;
-  await categoryModel.addCategory(nameCategory);
-  res.redirect("/admin/category");
+  if (
+    !nameCategory ||
+    typeof nameCategory !== "string" ||
+    nameCategory.trim() === ""
+  ) {
+    req.session.messageError = "Tên Danh Mục Sai Cú Pháp";
+    res.redirect("/admin/category");
+  }
+  try {
+    await categoryModel.addCategory(nameCategory.trim());
+    req.session.messageSuccess = "Thêm Danh Mục Thành Công";
+    res.redirect("/admin/category");
+  } catch (error) {
+    if (error.code === "ER_DUP_ENTRY") {
+      req.session.messageError = "Không được thêm danh mục trùng tên";
+      res.redirect("/admin/category");
+    }
+  }
 };
+
 const editCategory = async (req, res) => {
   const data = req.body;
-  console.log(data);
-  await categoryModel.editCategory(data);
-  res.redirect("/admin/category");
+  if (!data.name || typeof data.name !== "string" || data.name.trim() === "") {
+    req.session.messageError = "Tên Danh Mục Sai Cú Pháp";
+    res.redirect("/admin/category");
+  }
+  try {
+    await categoryModel.editCategory(data);
+    req.session.messageSuccess = "Cập nhật danh mục thành công";
+    res.redirect("/admin/category");
+  } catch (error) {
+    if (error.code === "ER_DUP_ENTRY") {
+      req.session.messageError = "Không được cập nhật danh mục trùng tên";
+      res.redirect("/admin/category");
+    }
+  }
 };
+
 const deleteCategory = async (req, res) => {
   const { id } = req.body;
   await categoryModel.deleteCategory(id);
+  req.session.messageSuccess = "Xóa danh mục thành công";
   res.redirect("/admin/category");
 };
 
@@ -327,12 +370,14 @@ const getAccountPage = async (req, res) => {
 const setStatus = async (req, res) => {
   const { idUser, status } = req.body;
   await userModel.updateStatus(idUser, status);
+  req.session.messageSuccess = "Cập nhật trạng thái tài khoản thành công";
   res.redirect("/admin/account");
 };
 
 const setRole = async (req, res) => {
   const { idUser, role } = req.body;
   await userModel.updateRole(idUser, role);
+  req.session.messageSuccess = "Cập nhật quyền tài khoản thành công";
   res.redirect("/admin/account");
 };
 // FEEDBACK ( PHAN HOI )
@@ -373,6 +418,7 @@ const getShopInforPage = async (req, res) => {
 const updateInfoShop = async (req, res) => {
   const data = req.body;
   await shopModel.updateInfoShop(data);
+  req.session.messageSuccess = "Cập nhật thông tin cửa hàng thành công";
   res.redirect("/admin/shopInfor");
 };
 export default {

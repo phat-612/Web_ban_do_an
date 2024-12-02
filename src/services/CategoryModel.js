@@ -16,20 +16,29 @@ const getCategoryByName = async (name) => {
 
 // danh mục
 const addCategory = async (nameCategory) => {
-  console.log(nameCategory);
-  const [row, field] = await pool.execute(
-    "INSERT INTO `categories` (`name`) VALUES (?)",
-    [nameCategory]
-  );
-  return row;
+  try {
+    const [row, field] = await pool.execute(
+      "INSERT INTO `categories` (`name`) VALUES (?)",
+      [nameCategory]
+    );
+    return row;
+  } catch (error) {
+    throw error;
+  }
 };
+
 const editCategory = async (data) => {
-  const [row, field] = await pool.execute(
-    "UPDATE `categories` SET `name` = ? WHERE `id` = ?",
-    [data.name, data.id]
-  );
-  return row;
+  try {
+    const [row, field] = await pool.execute(
+      "UPDATE `categories` SET `name` = ? WHERE `id` = ?",
+      [data.name, data.id]
+    );
+    return row;
+  } catch (error) {
+    throw error;
+  }
 };
+
 const deleteCategory = async (id) => {
   const [row, field] = await pool.execute(
     "DELETE FROM `categories` WHERE `id` = ?",

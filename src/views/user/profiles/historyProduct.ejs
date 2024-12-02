@@ -1,9 +1,7 @@
 <div class="container-fluid">
   <div class="row">
     <!-- Sidebar -->
-    <nav
-      class="col-md-3 col-lg-2 d-md-block bg-success text-white min-vh-100 p-4 rounded"
-    >
+    <nav class="col-md-3 col-lg-2 d-md-block bg-success text-white min-vh-100 p-4 rounded">
       <h6 class="text-center">THÔNG TIN TÀI KHOẢN</h6>
       <ul class="nav flex-column text-center p-3">
         <li class="nav-item">
@@ -52,20 +50,14 @@
         <div class="mb-4 border rounded p-3">
           <h4 class="d-flex justify-content-between align-items-center">
             Đơn hàng #<%= index + 1 %>
-            <button
-              class="btn btn-link"
-              type="button"
-              data-bs-toggle="collapse"
-              data-bs-target="#orderItems<%= index %>"
-              aria-expanded="false"
-              aria-controls="orderItems<%= index %>"
-            >
+            <button class="btn btn-link" type="button" data-bs-toggle="collapse" data-bs-target="#orderItems<%= index %>" aria-expanded="false" aria-controls="orderItems<%= index %>">
               Xem chi tiết
             </button>
           </h4>
 
           <!-- Order details -->
           <p><strong>Tổng tiền:</strong> <%= order.total %> VND</p>
+          <% if(order.status === 6) %>
           <p>
             <strong>Trạng thái:</strong> <%= order.status === 6 ? "Đã hủy" :
             "Đang xử lý" %>
@@ -75,17 +67,10 @@
             product.productName).join(', ') %>
           </p>
 
-          <!-- Conditional Cancel or Undo Order button based on status -->
           <% if (order.status !== 6) { %>
-          <a href="/api/cancelOrder/<%= order.id %>" class="btn btn-danger mt-2"
-            >Hủy đơn hàng</a
-          >
+          <a href="/api/cancelOrder/<%= order.id %>" class="btn btn-danger mt-2">Hủy đơn hàng</a>
           <% } else { %>
-          <a
-            href="/api/restoreOrder/<%= order.id %>"
-            class="btn btn-secondary mt-2"
-            >Hoàn tác</a
-          >
+          <a href="/api/restoreOrder/<%= order.id %>" class="btn btn-secondary mt-2">Hoàn tác</a>
           <% } %>
 
           <!-- Order items collapse -->
@@ -94,11 +79,7 @@
               <% order.products.forEach(function(product) { %>
               <div class="row mb-3 align-items-center">
                 <div class="col-md-3">
-                  <img
-                    src="/imgs/products/<%= product.image %>"
-                    alt="<%= product.productName %>"
-                    class="img-fluid rounded w-50"
-                  />
+                  <img src="/imgs/products/<%= product.image %>" alt="<%= product.productName %>" class="img-fluid rounded w-50" />
                 </div>
                 <div class="col-md-6">
                   <p><strong>Tên món:</strong> <%= product.productName %></p>
