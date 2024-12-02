@@ -9,10 +9,12 @@ const formatter = new Intl.NumberFormat("vi-VN", {
 
 const getAllProduct = async (filter = null) => {
   let query =
-    "SELECT products.*, categories.id idCategory, categories.name nameCategory, productAdd.id idProductAdd, productAdd.name nameProductAdd, productAdd.currentPrice currentPriceProductAdd, productAdd.image imageProductAdd, productAdd.isExit isExitProductAdd , productAdd.isBussiness isBussinessProductAdd from products left JOIN categories on categories.id = products.idCategory left JOIN itemAddMore on products.id = itemAddMore.idProduct left JOIN products as productAdd on productAdd.id = itemAddMore.idProductAdd";
+    "SELECT products.*, categories.id idCategory, categories.name nameCategory, productAdd.id idProductAdd, productAdd.name nameProductAdd, productAdd.currentPrice currentPriceProductAdd, productAdd.image imageProductAdd, productAdd.isExit isExitProductAdd , productAdd.isBussiness isBussinessProductAdd from products left JOIN categories on categories.id = products.idCategory left JOIN itemAddMore on products.id = itemAddMore.idProduct left JOIN products as productAdd on productAdd.id = itemAddMore.idProductAdd ";
   if (filter) {
     query += ` WHERE products.name LIKE '%${filter}%' OR categories.id LIKE '%${filter}%'`;
   }
+  query += " ORDER BY products.isExit desc, products.isBussiness desc";
+  console.log(query);
   const [row, fields] = await pool.execute(query);
 
   // const [row, fields] = await pool.execute(
@@ -225,6 +227,13 @@ const getLimitedProduct = async (filter = null) => {
 
   return products;
 };
+const updateStatusProduct = async (id, field, status) => {
+  const [row] = await pool.execute(
+    `UPDATE products SET ${field} = ? WHERE id = ?`,
+    [status, id]
+  );
+  return row;
+};
 
 export default {
   addProduct,
@@ -237,4 +246,5 @@ export default {
   getProductByCategory,
   getFullProduct,
   getLimitedProduct,
+  updateStatusProduct,
 };

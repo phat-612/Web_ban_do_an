@@ -146,7 +146,14 @@ const updateIsBuyCart = async (req, res) => {
 const addOrder = async (req, res) => {
   const data = req.body;
   const user = req.session.user;
-  const cartProducts = await cartModel.getCartDetail(user.id);
+  let cartProducts = await cartModel.getCartDetail(user.id);
+  cartProducts = cartProducts.filter(
+    (product) => product.isExit && product.isBussiness
+  );
+  if (cartProducts.length === 0) {
+    req.session.messageError = "Giỏ hàng của bạn đang trống";
+    return res.redirect("back");
+  }
   const dataDetailOrder = [];
   cartProducts.forEach((product) => {
     if (product.isBuy) {

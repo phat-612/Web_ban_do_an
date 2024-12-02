@@ -21,6 +21,21 @@
         <div
           class="row position-relative shadow p-1 mb-3 bg-body rounded justify-content-between"
         >
+          <% if (!cart.isBussiness) { %>
+          <div
+            class="tag position-absolute top-0 start-0 bg-danger rounded-pill px-2 text-white"
+            style="z-index: 10;max-width: 150px;"
+          >
+            Ngừng kinh doanh
+          </div>
+          <% } else if (!cart.isExit){ %>
+          <div
+            class="tag position-absolute top-0 start-0 bg-danger rounded-pill px-2 text-white"
+            style="z-index: 10;max-width: 90px;"
+          >
+            Hết hàng
+          </div>
+          <% } %>
           <span
             type="submit"
             class="position-absolute text-danger end-0 col-1 border text-center rounded deleteProduct"
@@ -30,8 +45,8 @@
           </span>
           <div class="col-1 align-self-center text-center">
             <input class="cbxIsBuy form-check-input" type="checkbox"
-            data-bs-idCart="<%= cart.id %>" <%= cart.isBuy ? 'checked' : '' %>
-            />
+            data-bs-idCart="<%= cart.id %>" <%= cart.isBuy ? ' checked ' : '' %>
+            <%= (!cart.isExit || !cart.isBussiness) ? 'disabled' : '' %> />
           </div>
           <div class="col-2 align-self-center">
             <img src="/imgs/products/<%= cart.image %>" alt="" class="w-100" />

@@ -7,13 +7,20 @@
   <!-- tìm kiếm này cũng coppy cho đồng bộ -->
   <div class="searchbox w-100 d-flex justify-content-end">
     <form class="d-flex">
-      <input class="form-control me-2" type="search" placeholder="Nhập Tên Sản Phẩm" aria-label="Search" />
+      <input
+        class="form-control me-2"
+        type="search"
+        placeholder="Nhập Tên Sản Phẩm"
+        aria-label="Search"
+      />
       <button class="btn btn-outline-success" type="submit">TÌM</button>
     </form>
   </div>
   <!-- ----- -->
   <div class="addBtnBox mt-3 w-100 d-flex justify-content-end">
-    <a class="btn btn-primary" href="/admin/product/addProduct">THÊM SẢN PHẨM</a>
+    <a class="btn btn-primary" href="/admin/product/addProduct"
+      >THÊM SẢN PHẨM</a
+    >
   </div>
 
   <table class="table table-striped table-hover">
@@ -35,16 +42,32 @@
         <td class="table-cell"><%= product.name %></td>
         <td><%= product.nameCategory %></td>
         <td><%= product.currentPrice %></td>
-        <td class="table-cell text-center"><input type="checkbox" name="isExit" <%= !product.isExit ? 'checked' : '' %>></td>
-        <td class="table-cell text-center"><input type="checkbox" name="isBussiness" <%= !product.isBussiness ? 'checked' : '' %>></td>
+        <td class="table-cell text-center">
+          <input type="checkbox" bs-data-id="<%= product.id %>" name="isExit"
+          <%= !product.isExit ? 'checked' : '' %>>
+        </td>
+        <td class="table-cell text-center">
+          <input type="checkbox" bs-data-id="<%= product.id %>"
+          name="isBussiness" <%= !product.isBussiness ? 'checked' : '' %>>
+        </td>
         <td class="col-3">
-          <a class="btn btn-primary" href="/admin/product/view/<%= product.id %>">
+          <a
+            class="btn btn-primary"
+            href="/admin/product/view/<%= product.id %>"
+          >
             Xem
           </a>
-          <a class="btn btn-success" href="/admin/product/edit/<%= product.id %>">
+          <a
+            class="btn btn-success"
+            href="/admin/product/edit/<%= product.id %>"
+          >
             Sửa
           </a>
-          <form action="/api/deleteProduct" method="post" class="d-inline-block">
+          <form
+            action="/api/deleteProduct"
+            method="post"
+            class="d-inline-block"
+          >
             <input type="hidden" name="id" value="<%= product.id %>" />
             <input type="hidden" name="image" value="<%= product.image %>" />
             <button type="submit" class="btn btn-danger">Xóa</button>
@@ -55,8 +78,23 @@
     </tbody>
   </table>
 </div>
+<div
+  class="alert alert-success top-0 end-0 position-fixed"
+  id="success-alert"
+></div>
 
 <script>
+  let idSetTimeOut;
+  const showAlert = (message, type = 'success') => {
+    const alert = document.getElementById('success-alert');
+    alert.innerHTML = `<strong>${type === 'success' ? 'Thành công' : 'Thất bại'}:</strong> ${message}`;
+    alert.classList.remove('alert-success', 'alert-danger');
+    alert.classList.add(`alert-${type}`);
+    alert.style.display = 'block';
+    idSetTimeOut = setTimeout(() => {
+      alert.style.display = 'none';
+    }, 2000);
+  };
   // xác nhận khi bấm xóa sản phẩm
   document.querySelectorAll('.btn-danger').forEach(function(btn) {
     btn.addEventListener('click', function(e) {
@@ -66,4 +104,63 @@
     });
   });
   // handle cập nhật trạng thái isExit
+  document.querySelectorAll('input[name="isExit"]').forEach(function(input) {
+    input.addEventListener('change', function(e) {
+      const id = e.target.getAttribute('bs-data-id');
+      console.log({
+        id,
+        isExit: e.target.checked
+      });
+      fetch(`/api/updateStatusProduct`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id,
+          field: 'isExit',
+          status: !!e.target.checked ? 0 : 1
+        })
+      }).then((res) => {
+        if (res.status === 200) {
+          clearTimeout(idSetTimeOut);
+          showAlert('Cập nhật trạng thái thành công');
+
+        } else {
+          clearTimeout(idSetTimeOut);
+          showAlert('Cập nhật trạng thái thất bại', 'danger');
+        }
+      });
+    });
+  });
+  // handle cập nhật trạng thái isBussiness
+  document.querySelectorAll('input[name="isBussiness"]').forEach(function(input) {
+    input.addEventListener('change', function(e) {
+      const id = e.target.getAttribute('bs-data-id');
+      console.log({
+        id,
+        isBussiness: e.target.checked
+      });
+      fetch(`/api/updateStatusProduct`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          id,
+          field: 'isBussiness',
+          status: !!e.target.checked ? 0 : 1
+        })
+      }).then((res) => {
+        if (res.status === 200) {
+          clearTimeout(idSetTimeOut);
+          showAlert('Cập nhật trạng thái thành công');
+
+        } else {
+          clearTimeout(idSetTimeOut);
+          showAlert('Cập nhật trạng thái thất bại', 'danger');
+        }
+      });
+    });
+  });
 </script>

@@ -87,7 +87,7 @@ const getCart = async (idUser) => {
 };
 const getCartDetail = async (idUser) => {
   const [rows, field] = await pool.execute(
-    `SELECT  c.idProduct, p.name, p.currentPrice, p.image, c.quantity, p.description, c.isBuy, c.id
+    `SELECT  c.idProduct, p.name, p.currentPrice, p.image, c.quantity, p.description, c.isBuy, c.id, p.isExit, p.isBussiness
         FROM carts c
         JOIN products p ON c.idProduct = p.id
         WHERE c.idUser = ?`,

@@ -36,7 +36,7 @@ router.post(
   adminController.editProduct
 );
 router.post("/deleteProduct", adminController.deleteProduct);
-
+router.post("/updateStatusProduct", adminController.updateStatusProduct);
 // account admin
 router.post("/updateStatusUser", adminController.setStatus);
 router.post("/updateRoleUser", adminController.setRole);

@@ -127,6 +127,16 @@ const deleteProduct = async (req, res) => {
   req.session.messageError = "Không thể xóa sản phẩm đã được đặt hàng";
   res.redirect("/admin");
 };
+const updateStatusProduct = async (req, res) => {
+  const { id, field, status } = req.body;
+  // nếu field không phải isExit và isBussiness thì trả về lỗi
+  console.log(req.body);
+  if (field !== "isExit" && field !== "isBussiness") {
+    res.status(400).json({ message: "Trường không hợp lệ" });
+  }
+  await productModel.updateStatusProduct(id, field, status);
+  res.status(200).json({ message: "Cập nhật trạng thái thành công" });
+};
 // ORDER ( DON HANG)
 const getStatusText = (status) => {
   switch (status) {
@@ -442,6 +452,7 @@ export default {
   addProduct,
   editProduct,
   deleteProduct,
+  updateStatusProduct,
   updateInfoShop,
   setStatus,
   setRole,

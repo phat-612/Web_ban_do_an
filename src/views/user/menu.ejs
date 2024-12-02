@@ -37,8 +37,23 @@
   <div class="container row d-flex justify-content-between">
     <!-- 1 the san pham -->
     <% data.products.forEach(function (product){ %>
-    <div class="col d-flex justify-content-center my-5">
-      <div class="card" style="width: 18rem">
+    <div class="col d-flex justify-content-center my-5 ">
+      <div class="card position-relative" style="width: 18rem">
+        <% if (!product.isBussiness) { %>
+        <div
+          class="tag position-absolute top-0 start-0 bg-danger rounded-pill px-2 text-white"
+          style="z-index: 10;"
+        >
+          Ngừng kinh doanh
+        </div>
+        <% } else if (!product.isExit){ %>
+        <div
+          class="tag position-absolute top-0 start-0 bg-danger rounded-pill px-2 text-white"
+          style="z-index: 10;"
+        >
+          Hết hàng
+        </div>
+        <% } %>
         <div
           style="width: 287px; height: 287px"
           class="d-flex justify-content-center align-items-center"
