@@ -7,14 +7,25 @@ const formatter = new Intl.NumberFormat("vi-VN", {
   trailingZeroDisplay: "stripIfInteger",
 });
 
-const getAllProduct = async (filter = null) => {
+const getAllProduct = async (filter = null, find = null) => {
   let query =
     "SELECT products.*, categories.id idCategory, categories.name nameCategory, productAdd.id idProductAdd, productAdd.name nameProductAdd, productAdd.currentPrice currentPriceProductAdd, productAdd.image imageProductAdd, productAdd.isExit isExitProductAdd , productAdd.isBussiness isBussinessProductAdd from products left JOIN categories on categories.id = products.idCategory left JOIN itemAddMore on products.id = itemAddMore.idProduct left JOIN products as productAdd on productAdd.id = itemAddMore.idProductAdd ";
-  if (filter) {
-    query += ` WHERE products.name LIKE '%${filter}%' OR categories.id LIKE '%${filter}%'`;
-  }
+  // if (filter) {
+  //   query += ` WHERE categories.id = ${filter}`;
+  // }
+  // if (find){
+  //   if (filter) {
+  //     query += ` AND products.name LIKE '%${find}%' OR categories.id LIKE '%${find}%'`;
+  //   }
+  // }
+  query += ` ${
+    filter || find
+      ? `WHERE (products.name LIKE '%${find}%' and 1=${
+          find ? 1 : 0
+        }) OR (categories.id = ${filter} and 1=${filter ? 1 : 0})`
+      : ""
+  }`;
   query += " ORDER BY products.isExit desc, products.isBussiness desc";
-  console.log(query);
   const [row, fields] = await pool.execute(query);
 
   // const [row, fields] = await pool.execute(
@@ -54,7 +65,7 @@ const getAllProduct = async (filter = null) => {
 };
 const getProductById = async (id) => {
   const [row, fields] = await pool.execute(
-    "SELECT products.id, products.name, currentPrice, description, categories.name as nameCategory, products.image FROM products JOIN categories on products.idCategory = categories.id WHERE products.id = ? ",
+    "SELECT products.id, products.name, currentPrice, description, categories.id as idCategory, categories.name as nameCategory, products.image FROM products JOIN categories on products.idCategory = categories.id WHERE products.id = ? ",
     [id]
   );
   return row;

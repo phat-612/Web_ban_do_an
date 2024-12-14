@@ -54,7 +54,7 @@ const addOrder = async (order, orderDetail) => {
     ]
   );
   const idOrder = rows.insertId;
-  console.log("idOrder", idOrder);
+  // console.log("idOrder", idOrder);
   // thêm dữ liệu vào bảng orderDetail
   if (orderDetail) {
     const values = orderDetail.map((item) => [idOrder, ...item]);

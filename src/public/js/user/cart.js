@@ -142,10 +142,16 @@ $(document).ready(function () {
   });
   // submit form
   $("#formOrder").on("submit", function (e) {
+    e.preventDefault();
     const isEmptyAddress =
       $('input[name="addressDelivery"]').val() &&
       $('input[name="nameDelivery"]').val() &&
       $('input[name="phoneDelivery"]').val();
+    if (!isEmptyAddress) {
+      alert("Vui lòng chọn địa chỉ giao hàng");
+      return false;
+    }
+    e.target.submit();
   });
   // xử lý chọn sản phẩm đặt hàng
   $(".cbxIsBuy").on("change", function (e) {

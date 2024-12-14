@@ -59,7 +59,13 @@ $(document).ready(function () {
       eleAreaAddMore.show();
       itemAddMore.forEach((item) => {
         eleAreaAddMoreItem.append(
-          `<div class="row d-flex justify-content-around align-items-center mb-3">
+          `<div class="row d-flex justify-content-around align-items-center mb-3 position-relative">
+          <div
+          class="tag position-absolute top-0 start-0 bg-danger rounded-pill px-2 text-white"
+          style="z-index: 10; width: 150px;"
+        >
+          Ngừng kinh doanh
+        </div>
             <input type="hidden" name="productId" value="${item.id}">
             <div class="col-2">
               <img src="/imgs/products/${item.image}" alt="" width="100" />
@@ -69,11 +75,17 @@ $(document).ready(function () {
             </div>
             <div class="col-2">
               <div class="input-group mb-3">
-                <button class="btn btn-outline-secondary button-minus-Addmore" type="button">
+                <button class="btn btn-outline-secondary button-minus-Addmore" ${
+                  !item.isBussiness || !item.isExit ? "disabled" : ""
+                } type="button">
                   <i class="bi bi-dash"></i>
                 </button>
-                <input name="productQuantity" style="text-align: center;" type="number" class="form-control quantity-Addmore" aria-label="Example text with button addon" aria-describedby="button-addon1" min="0" max="100" value="0" />
-                <button class="btn btn-outline-secondary button-plus-Addmore" type="button">
+                <input name="productQuantity" style="text-align: center;" type="number" ${
+                  !item.isBussiness || !item.isExit ? "disabled" : ""
+                } class="form-control quantity-Addmore" aria-label="Example text with button addon" aria-describedby="button-addon1" min="0" max="100" value="0" />
+                <button class="btn btn-outline-secondary button-plus-Addmore" ${
+                  !item.isBussiness || !item.isExit ? "disabled" : ""
+                } type="button">
                   <i class="bi bi-plus"></i>
                 </button>
               </div>

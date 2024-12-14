@@ -7,15 +7,15 @@ const getAllBanner = async function () {
 
 const addBanner = async function (data) {
   const [row] = await pool.execute(
-    "INSERT INTO `banners` (`image`,`link`) VALUES (?,?)",
-    [data.image, data.link]
+    "INSERT INTO `banners` (`image`,`link`, `idEditor`) VALUES (?,?,?)",
+    [data.image, data.link, data.idEditor]
   );
 };
 
 const editBanner = async function (data) {
   await pool.execute(
-    "UPDATE `banners` SET `image` = ?, `link` = ? WHERE `banners`.`id` = ?",
-    [data.image, data.link, data.id]
+    "UPDATE `banners` SET `image` = ?, `link` = ?, `idEditor` = ? WHERE `banners`.`id` = ?",
+    [data.image, data.link, data.idEditor, data.id]
   );
 };
 const deletebanner = async function (id) {

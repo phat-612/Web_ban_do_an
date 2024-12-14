@@ -87,6 +87,7 @@
               data-bs-productCurrentPrice="<%= product.currentPrice %>"
               data-bs-productImage="<%= product.image %>"
               data-bs-productDescription="<%= product.description %>"
+              <%= !product.isBussiness || !product.isExit ? 'disabled' : '' %>
             >
               Thêm Vào Giỏ Hàng
             </button>

@@ -56,6 +56,17 @@ const getEditProductPage = async (req, res) => {
       }
     });
   });
+  console.log({
+    data: {
+      title: "Edit Product",
+      header: "partials/headerAdmin",
+      page: "admin/editProduct",
+      product: product[0],
+      categorys: categoryList,
+      products: products,
+      script: "admin/editProduct",
+    },
+  });
   res.render("main", {
     data: {
       title: "Edit Product",
@@ -130,7 +141,7 @@ const deleteProduct = async (req, res) => {
 const updateStatusProduct = async (req, res) => {
   const { id, field, status } = req.body;
   // nếu field không phải isExit và isBussiness thì trả về lỗi
-  console.log(req.body);
+  // console.log(req.body);
   if (field !== "isExit" && field !== "isBussiness") {
     res.status(400).json({ message: "Trường không hợp lệ" });
   }
@@ -149,8 +160,9 @@ const getStatusText = (status) => {
     case 4:
       return "Thành Công";
     case 5:
-    case 6:
       return "Bị Hủy";
+    case 6:
+      return "Đã Hủy";
     default:
       return "Không Xác Định";
   }
@@ -176,7 +188,9 @@ const getOrderPage = async (req, res) => {
       // Nếu chưa có, tạo mới đơn hàng và thêm sản phẩm đầu tiên vào
       acc.push({
         id: item.id,
-        createdAt: item.created_at,
+        createdAt: new Intl.DateTimeFormat("vi-VN").format(
+          new Date(item.created_at)
+        ),
         customerName: item.customerName,
         phone: item.phone,
         address: item.address,
@@ -223,7 +237,6 @@ const updateStatusOrder = async (req, res) => {
   if (parseInt(status) > parseInt(currentStatus)) {
     if (currentStatus == 4 && status == 5) {
       req.session.messageError = "Đơn hàng đã hoàn thành, không thể hủy";
-      // return res.status(400).send("Đơn hàng đã thanh toán, không thể hủy");
       return res.redirect("back");
     }
     if (status == 4) {
@@ -231,7 +244,6 @@ const updateStatusOrder = async (req, res) => {
       const { idProduct, quantity } = orderProducts;
       await orderModel.updateSold(quantity, idProduct);
     }
-
     // Cập nhật trạng thái của đơn hàng
     await orderModel.updateStatusOrder(status, orderId);
     req.session.messageSuccess = "Cập nhật trạng thái đơn hàng thành công";
@@ -259,6 +271,7 @@ const addBanner = async (req, res) => {
   const data = req.body;
   const bannerImage = req.file.filename;
   data.image = bannerImage;
+  data.idEditor = req.session.user.id;
   await bannerModel.addBanner(data);
   req.session.messageSuccess = "Thêm banner thành công";
   res.redirect("/admin/banner");
@@ -266,8 +279,6 @@ const addBanner = async (req, res) => {
 
 const editBanner = async (req, res) => {
   const data = req.body;
-  console.log(data);
-  console.log(req.file);
   const bannerImage = req.file ? req.file.filename : null;
   if (bannerImage) {
     data.image = bannerImage;
@@ -277,6 +288,7 @@ const editBanner = async (req, res) => {
   } else {
     data.image = data.oldImage;
   }
+  data.idEditor = req.session.user.id;
   await bannerModel.editBanner(data);
   req.session.messageSuccess = "Cập nhật banner thành công";
   res.redirect("back");
@@ -427,6 +439,8 @@ const getShopInforPage = async (req, res) => {
 
 const updateInfoShop = async (req, res) => {
   const data = req.body;
+  const idUser = req.session.user.id;
+  data.idEditor = idUser;
   await shopModel.updateInfoShop(data);
   req.session.messageSuccess = "Cập nhật thông tin cửa hàng thành công";
   res.redirect("/admin/shopInfor");

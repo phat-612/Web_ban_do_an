@@ -34,12 +34,12 @@ const getUserMenuPage = async (req, res) => {
   const { category, find } = req.query;
   let productList;
   // ưu tiên tìm kiếm hơn danh mục
-  if (find) {
-    productList = await productModel.getAllProduct(find);
-  } else if (category) {
-    productList = await productModel.getAllProduct(category);
-  } else {
+  if (!category && !find) {
     productList = await productModel.getAllProduct();
+  } else if (find) {
+    productList = await productModel.getAllProduct(null, find);
+  } else if (category) {
+    productList = await productModel.getAllProduct(category, null);
   }
   const categoryList = await categoryModel.getAllCategory();
   // console.log(productList);
@@ -119,7 +119,7 @@ const addProductToCart = async (req, res) => {
   await cartModel.addOrUpdateProductsInCart(user.id, cartArr);
 
   req.session.messageSuccess = "Thêm sản phẩm vào giỏ hàng thành công";
-  res.redirect("back");
+  return res.redirect("back");
 };
 const updateQuantityCart = async (req, res) => {
   const { idProduct, quantity } = req.body;
@@ -128,14 +128,14 @@ const updateQuantityCart = async (req, res) => {
     if (quantity == 0) {
       await cartModel.deleteProduct(user.id, idProduct);
       req.session.messageSuccess = "Xóa sản phẩm thành công";
-      res.redirect("back");
+      return res.redirect("back");
     }
     await cartModel.updateQuantityProduct(user.id, idProduct, quantity);
     req.session.messageSuccess = "Cập nhật số lượng sản phẩm thành công";
-    res.redirect("back");
+    return res.redirect("back");
   } catch (error) {
     req.session.messageError = "Cập nhật sản phẩm thành công";
-    res.redirect("back");
+    return res.redirect("back");
   }
 };
 const updateIsBuyCart = async (req, res) => {
@@ -222,7 +222,7 @@ const addAddress = async (req, res) => {
     return res.status(400).send("Số điện thoại không hợp lệ");
   }
   await userModel.address(data, userId);
-  res.redirect("/listAddress");
+  return res.redirect("/listAddress");
 };
 // danh sách địa chỉ
 const getListAddress = async (req, res) => {
@@ -310,8 +310,9 @@ const getStatusText = (status) => {
     case 4:
       return "Thành Công";
     case 5:
-    case 6:
       return "Bị Hủy";
+    case 6:
+      return "Đã Hủy";
     default:
       return "Không Xác Định";
   }
@@ -410,7 +411,7 @@ const changePassword = async (req, res) => {
   if (isMatch) {
     const hashedPassword = await bcrypt.hash(data.newPassword1, 10);
     await userModel.updatePassword(user.id, hashedPassword);
-    res.redirect("/profile/" + user.id);
+    res.redirect("/profile");
   } else {
     res.status(401).send("Mật khẩu không chính xác.");
   }
@@ -456,7 +457,13 @@ const login = async (req, res) => {
       };
       req.session.messageSuccess = "Đăng nhập thành công";
       return res.redirect("back");
+    } else {
+      req.session.messageError = "Sai mật khẩu";
+      return res.redirect("back");
     }
+  } else {
+    req.session.messageError = "Tài khoản không hoạt động";
+    return res.redirect("back");
   }
 };
 
@@ -541,7 +548,6 @@ const editProfile = async (req, res) => {
 // người dùng hủy tài khoản
 const cancelAccount = async (req, res) => {
   const user = req.session.user;
-  console.log("user", user);
   await userModel.cancelAccount(user.id);
   req.session.destroy();
   res.redirect("/");
