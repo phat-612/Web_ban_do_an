@@ -32,4 +32,12 @@ router.get("/feedback", isAdmin, adminController.getFeedbackPage);
 // SHOP-INFORMATION ( THONG TIN CUA HANG)
 router.get("/shopInfor", isAdmin, adminController.getShopInforPage);
 
+// DELIVERY ( VAN CHUYEN )
+router.get("/deliveryList", isAdmin, adminController.getDeliveryListPage);
+router.get(
+  "/deliveryList/detail/:id",
+  isAdmin,
+  adminController.getDeliveryDetailPage
+);
+
 export default router;
