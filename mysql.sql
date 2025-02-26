@@ -5,8 +5,8 @@ create table users (
     email varchar(255) not null,
     phone varchar(12) not null,
     password varchar(255) not null,
-    created_at timestamp default current_timestamp
-    status int default 1
+    created_at timestamp default current_timestamp,
+    status int default 1,
     role int default 1
 );
 create table addresses (
@@ -14,7 +14,7 @@ create table addresses (
     idUser int not null,
     name varchar(255) not null,
     phone varchar(12) not null,
-    address varchar(255) not null,
+    address varchar(255) not null
 );
 create table products (
     id int primary key auto_increment,
@@ -30,7 +30,7 @@ create table products (
 );
 create table categories (
     id int primary key auto_increment,
-    name varchar(255) not null,
+    name varchar(255) not null
 );
 create table priceHistory (
     id int primary key auto_increment,
@@ -41,8 +41,8 @@ create table priceHistory (
 );
 create table itemAddMore (
     idProduct int not null,
-    idProductAdd int not null,
-)
+    idProductAdd int not null
+);
 create table orders (
     id int primary key auto_increment,
     idUser int not null,
@@ -68,12 +68,12 @@ create table carts(
     idProduct int not null,
     quantity int not null,
     created_at timestamp default current_timestamp
-)
+);
 create table banners (
     id int primary key auto_increment,
     image varchar(255) not null,
-    link varchar(255) not null,
-)
+    link varchar(255) not null
+);
 create table feedbacks (
     id int primary key auto_increment,
     name varchar(255) not null,
@@ -81,15 +81,15 @@ create table feedbacks (
     title varchar(255) not null,
     content text,
     created_at timestamp default current_timestamp
-)
+);
 create table shopInfo(
     name varchar(255) not null,
     phone varchar(12) not null,
     taxCode varchar(50) not null,
     email varchar(255) not null,
     address varchar(255) not null,
-    activeTime varchar(255) not null,
-)
+    activeTime varchar(255) not null
+);
 
 alter table addresses
     add constraint fk_addresses_users foreign key (idUser) references users(id);

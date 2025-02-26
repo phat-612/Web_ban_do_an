@@ -1,7 +1,7 @@
 import { createClient } from "redis";
-
+import "dotenv/config";
 const client = createClient({
-  url: "redis://default:rjFnAboUIitlrlrethk2hesMTCO2xEtp@redis-15568.c252.ap-southeast-1-1.ec2.redns.redis-cloud.com:15568",
+  url: process.env.REDIS_URL,
 });
 
 client.on("error", (err) => {
