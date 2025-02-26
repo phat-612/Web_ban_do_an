@@ -453,7 +453,7 @@ const getDeliveryListPage = async (req, res) => {
     data: {
       title: "Delivery List",
       header: "partials/headerDelivery",
-      page: "admin/deliveryPage/shippingOrderDetail",
+      page: "admin/deliveryPage/shippingOrderList",
     },
   });
 };
