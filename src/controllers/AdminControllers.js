@@ -449,11 +449,13 @@ const updateInfoShop = async (req, res) => {
 // DELIVERY ( VAN CHUYEN )
 
 const getDeliveryListPage = async (req, res) => {
+  const orderList = await orderModel.getOrdersByStatusPedding();
   res.render("main", {
     data: {
       title: "Delivery List",
-      header: "partials/headerDelivery",
+      header: "partials/delivery/headerDelivery",
       page: "admin/deliveryPage/shippingOrderList",
+      orderList,
     },
   });
 };
@@ -462,7 +464,7 @@ const getDeliveryDetailPage = async (req, res) => {
   res.render("main", {
     data: {
       title: "Delivery Detail",
-      header: "partials/headerDelivery",
+      header: "partials/delivery/headerDeliveryDetail",
       page: "admin/deliveryPage/shippingOrderDetail",
     },
   });
