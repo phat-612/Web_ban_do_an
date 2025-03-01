@@ -461,6 +461,12 @@ const getDeliveryListPage = async (req, res) => {
 };
 
 const getDeliveryDetailPage = async (req, res) => {
+  const id = req.params.id;
+
+  const order = await orderModel.getAllOrderFullById(id);
+
+  console.log(order);
+
   res.render("main", {
     data: {
       title: "Delivery Detail",

@@ -110,10 +110,14 @@ const getOrdersByStatusPedding = async () => {
 FROM orders o
 JOIN orderDetail od ON o.id = od.idOrder
 JOIN products p ON od.idProduct = p.id
-WHERE o.status = 3;
+WHERE o.status = 3
+AND od.idProduct = (
+    SELECT MIN(od2.idProduct) 
+    FROM orderDetail od2 
+    WHERE od2.idOrder = o.id
+);
 `
   );
-  console.log(rows[0]);
   return rows;
 };
 
