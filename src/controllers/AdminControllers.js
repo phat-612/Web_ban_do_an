@@ -463,15 +463,14 @@ const getDeliveryListPage = async (req, res) => {
 const getDeliveryDetailPage = async (req, res) => {
   const id = req.params.id;
 
-  const order = await orderModel.getAllOrderFullById(id);
-
-  console.log(order);
+  const orders = await orderModel.getAllOrderFullById(id);
 
   res.render("main", {
     data: {
       title: "Delivery Detail",
       header: "partials/delivery/headerDeliveryDetail",
       page: "admin/deliveryPage/shippingOrderDetail",
+      orderFull: orders, // Dữ liệu đã xử lý
     },
   });
 };
