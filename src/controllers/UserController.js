@@ -42,7 +42,6 @@ const getUserMenuPage = async (req, res) => {
     productList = await productModel.getAllProduct(category, null);
   }
   const categoryList = await categoryModel.getAllCategory();
-  // console.log(productList);
   res.render("main", {
     data: {
       title: "Menu",

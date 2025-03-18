@@ -56,17 +56,17 @@ const getEditProductPage = async (req, res) => {
       }
     });
   });
-  console.log({
-    data: {
-      title: "Edit Product",
-      header: "partials/headerAdmin",
-      page: "admin/editProduct",
-      product: product[0],
-      categorys: categoryList,
-      products: products,
-      script: "admin/editProduct",
-    },
-  });
+  // console.log({
+  //   data: {
+  //     title: "Edit Product",
+  //     header: "partials/headerAdmin",
+  //     page: "admin/editProduct",
+  //     product: product[0],
+  //     categorys: categoryList,
+  //     products: products,
+  //     script: "admin/editProduct",
+  //   },
+  // });
   res.render("main", {
     data: {
       title: "Edit Product",
@@ -141,7 +141,6 @@ const deleteProduct = async (req, res) => {
 const updateStatusProduct = async (req, res) => {
   const { id, field, status } = req.body;
   // nếu field không phải isExit và isBussiness thì trả về lỗi
-  // console.log(req.body);
   if (field !== "isExit" && field !== "isBussiness") {
     res.status(400).json({ message: "Trường không hợp lệ" });
   }
