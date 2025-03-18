@@ -33,47 +33,59 @@
       </ul>
     </nav>
 
-    <div class="col-md-9 ms-sm-auto">
+    <div class="col-md-9 ms-5">
       <h1 class="text-center m-4">THÊM ĐỊA CHỈ</h1>
-      <form method="POST" action="/api/address">
-        <div class="row mb-3">
-          <div class="col-12">
-            <label for="fullname" class="form-label">Họ và tên *</label>
-            <input
-              type="text"
-              class="form-control"
-              name="name"
-              id="fullname"
-              required
-            />
-          </div>
-          <div class="col-12">
-            <label for="phone" class="form-label">Số điện thoại *</label>
-            <input
-              type="text"
-              class="form-control"
-              name="phone"
-              id="phone"
-              required
-            />
-          </div>
-          <div class="col-12">
-            <label for="address" class="form-label">Địa chỉ *</label>
-            <input
-              type="text"
-              class="form-control"
-              name="address"
-              id="address"
-              required
-            />
-          </div>
+      <div class="row">
+        <div class="col-6">
+          <form method="POST" action="/api/address">
+            <div class="row mb-3">
+              <div class="col-12">
+                <label for="fullname" class="form-label">Họ và tên *</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="name"
+                  id="fullname"
+                  required
+                />
+              </div>
+              <div class="col-12">
+                <label for="phone" class="form-label">Số điện thoại *</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="phone"
+                  id="phone"
+                  required
+                />
+              </div>
+              <div class="col-12">
+                <label for="address" class="form-label">Địa chỉ *</label>
+                <input
+                  type="text"
+                  class="form-control"
+                  name="address"
+                  id="address"
+                  required
+                />
+              </div>
+            </div>
+            <div class="text-center">
+              <button type="submit" class="btn btn-success w-100">
+                Thêm địa chỉ
+              </button>
+            </div>
+          </form>
         </div>
-        <div class="text-center">
-          <button type="submit" class="btn btn-success w-100">
-            Thêm địa chỉ
-          </button>
+        <div class="col-5 ms-3">
+          <div id="map" class="w-100 h-100"></div>
         </div>
-      </form>
+      </div>
     </div>
   </div>
 </div>
+
+<script>
+  var map = L.map('map').setView([10.046260, 105.766599], 13);
+  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
+</script>

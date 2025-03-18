@@ -84,6 +84,43 @@ const restoreOrder = async (id) => {
   return rows;
 };
 
+// FOR DELIVERY
+
+const getOrdersByStatusPedding = async () => {
+  const [rows, fields] = await pool.execute(
+    `SELECT 
+    o.id AS order_id,
+    o.idUser,
+    o.name AS customer_name,
+    o.phone,
+    o.address,
+    o.note,
+    o.total,
+    o.status,
+    o.created_at AS order_created_at,
+    od.id AS order_detail_id,
+    od.quantity,
+    od.price,
+    od.created_at AS order_detail_created_at,
+    p.id AS product_id,
+    p.name AS product_name,
+    p.currentPrice,
+    p.description,
+    p.image
+FROM orders o
+JOIN orderDetail od ON o.id = od.idOrder
+JOIN products p ON od.idProduct = p.id
+WHERE o.status = 3
+AND od.idProduct = (
+    SELECT MIN(od2.idProduct) 
+    FROM orderDetail od2 
+    WHERE od2.idOrder = o.id
+);
+`
+  );
+  return rows;
+};
+
 export default {
   getAllOrderFull,
   addOrder,
@@ -93,4 +130,6 @@ export default {
   updateSold,
   getAllOrderFullById,
   getAllOrderFullByIdUser,
+  // FOR DELIVERY
+  getOrdersByStatusPedding,
 };

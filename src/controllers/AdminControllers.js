@@ -445,6 +445,36 @@ const updateInfoShop = async (req, res) => {
   req.session.messageSuccess = "Cập nhật thông tin cửa hàng thành công";
   res.redirect("/admin/shopInfor");
 };
+
+// DELIVERY ( VAN CHUYEN )
+
+const getDeliveryListPage = async (req, res) => {
+  const orderList = await orderModel.getOrdersByStatusPedding();
+  res.render("main", {
+    data: {
+      title: "Delivery List",
+      header: "partials/delivery/headerDelivery",
+      page: "admin/deliveryPage/shippingOrderList",
+      orderList,
+    },
+  });
+};
+
+const getDeliveryDetailPage = async (req, res) => {
+  const id = req.params.id;
+
+  const orders = await orderModel.getAllOrderFullById(id);
+
+  res.render("main", {
+    data: {
+      title: "Delivery Detail",
+      header: "partials/delivery/headerDeliveryDetail",
+      page: "admin/deliveryPage/shippingOrderDetail",
+      orderFull: orders, // Dữ liệu đã xử lý
+    },
+  });
+};
+
 export default {
   // GET PAGE
   getLoginPage,
@@ -459,6 +489,8 @@ export default {
   getFeedbackPage,
   getShopInforPage,
   getStatusText,
+  getDeliveryListPage,
+  getDeliveryDetailPage,
   // API
   addCategory,
   deleteCategory,
