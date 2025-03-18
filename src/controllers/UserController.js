@@ -210,6 +210,7 @@ const getProfileAddress = async (req, res) => {
       footer: "partials/footerUser",
       page: "user/profiles/profileAddress",
       user: user,
+      script: "user/profiles/profileAddress",
     },
   });
 };
@@ -222,6 +223,25 @@ const addAddress = async (req, res) => {
   }
   await userModel.address(data, userId);
   return res.redirect("/listAddress");
+};
+const getEditAddress = async (req, res) => {
+  const user = req.session.user;
+  const idAddress = req.params.idAddress;
+  const address = await userModel.getAddressById(idAddress);
+  if (!address) {
+    return res.status(404).send("Địa chỉ không tồn tại");
+  }
+  res.render("main", {
+    data: {
+      title: "Profile",
+      header: "partials/headerUser",
+      footer: "partials/footerUser",
+      page: "user/profiles/editAddress",
+      user,
+      address,
+      script: "user/profiles/editAddress",
+    },
+  });
 };
 // danh sách địa chỉ
 const getListAddress = async (req, res) => {
@@ -572,6 +592,7 @@ export default {
   getCartPage,
   getProfile,
   getProfileAddress,
+  getEditAddress,
   getHistoryProduct,
   getRePassword,
   getDeleteAccount,

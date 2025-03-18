@@ -11,6 +11,7 @@ router.get("/cart", isUser, userController.getCartPage);
 // profile
 router.get("/profile", isUser, userController.getProfile);
 router.get("/addAddress", isUser, userController.getProfileAddress);
+router.get("/editAddress/:idAddress", isUser, userController.getEditAddress);
 router.get("/listAddress", isUser, userController.getListAddress);
 router.get("/historyProduct", isUser, userController.getHistoryProduct);
 router.get("/rePassword", isUser, userController.getRePassword);

@@ -432,6 +432,7 @@ const getShopInforPage = async (req, res) => {
       header: "partials/headerAdmin",
       page: "admin/shopInfor",
       shopInfo: row[0],
+      script: "admin/shopInfo",
     },
   });
 };

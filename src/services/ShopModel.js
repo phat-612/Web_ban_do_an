@@ -5,7 +5,7 @@ const getInfoShop = async () => {
 };
 const updateInfoShop = async (data) => {
   const [row, field] = await pool.execute(
-    "UPDATE shopInfo SET name=?, phone=?, taxCode=?, email=?, address=?, activeTime=?, idEditor=?",
+    "UPDATE shopInfo SET name=?, phone=?, taxCode=?, email=?, address=?, activeTime=?, idEditor=?, province=?, district=?, ward=?, location=?",
     [
       data.name,
       data.phone,
@@ -14,6 +14,10 @@ const updateInfoShop = async (data) => {
       data.address,
       data.activeTime,
       data.idEditor,
+      data.province,
+      data.district,
+      data.ward,
+      data.location,
     ]
   );
 };

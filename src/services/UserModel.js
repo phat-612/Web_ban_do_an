@@ -79,10 +79,10 @@ const editProfile = async (id, data) => {
 };
 // thêm địa chỉ
 const address = async (data, idUser) => {
-  const { name, phone, address } = data;
+  const { name, phone, address, province, district, ward, location } = data;
   const [rows] = await pool.execute(
-    "INSERT INTO `addresses` (`idUser`, `name`,`phone`,`address`) VALUES(?,?,?,?)",
-    [idUser, name, phone, address]
+    "INSERT INTO `addresses` (`idUser`, `name`,`phone`,`address`, `province`, `district`, `ward`, `location`) VALUES(?,?,?,?,?,?,?,?)",
+    [idUser, name, phone, address, province, district, ward, location]
   );
   return rows;
 };
@@ -102,12 +102,18 @@ const setDefaultAddress = async (idUser) => {
   );
   return row;
 };
+const getAddressById = async (idAddress) => {
+  const [row] = await pool.execute("SELECT * FROM `addresses` WHERE `id` = ?", [
+    idAddress,
+  ]);
+  return row[0];
+};
 // sửa địa chỉ
 const editAddress = async (idAddress, data) => {
-  const { name, phone, address } = data;
+  const { name, phone, address, province, district, ward, location } = data;
   const [row, field] = await pool.execute(
-    "UPDATE `addresses` SET `name` =?, `phone` =?, `address` =? WHERE `id` =?",
-    [name, phone, address, idAddress]
+    "UPDATE `addresses` SET `name` =?, `phone` =?, `address` =?, `province` =?, `district` =?, `ward` =?, `location` =? WHERE `id` =?",
+    [name, phone, address, province, district, ward, location, idAddress]
   );
   return row;
 };
@@ -197,6 +203,7 @@ export default {
   getAllAddress,
   setDefaultAddress,
   defaultAddress,
+  getAddressById,
   editAddress,
   deleteAddress,
   resetPassword,

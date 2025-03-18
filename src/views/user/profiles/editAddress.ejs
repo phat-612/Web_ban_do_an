@@ -34,10 +34,10 @@
     </nav>
 
     <div class="col-md-9 ms-5">
-      <h1 class="text-center m-4">THÊM ĐỊA CHỈ</h1>
+      <h1 class="text-center m-4">SỬA ĐỊA CHỈ</h1>
       <div class="row">
         <div class="col-6">
-          <form method="POST" action="/api/address">
+          <form method="POST" action="/api/editAddress">
             <div class="row mb-3">
               <div class="col-12">
                 <label for="fullname" class="form-label">Họ và tên *</label>
@@ -46,6 +46,7 @@
                   class="form-control"
                   name="name"
                   id="fullname"
+                  value="<%= data.address.name %>"
                   required
                 />
               </div>
@@ -56,6 +57,7 @@
                   class="form-control"
                   name="phone"
                   id="phone"
+                  value="<%= data.address.phone %>"
                   required
                 />
               </div>
@@ -69,6 +71,7 @@
                   class="form-control"
                   name="province"
                   id="province"
+                  data-province="<%= data.address.province %>"
                 >
                   <option value="">Vui lòng chọn</option>
                 </select>
@@ -80,13 +83,20 @@
                   class="form-control"
                   name="district"
                   id="district"
+                  data-district="<%= data.address.district %>"
                 >
                   <option value="">Vui lòng chọn</option>
                 </select>
               </div>
               <div class="col-12">
                 <label for="ward" class="form-label">Xã/Thị trấn *</label>
-                <select required class="form-control" name="ward" id="ward">
+                <select
+                  required
+                  class="form-control"
+                  name="ward"
+                  id="ward"
+                  data-ward="<%= data.address.ward %>"
+                >
                   <option value="">Vui lòng chọn</option>
                 </select>
               </div>
@@ -99,9 +109,16 @@
                   id="location"
                   disabled
                   placeholder="Click vào bản đồ để chọn vị trí"
+                  value="<%= data.address.location %>"
                   required
                 />
-                <input type="text" name="location" hidden required />
+                <input
+                  type="text"
+                  name="location"
+                  value="<%= data.address.location %>"
+                  hidden
+                  required
+                />
               </div>
               <!-- end -->
               <div class="col-12">
@@ -112,13 +129,20 @@
                   name="address"
                   id="address"
                   placeholder="Số nhà, tên đường"
+                  value="<%= data.address.address %>"
                   required
                 />
               </div>
             </div>
+            <input
+              type="text"
+              name="id"
+              value="<%= data.address.id %>"
+              hidden
+            />
             <div class="text-center">
               <button type="submit" class="btn btn-success w-100">
-                Thêm địa chỉ
+                Cập nhật địa chỉ
               </button>
             </div>
           </form>

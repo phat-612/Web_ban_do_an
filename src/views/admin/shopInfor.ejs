@@ -52,6 +52,64 @@
               value="<%= data.shopInfo.email %>"
             />
           </div>
+          <!-- process province, district, ward-->
+          <div class="col-12">
+            <label for="province" class="form-label">Tỉnh/Thành phố *</label>
+            <select
+              required
+              class="form-control"
+              name="province"
+              id="province"
+              data-province="<%= data.shopInfo.province %>"
+            >
+              <option value="">Vui lòng chọn</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <label for="district" class="form-label">Quận/Huyện *</label>
+            <select
+              required
+              class="form-control"
+              name="district"
+              id="district"
+              data-district="<%= data.shopInfo.district %>"
+            >
+              <option value="">Vui lòng chọn</option>
+            </select>
+          </div>
+          <div class="col-12">
+            <label for="ward" class="form-label">Xã/Thị trấn *</label>
+            <select
+              required
+              class="form-control"
+              name="ward"
+              id="ward"
+              data-ward="<%= data.shopInfo.ward %>"
+            >
+              <option value="">Vui lòng chọn</option>
+            </select>
+          </div>
+          <!-- required click on map -->
+          <div class="col-12">
+            <label for="" class="form-label">Vị trí trên bản đồ *</label>
+            <input
+              type="text"
+              class="form-control"
+              id="location"
+              disabled
+              placeholder="Click vào bản đồ để chọn vị trí"
+              value="<%= data.shopInfo.location %>"
+              required
+            />
+            <input
+              type="text"
+              name="location"
+              value="<%= data.shopInfo.location %>"
+              hidden
+              required
+            />
+          </div>
+          <!-- end -->
           <div class="mb-2">
             <label for="" class="form-label">Địa Chỉ :</label>
             <input
@@ -85,7 +143,3 @@
     </div>
   </div>
 </div>
-<script>
-  var map = L.map('map').setView([10.046260, 105.766599], 13);
-  L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
-</script>
