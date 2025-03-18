@@ -62,9 +62,11 @@ $(document).ready(function () {
           `<div class="row d-flex justify-content-around align-items-center mb-3 position-relative">
           <div
           class="tag position-absolute top-0 start-0 bg-danger rounded-pill px-2 text-white"
-          style="z-index: 10; width: 150px;"
+          style="z-index: 10; width: 115px;${
+            item.isBussiness || item.isExit ? "display:none" : ""
+          }"
         >
-          Ngừng kinh doanh
+          Không có sẵn
         </div>
             <input type="hidden" name="productId" value="${item.id}">
             <div class="col-2">
