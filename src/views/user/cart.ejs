@@ -21,17 +21,17 @@
         <div
           class="row position-relative shadow p-1 mb-3 bg-body rounded justify-content-between"
         >
-          <% if (!cart.isBussiness) { %>
+          <% if (cart.isBussiness != 1) { %>
           <div
             class="tag position-absolute top-0 start-0 bg-danger rounded-pill px-2 text-white"
-            style="z-index: 10;max-width: 150px;"
+            style="z-index: 10; max-width: 150px"
           >
             Ngừng kinh doanh
           </div>
-          <% } else if (!cart.isExit){ %>
+          <% } else if (cart.isExit != 1){ %>
           <div
             class="tag position-absolute top-0 start-0 bg-danger rounded-pill px-2 text-white"
-            style="z-index: 10;max-width: 90px;"
+            style="z-index: 10; max-width: 90px"
           >
             Hết hàng
           </div>
@@ -113,6 +113,7 @@
         <input type="text" hidden name="nameDelivery" />
         <input type="text" hidden name="phoneDelivery" />
         <input type="text" hidden name="addressDelivery" />
+        <input type="text" hidden name="locationDelivery" />
         <!-- kết thúc -->
       </div>
       <div class="rounded border p-1 mb-2">
@@ -138,6 +139,12 @@
             <span>125.000đ</span>
           </div>
           <!-- kết thúc -->
+        </div>
+        <div class="fs-5 areaShiping" style="display: none">
+          <div class="d-flex justify-content-between">
+            <span>Phí vận chuyển</span>
+            <span></span>
+          </div>
         </div>
         <!-- tong cong -->
         <div class="d-flex justify-content-between fs-4 text-danger">
@@ -186,7 +193,8 @@
             value="<%= address.name %> - <%= address.phone %> - <%=
             address.address %>" data-bs-name="<%= address.name %>"
             data-bs-phone="<%= address.phone %>" data-bs-address="<%=
-            address.address %>" <%= address.isDefault ? 'checked' : '' %> />
+            address.address %>" data-bs-location="<%= address.location %>" <%=
+            address.isDefault ? 'checked' : '' %> />
           </div>
           <label class="col-11" for="address<%= address.id %>">
             <div class="d-flex justify-content-between">
@@ -203,3 +211,6 @@
     </div>
   </div>
 </div>
+<script>
+  const locationShop = JSON.parse("<%= infoShop.location %>");
+</script>

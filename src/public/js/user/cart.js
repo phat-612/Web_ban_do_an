@@ -2,6 +2,8 @@ $(document).ready(function () {
   let debounceTimer;
   let currentIdProduct;
   let currentQuantityProduct;
+  let locationUser;
+  let priceShip = 0;
   // function
   //  hàm debounce
   function debounce(func, delay) {
@@ -12,8 +14,31 @@ $(document).ready(function () {
       debounceTimer = setTimeout(() => func.apply(this, args), delay);
     };
   }
+  //get distance
+  function findRoute(start, end) {
+    fetch(
+      `https://graphhopper.com/api/1/route?vehicle=car&locale=en&key=LijBPDQGfu7Iiq80w3HzwB4RUDJbMbhs6BU0dEnn&elevation=false&instructions=true&turn_costs=true&point=${start[0]}%2C${start[1]}&point=${end[0]}%2C${end[1]}`
+    )
+      .then((res) => res.json())
+      .then((data) => {
+        if (data.paths && data.paths.length > 0) {
+          priceShip =
+            Math.round(parseInt(data.paths[0].distance * 7) / 1000) * 1000;
+          $(
+            "#formOrder > div.col-5 > div:nth-child(4) > div.fs-5.areaShiping > div > span:nth-child(2)"
+          ).text(priceShip.toLocaleString("vi-VN"));
+          loadTotal();
+        } else {
+          alert("Không tìm thấy đường đi");
+        }
+      })
+      .catch((error) => console.error("Error fetching route:", error));
+  }
   const setAddress = () => {
     const eleAddressChecked = $('input[name="address"]:checked');
+    if (eleAddressChecked.length == 0) {
+      return;
+    }
     $(".showAddress").text(eleAddressChecked.val());
     $('input[name="nameDelivery"]').val(eleAddressChecked.attr("data-bs-name"));
     $('input[name="phoneDelivery"]').val(
@@ -21,6 +46,18 @@ $(document).ready(function () {
     );
     $('input[name="addressDelivery"]').val(
       eleAddressChecked.attr("data-bs-address")
+    );
+    $('input[name="locationDelivery"]').val(
+      eleAddressChecked.attr("data-bs-location")
+    );
+    if (eleAddressChecked.attr("data-bs-location") != undefined) {
+      locationUser = JSON.parse(eleAddressChecked.attr("data-bs-location"));
+    }
+
+    findRoute(locationShop, locationUser);
+    $("#formOrder > div.col-5 > div:nth-child(4) > div.fs-5.areaShiping").css(
+      "display",
+      "block"
     );
   };
   //   hàm update số lượng lên server và total
@@ -82,14 +119,22 @@ $(document).ready(function () {
     const countProductBuy = dataProduct.filter((item) => item.isBuy).length;
     if (countProductBuy == 0) {
       $(".btnOrder").attr("disabled", true);
+      $("#formOrder > div.col-5 > div:nth-child(4) > div.fs-5.areaShiping").css(
+        "display",
+        "none"
+      );
     } else {
       $(".btnOrder").removeAttr("disabled");
     }
-    $(".total").text(
-      dataProduct
-        .reduce((acc, cur) => (cur.isBuy ? acc + cur.total : acc), 0)
-        .toLocaleString("vi-VN")
+    let totalPrice = dataProduct.reduce(
+      (acc, cur) => (cur.isBuy ? acc + cur.total : acc),
+      0
     );
+
+    if (priceShip > 0 && totalPrice != 0) {
+      totalPrice += priceShip;
+    }
+    $(".total").text(totalPrice.toLocaleString("vi-VN"));
   };
   // xử lý khi website load
   loadTotal();

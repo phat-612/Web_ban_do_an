@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 18, 2025 at 12:05 PM
+-- Generation Time: Mar 19, 2025 at 05:52 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -32,15 +32,20 @@ CREATE TABLE `addresses` (
   `idUser` int(11) NOT NULL,
   `name` varchar(255) NOT NULL,
   `phone` varchar(12) NOT NULL,
-  `address` varchar(255) NOT NULL
+  `address` varchar(255) NOT NULL,
+  `province` varchar(255) NOT NULL,
+  `district` varchar(255) NOT NULL,
+  `ward` varchar(255) NOT NULL,
+  `location` varchar(255) NOT NULL,
+  `isDefault` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `addresses`
 --
 
-INSERT INTO `addresses` (`id`, `idUser`, `name`, `phone`, `address`) VALUES
-(1, 1, 'Nguyễn Phát 1', '1234567890', 'ct');
+INSERT INTO `addresses` (`id`, `idUser`, `name`, `phone`, `address`, `province`, `district`, `ward`, `location`, `isDefault`) VALUES
+(3, 1, 'Nguyễn Phát', '1234567890', '26/10', 'Thành phố Cần Thơ', 'Quận Bình Thuỷ', 'Phường Bình Thủy', '[10.077179759279913, 105.7475296928458]', 0);
 
 -- --------------------------------------------------------
 
@@ -78,6 +83,15 @@ CREATE TABLE `carts` (
   `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
   `isBuy` tinyint(1) NOT NULL DEFAULT 0
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Dumping data for table `carts`
+--
+
+INSERT INTO `carts` (`id`, `idUser`, `idProduct`, `quantity`, `created_at`, `isBuy`) VALUES
+(6, 1, 1, 2, '2025-03-19 14:33:10', 1),
+(7, 1, 84, 1, '2025-03-19 14:33:10', 0),
+(8, 1, 90, 1, '2025-03-19 14:44:29', 1);
 
 -- --------------------------------------------------------
 
@@ -314,8 +328,8 @@ INSERT INTO `products` (`id`, `name`, `currentPrice`, `description`, `image`, `s
 (81, 'Bí đỏ nướng (100g)', 6000, NULL, 'Bí đỏ nướng (100g)1742294686.5734253.png', 0, 1, 1, 6, '2025-03-18 10:48:12'),
 (82, 'Khoai lang nướng (150g)', 12000, NULL, 'Khoai lang nướng (150g)1742294687.1403031.png', 0, 1, 1, 6, '2025-03-18 10:48:12'),
 (83, 'Khoai lang nướng (100g)', 8000, NULL, 'Khoai lang nướng (100g)1742294687.3509266.png', 0, 1, 1, 6, '2025-03-18 10:48:12'),
-(84, 'Khoai tây nướng (150g)', 7000, NULL, 'Khoai tây nướng (150g)1742294687.5494523.png', 0, 1, 1, 6, '2025-03-18 10:48:12'),
-(85, 'Khoai tây nướng (100g)', 5000, NULL, 'Khoai tây nướng (100g)1742294687.7510066.png', 0, 1, 1, 6, '2025-03-18 10:48:12'),
+(84, 'Khoai tây nướng (150g)', 7000, NULL, 'Khoai tây nướng (150g)1742294687.5494523.png', 0, 0, 0, 6, '2025-03-18 10:48:12'),
+(85, 'Khoai tây nướng (100g)', 5000, NULL, 'Khoai tây nướng (100g)1742294687.7510066.png', 0, 0, 0, 6, '2025-03-18 10:48:12'),
 (87, 'Đậu phụ sốt mật ong', 17000, NULL, 'Đậu phụ sốt mật ong1742294776.8610992.png', 0, 1, 1, 6, '2025-03-18 10:48:12'),
 (88, 'Quả bơ (80g)', 12000, NULL, 'Quả bơ (80g)1742294777.1330101.png', 0, 1, 1, 6, '2025-03-18 10:48:12'),
 (89, 'Quả bơ (40g)', 6000, NULL, 'Quả bơ (40g)1742294777.362255.png', 0, 1, 1, 6, '2025-03-18 10:48:12'),
@@ -359,16 +373,20 @@ CREATE TABLE `shopinfo` (
   `email` varchar(255) NOT NULL,
   `address` varchar(255) NOT NULL,
   `activeTime` varchar(255) NOT NULL,
-  `idEditor` int(11) NOT NULL
+  `idEditor` int(11) NOT NULL,
+  `location` varchar(255) NOT NULL,
+  `province` varchar(255) NOT NULL,
+  `district` varchar(255) NOT NULL,
+  `ward` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `shopinfo`
 --
 
-INSERT INTO `shopinfo` (`name`, `phone`, `taxCode`, `email`, `address`, `activeTime`, `idEditor`) VALUES
-('ShopBear', '0382909902', '24244432242-24324', 'lienhe@shopbear.com', '26/10 hẻm 9 lê hồng phong, bình thủy, bình thủy, cần thơ', '8:00 - 22:00', 1),
-('ShopBear', '0382909902', '24244432242-24324', 'lienhe@shopbear.com', '26/10 hẻm 9 lê hồng phong, bình thủy, bình thủy, cần thơ', '8:00 - 22:00', 1);
+INSERT INTO `shopinfo` (`name`, `phone`, `taxCode`, `email`, `address`, `activeTime`, `idEditor`, `location`, `province`, `district`, `ward`) VALUES
+('ShopBear', '0382909902', '24244432242-24324', 'lienhe@shopbear.com', 'heẻm 311', '8:00 - 22:00', 1, '[10.047365387127217, 105.7699728012085]', 'Thành phố Cần Thơ', 'Quận Ninh Kiều', 'Phường An Hòa'),
+('ShopBear', '0382909902', '24244432242-24324', 'lienhe@shopbear.com', 'heẻm 311', '8:00 - 22:00', 1, '[10.047365387127217, 105.7699728012085]', 'Thành phố Cần Thơ', 'Quận Ninh Kiều', 'Phường An Hòa');
 
 -- --------------------------------------------------------
 
@@ -483,7 +501,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT for table `banners`
@@ -495,7 +513,7 @@ ALTER TABLE `banners`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT for table `categories`

@@ -1,29 +1,66 @@
-<div class="row mt-3 d-flex justify-content-center" style="background-color: rgb(52,133 ,89);">
+<div
+  class="row mt-3 d-flex justify-content-center"
+  style="background-color: rgb(52, 133, 89)"
+>
   <div class="col-2 my-3">
-    <img width="200" height="230" src="/imgs/static/logo.png" alt="logo image" />
+    <img
+      width="200"
+      height="230"
+      src="/imgs/static/logo.png"
+      alt="logo image"
+    />
   </div>
   <div class="col-4 my-3">
     <div class="mb-3">
       <div class="col-12 row d-flex justify-content-center align-items-center">
         <div class="col-12 d-flex justify-content-center align-items-center">
-          <a href="tel:<%= infoShop.phone %>" class="text-white h5" style="margin-bottom: -3px; text-decoration: none;text-shadow: 2px 2px 4px #000000;"><%= infoShop.phone %></a>
+          <a
+            href="tel:<%= infoShop.phone %>"
+            class="text-white h5"
+            style="
+              margin-bottom: -3px;
+              text-decoration: none;
+              text-shadow: 2px 2px 4px #000000;
+            "
+            ><%= infoShop.phone %></a
+          >
         </div>
-        <div style="background-color: white; border-radius: 40px; height: 20px; box-shadow: 2px 2px 4px #000000;" class="col-7 d-flex justify-content-center align-items-center">
+        <div
+          style="
+            background-color: white;
+            border-radius: 40px;
+            height: 20px;
+            box-shadow: 2px 2px 4px #000000;
+          "
+          class="col-7 d-flex justify-content-center align-items-center"
+        >
           <span class="text-dark fw-bold">GIAO HÀNG TẬN NƠI</span>
         </div>
       </div>
     </div>
     <div class="mb-3">
-      <h6 class="fw-bold text-white">THỜI GIAN MỞ CỬA: <%= infoShop.activeTime %></h6>
+      <h6 class="fw-bold text-white">
+        THỜI GIAN MỞ CỬA: <%= infoShop.activeTime %>
+      </h6>
     </div>
     <div class="mb-3">
       <h6 class="fw-bold text-white">CỬA HÀNG: <%= infoShop.address %></h6>
     </div>
     <div class="mb-3">
-      <a href="/paymentAndOrderPolicy" class="h6 fw-bold text-white" style="text-decoration: none;">CHÍNH SÁCH SÁCH THANH TOÁN VÀ ĐẶT HÀNG</a>
+      <a
+        href="/paymentAndOrderPolicy"
+        class="h6 fw-bold text-white"
+        style="text-decoration: none"
+        >CHÍNH SÁCH SÁCH THANH TOÁN VÀ ĐẶT HÀNG</a
+      >
     </div>
     <div class="mb-3">
-      <a href="/guideOrder" class="h6 fw-bold text-white" style="text-decoration: none;">HƯỚNG DẪN ĐẶT PHẦN ĂN</a>
+      <a
+        href="/guideOrder"
+        class="h6 fw-bold text-white"
+        style="text-decoration: none"
+        >HƯỚNG DẪN ĐẶT PHẦN ĂN</a
+      >
     </div>
   </div>
   <div class="col-4 my-3">
@@ -31,14 +68,32 @@
       <h4 class="fw-bold fst-italic text-white">HÃY KẾT NỐI VỚI CHÚNG TÔI</h4>
     </div>
     <div class="mb-3">
-      <a class="fw-bold text-white h4" style="text-decoration: none;"><i style="color:rgb(80,185 ,10 );" class="bi bi-facebook"></i> FACEBOOK</a>
+      <a class="fw-bold text-white h4" style="text-decoration: none"
+        ><i style="color: rgb(80, 185, 10)" class="bi bi-facebook"></i>
+        FACEBOOK</a
+      >
     </div>
     <div class="mb-3">
-      <p type="Email:<%= infoShop.email %>" class="fw-bold text-white h4" style="text-decoration: none;"><i style="color:rgb(80,185 ,10 );" class="bi bi-envelope"></i> <%= infoShop.email %></p>
+      <p
+        type="Email:<%= infoShop.email %>"
+        class="fw-bold text-white h4"
+        style="text-decoration: none"
+      >
+        <i style="color: rgb(80, 185, 10)" class="bi bi-envelope"></i> <%=
+        infoShop.email %>
+      </p>
     </div>
     <div class="mb-3">
-      <a href="/feedback" class="fw-bold text-white h4" style="text-decoration: none;">
-        <i style="color:rgb(80,185 ,10 );" class="bi bi-exclamation-square-fill"></i> FEEDBACK
+      <a
+        href="/feedback"
+        class="fw-bold text-white h4"
+        style="text-decoration: none"
+      >
+        <i
+          style="color: rgb(80, 185, 10)"
+          class="bi bi-exclamation-square-fill"
+        ></i>
+        FEEDBACK
       </a>
     </div>
   </div>

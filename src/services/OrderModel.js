@@ -41,6 +41,8 @@ const getOrders = async (id) => {
 };
 const addOrder = async (order, orderDetail) => {
   // thêm sản dữ liệu vào bảng orders
+  console.log("order", order);
+  console.log("orderDetail", orderDetail);
   const [rows, fields] = await pool.execute(
     "INSERT INTO `orders` (`idUser`, `name`, `phone`, `address`, `note`, `total`, `status` ) VALUES (?, ?, ?, ?, ?, ?, ?)",
     [

@@ -5,6 +5,7 @@ import cartModel from "../services/CartModel";
 import orderModel from "../services/OrderModel";
 import bannerModel from "../services/BannerModel";
 import feedbackModel from "../services/FeedbackModel";
+import ShopModel from "../services/ShopModel";
 import bcrypt from "bcrypt";
 
 // TRANG CHU
@@ -143,7 +144,11 @@ const updateIsBuyCart = async (req, res) => {
   return res.json({ status: true, message: "Cập nhật thành công" });
 };
 const addOrder = async (req, res) => {
-  const data = req.body;
+  const dataForm = req.body;
+  const start = JSON.parse(dataForm.locationDelivery);
+  const infoShop = await ShopModel.getInfoShop();
+  console.log(infoShop);
+  const end = JSON.parse(infoShop[0].location);
   const user = req.session.user;
   let cartProducts = await cartModel.getCartDetail(user.id);
   cartProducts = cartProducts.filter(
@@ -167,18 +172,33 @@ const addOrder = async (req, res) => {
     (acc, product) => acc + product.currentPrice * product.quantity,
     0
   );
-  const dataOrder = {
-    idUser: user.id,
-    name: data.nameDelivery,
-    phone: data.phoneDelivery,
-    address: data.addressDelivery,
-    note: data.description,
-    total,
-    status: 1,
-  };
-  await orderModel.addOrder(dataOrder, dataDetailOrder);
-
-  return res.redirect("/historyProduct");
+  fetch(
+    `https://graphhopper.com/api/1/route?vehicle=car&locale=en&key=LijBPDQGfu7Iiq80w3HzwB4RUDJbMbhs6BU0dEnn&elevation=false&instructions=true&turn_costs=true&point=${start[0]}%2C${start[1]}&point=${end[0]}%2C${end[1]}`
+  )
+    .then((res) => res.json())
+    .then((data) => {
+      if (data.paths && data.paths.length > 0) {
+        let priceShip =
+          Math.round(parseInt(data.paths[0].distance * 7) / 1000) * 1000;
+        total += priceShip;
+        const dataOrder = {
+          idUser: user.id,
+          name: dataForm.nameDelivery,
+          phone: dataForm.phoneDelivery,
+          address: dataForm.addressDelivery,
+          note: dataForm.description || "Không có ghi chú",
+          total,
+          status: 1,
+        };
+        return orderModel.addOrder(dataOrder, dataDetailOrder);
+      } else {
+        alert("Không tìm thấy đường đi");
+      }
+    })
+    .then((data) => {
+      return res.redirect("/historyProduct");
+    })
+    .catch((error) => console.error("Error fetching route:", error));
 };
 // end cart
 // start profile
