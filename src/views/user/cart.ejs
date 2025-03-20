@@ -114,6 +114,9 @@
         <input type="text" hidden name="phoneDelivery" />
         <input type="text" hidden name="addressDelivery" />
         <input type="text" hidden name="locationDelivery" />
+        <input type="text" hidden name="provinceDelivery" />
+        <input type="text" hidden name="districtDelivery" />
+        <input type="text" hidden name="wardDelivery" />
         <!-- kết thúc -->
       </div>
       <div class="rounded border p-1 mb-2">
@@ -193,7 +196,9 @@
             value="<%= address.name %> - <%= address.phone %> - <%=
             address.address %>" data-bs-name="<%= address.name %>"
             data-bs-phone="<%= address.phone %>" data-bs-address="<%=
-            address.address %>" data-bs-location="<%= address.location %>" <%=
+            address.address %>" data-bs-location="<%= address.location %>"
+            data-bs-province="<%= address.province %>" data-bs-district="<%=
+            address.district %>" data-bs-ward="<%= address.ward %>" <%=
             address.isDefault ? 'checked' : '' %> />
           </div>
           <label class="col-11" for="address<%= address.id %>">

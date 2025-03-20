@@ -178,14 +178,16 @@ const addOrder = async (req, res) => {
     .then((res) => res.json())
     .then((data) => {
       if (data.paths && data.paths.length > 0) {
-        let priceShip =
-          Math.round(parseInt(data.paths[0].distance * 7) / 1000) * 1000;
+        let distance = data.paths[0].distance;
+        let priceShip = Math.round(parseInt(distance * 7) / 1000) * 1000;
         total += priceShip;
         const dataOrder = {
           idUser: user.id,
+          distance,
+          location: start,
           name: dataForm.nameDelivery,
           phone: dataForm.phoneDelivery,
-          address: dataForm.addressDelivery,
+          address: `${dataForm.addressDelivery} - ${dataForm.wardDelivery} - ${dataForm.districtDelivery} - ${dataForm.provinceDelivery}`,
           note: dataForm.description || "Không có ghi chú",
           total,
           status: 1,

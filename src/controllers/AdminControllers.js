@@ -449,7 +449,15 @@ const updateInfoShop = async (req, res) => {
 // DELIVERY ( VAN CHUYEN )
 
 const getDeliveryListPage = async (req, res) => {
-  const orderList = await orderModel.getOrdersByStatusPedding();
+  let orderList = await orderModel.getOrdersByStatusPedding();
+  // process data
+  orderList = orderList.map((order) => {
+    return {
+      ...order,
+      distance: (order.distance / 1000).toFixed(2),
+      timeDelivery: ((order.distance / 1000) * 4.5).toFixed(0),
+    };
+  });
   res.render("main", {
     data: {
       title: "Delivery List",
@@ -463,14 +471,14 @@ const getDeliveryListPage = async (req, res) => {
 const getDeliveryDetailPage = async (req, res) => {
   const id = req.params.id;
 
-  const orders = await orderModel.getAllOrderFullById(id);
-
+  const detailOrder = await orderModel.getDetailOrderById(id);
   res.render("main", {
     data: {
       title: "Delivery Detail",
       header: "partials/delivery/headerDeliveryDetail",
       page: "admin/deliveryPage/shippingOrderDetail",
-      orderFull: orders, // Dữ liệu đã xử lý
+      detailOrder,
+      script: "admin/delivery/shippingOrderDetail",
     },
   });
 };

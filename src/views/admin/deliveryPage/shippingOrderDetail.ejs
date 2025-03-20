@@ -1,46 +1,50 @@
 <div class="w-100 d-flex justify-content-center row">
-    <div style="height: 500px; width: 330px;" class="col-11 mb-2">
-        <div id="map" class="w-100 h-100"></div>
+  <div style="height: 500px; width: 330px" class="col-11 mb-2">
+    <div id="map" class="w-100 h-100"></div>
+  </div>
+  <div class="col-11 mb-2">
+    <div class="w-100 row">
+      <div class="col-12 d-flex justify-content-center"></div>
+      <div class="col-6">
+        <p>Tên: <strong><%= data.detailOrder.customer_name%></strong></p>
+      </div>
+      <div class="col-6">
+        <p>SDT: <strong><%= data.detailOrder.phone%></strong></p>
+      </div>
+      <div class="col-12">
+        <p>
+          Địa Chỉ:
+          <strong><%= data.detailOrder.address%></strong>
+        </p>
+      </div>
     </div>
-    <div class="col-11 mb-2">
-        <div class="w-100 row">
-            <div class="col-12 d-flex justify-content-center">
-                <p>Số km còn lại: <strong>13km</strong></p>
-            </div>
-            <div class="col-6">
-                <p>Tên: <strong>Cam Đại Hưng</strong></p>
-            </div>
-            <div class="col-6">
-                <p>SDT: <strong>0354514832</strong></p>
-            </div>
-            <div class="col-12">
-                <p>Địa Chỉ: <strong>so 55, duong 3/2,Phuong Xuan Khanh, Quan Ninh Kieu, Thành Pho Can Tho</strong></p>
-            </div>
+  </div>
+  <div class="col-11 mb-2">
+    <h6>Danh Sách Đơn Hàng</h6>
+  </div>
+  <div class="col-11 mb-2">
+    <!-- day la 1 the san pham  -->
+    <% data.detailOrder.order_details.forEach((product, index) => { %>
+    <div
+      class="w-100 row bg-success text-white rounded-3 mb-2"
+      style="padding: 0.5%"
+    >
+      <div class="col-3">
+        <img
+          src="/imgs/products/<%= product.ProductImage %>"
+          alt=""
+          class="w-100 h-100 rounded-3"
+        />
+      </div>
+      <div class="col-8 row ms-3">
+        <div class="col-12">
+          <p>Tên món: <strong><%= product.ProductName %></strong></p>
         </div>
-    </div>
-    <div class="col-11 mb-2">
-        <h6>Danh Sách Đơn Hàng</h6>
-    </div>
-    <div class="col-11 mb-2">
-        <!-- day la 1 the san pham  -->
-        <div class="w-100 row bg-success text-white rounded-3 mb-2" style="padding: 0.5%;">
-            <div class="col-3">
-                <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRrE317Uqf454SKaIYActAKxZqWc1CD4dyDqQ&s" alt="" class="w-100 h-100 rounded-3">
-            </div>
-            <div class="col-8 row ms-3">
-                <div class="col-12">
-                    <p>Tên món: <strong>Phở bò</strong></p>
-                </div>
-                <div class="col-12">
-                    <p>Số Lượng: <strong>15</strong></p>
-                </div>
-            </div>
+        <div class="col-12">
+          <p>Số Lượng: <strong><%= product.Quantity %></strong></p>
         </div>
+      </div>
     </div>
+    <% }); %>
+  </div>
 </div>
-<%=  JSON.stringify(data.orderFull) %>
-
-<script>
-    var map = L.map('map').setView([10.046260, 105.766599], 13);
-    L.tileLayer('https://tile.openstreetmap.org/{z}/{x}/{y}.png', {attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'}).addTo(map);
-</script>

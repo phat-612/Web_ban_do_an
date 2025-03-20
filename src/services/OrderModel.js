@@ -44,7 +44,7 @@ const addOrder = async (order, orderDetail) => {
   console.log("order", order);
   console.log("orderDetail", orderDetail);
   const [rows, fields] = await pool.execute(
-    "INSERT INTO `orders` (`idUser`, `name`, `phone`, `address`, `note`, `total`, `status` ) VALUES (?, ?, ?, ?, ?, ?, ?)",
+    "INSERT INTO `orders` (`idUser`, `name`, `phone`, `address`, `note`, `total`, `status`, `distance` ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
     [
       order.idUser,
       order.name,
@@ -53,6 +53,7 @@ const addOrder = async (order, orderDetail) => {
       order.note,
       order.total,
       order.status,
+      order.distance,
     ]
   );
   const idOrder = rows.insertId;
@@ -99,6 +100,7 @@ const getOrdersByStatusPedding = async () => {
     o.note,
     o.total,
     o.status,
+    o.distance,
     o.created_at AS order_created_at,
     od.id AS order_detail_id,
     od.quantity,
@@ -122,7 +124,51 @@ AND od.idProduct = (
   );
   return rows;
 };
+const getDetailOrderById = async (idOrder) => {
+  const [rows, fields] = await pool.execute(
+    `
+    SELECT 
+    o.id AS order_id,
+    o.idUser,
+    o.name AS customer_name,
+    o.phone,
+    o.address,
+    o.note,
+    o.total,
+    o.status,
+    o.created_at AS order_created_at,
+    o.distance,
+    GROUP_CONCAT(
+        CONCAT(
+            'ID: ', od.id, 
+            ', ProductID: ', od.idProduct, 
+            ', Quantity: ', od.quantity, 
+            ', Price: ', od.price, 
+            ', ProductName: ', p.name, 
+            ', ProductImage: ', p.image, 
+            ', CreatedAt: ', od.created_at
+        ) SEPARATOR ' | '
+    ) AS order_details
+FROM webbandoan.orders o
+JOIN webbandoan.orderdetail od ON o.id = od.idOrder
+JOIN webbandoan.products p ON od.idProduct = p.id
+WHERE o.id = ?
+GROUP BY o.id;
+`,
+    [idOrder]
+  );
+  const array = rows[0].order_details.split(" | ").map((item) => {
+    const obj = {};
+    item.split(", ").forEach((pair) => {
+      const [key, value] = pair.split(": ").map((s) => s.trim());
+      obj[key] = isNaN(value) || key === "CreatedAt" ? value : Number(value);
+    });
+    return obj;
+  });
 
+  rows[0].order_details = array;
+  return rows[0];
+};
 export default {
   getAllOrderFull,
   addOrder,
@@ -134,4 +180,5 @@ export default {
   getAllOrderFullByIdUser,
   // FOR DELIVERY
   getOrdersByStatusPedding,
+  getDetailOrderById,
 };

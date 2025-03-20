@@ -50,6 +50,13 @@ $(document).ready(function () {
     $('input[name="locationDelivery"]').val(
       eleAddressChecked.attr("data-bs-location")
     );
+    $('input[name="provinceDelivery"]').val(
+      eleAddressChecked.attr("data-bs-province")
+    );
+    $('input[name="districtDelivery"]').val(
+      eleAddressChecked.attr("data-bs-district")
+    );
+    $('input[name="wardDelivery"]').val(eleAddressChecked.attr("data-bs-ward"));
     if (eleAddressChecked.attr("data-bs-location") != undefined) {
       locationUser = JSON.parse(eleAddressChecked.attr("data-bs-location"));
     }
