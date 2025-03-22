@@ -20,6 +20,7 @@ map.on("locationerror", (e) => alert(e.message));
 map.locate({ setView: true, maxZoom: 16 });
 
 const findRoute = (start, end) => {
+  console.log("Tìm đường đi");
   fetch(
     `https://graphhopper.com/api/1/route?vehicle=car&locale=en&key=LijBPDQGfu7Iiq80w3HzwB4RUDJbMbhs6BU0dEnn&elevation=false&instructions=true&turn_costs=true&point=${start[0]},${start[1]}&point=${end[0]},${end[1]}`
   )
@@ -63,9 +64,14 @@ setInterval(() => {
   navigator.geolocation?.getCurrentPosition(
     ({ coords }) => {
       let latlng = [coords.latitude, coords.longitude];
-      moveMarker(...latlng);
-      if (isOffRoute(latlng)) findRoute(latlng, locationEnd);
-      previousLocation = latlng;
+      if (
+        !previousLocation ||
+        haversineDistance(previousLocation, latlng) >= 50
+      ) {
+        moveMarker(...latlng);
+        if (isOffRoute(latlng)) findRoute(latlng, locationEnd);
+        previousLocation = latlng;
+      }
     },
     () => console.log("Trình duyệt không hỗ trợ Geolocation!")
   );
