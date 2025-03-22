@@ -9,7 +9,7 @@
         <p>Tên: <strong><%= data.detailOrder.customer_name%></strong></p>
       </div>
       <div class="col-6">
-        <p>SDT: <strong><%= data.detailOrder.phone%></strong></p>
+        <p>SDT: <strong><%= data.detailOrder.location%></strong></p>
       </div>
       <div class="col-12">
         <p>
@@ -48,3 +48,9 @@
     <% }); %>
   </div>
 </div>
+<script>
+  console.log("location user", "<%= data.detailOrder.location %>");
+  console.log("location shop", "<%= infoShop.location %>");
+  let locationEnd = JSON.parse("<%=data.detailOrder.location%>");
+  let locationStart = JSON.parse("<%=infoShop.location%>");
+</script>

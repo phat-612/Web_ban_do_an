@@ -184,7 +184,7 @@ const addOrder = async (req, res) => {
         const dataOrder = {
           idUser: user.id,
           distance,
-          location: start,
+          location: dataForm.locationDelivery,
           name: dataForm.nameDelivery,
           phone: dataForm.phoneDelivery,
           address: `${dataForm.addressDelivery} - ${dataForm.wardDelivery} - ${dataForm.districtDelivery} - ${dataForm.provinceDelivery}`,

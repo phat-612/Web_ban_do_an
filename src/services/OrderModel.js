@@ -136,6 +136,7 @@ const getDetailOrderById = async (idOrder) => {
     o.note,
     o.total,
     o.status,
+    o.location,
     o.created_at AS order_created_at,
     o.distance,
     GROUP_CONCAT(
