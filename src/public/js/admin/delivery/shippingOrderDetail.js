@@ -76,3 +76,39 @@ setInterval(() => {
     () => console.log("Trình duyệt không hỗ trợ Geolocation!")
   );
 }, 1000);
+
+// button
+const failedButton = document.getElementById("failedButton");
+const successButton = document.getElementById("successButton");
+
+failedButton.addEventListener("click", () => {
+  const confirm = window.confirm("Bạn có chắc muốn hủy đơn hàng này?");
+  if (confirm) {
+    console.log("Hủy đơn hàng");
+    changeStatusOrder(5);
+  }
+});
+
+successButton.addEventListener("click", () => {
+  const confirm = window.confirm(
+    "Bạn có chắc muốn xác nhận hoàn thành đơn hàng này?"
+  );
+  if (confirm) {
+    changeStatusOrder(4);
+    console.log("Xác nhận đơn hàng");
+  }
+});
+function changeStatusOrder(status) {
+  fetch(`/api/updateOrderStatus`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      status: status,
+      orderId,
+    }),
+  }).then((data) => {
+    window.location.href = "/admin/deliveryList";
+  });
+}
