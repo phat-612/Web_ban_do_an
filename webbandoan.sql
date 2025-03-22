@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Mar 19, 2025 at 05:52 PM
+-- Generation Time: Mar 22, 2025 at 07:56 AM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.1.25
 
@@ -45,7 +45,7 @@ CREATE TABLE `addresses` (
 --
 
 INSERT INTO `addresses` (`id`, `idUser`, `name`, `phone`, `address`, `province`, `district`, `ward`, `location`, `isDefault`) VALUES
-(3, 1, 'Nguyễn Phát', '1234567890', '26/10', 'Thành phố Cần Thơ', 'Quận Bình Thuỷ', 'Phường Bình Thủy', '[10.077179759279913, 105.7475296928458]', 0);
+(4, 1, 'Nguyễn Phát', '1234567890', '26/10', 'Thành phố Cần Thơ', 'Quận Bình Thuỷ', 'Phường Bình Thủy', '[10.078621649474586, 105.74668542652915]', 0);
 
 -- --------------------------------------------------------
 
@@ -89,9 +89,7 @@ CREATE TABLE `carts` (
 --
 
 INSERT INTO `carts` (`id`, `idUser`, `idProduct`, `quantity`, `created_at`, `isBuy`) VALUES
-(6, 1, 1, 2, '2025-03-19 14:33:10', 1),
-(7, 1, 84, 1, '2025-03-19 14:33:10', 0),
-(8, 1, 90, 1, '2025-03-19 14:44:29', 1);
+(19, 1, 1, 1, '2025-03-21 07:04:45', 1);
 
 -- --------------------------------------------------------
 
@@ -173,11 +171,9 @@ CREATE TABLE `orderdetail` (
 --
 
 INSERT INTO `orderdetail` (`id`, `idOrder`, `idProduct`, `quantity`, `price`, `created_at`) VALUES
-(1, 1, 3, 1, 109000, '2025-03-18 10:28:04'),
-(2, 2, 1, 2, 30000, '2025-03-18 10:30:43'),
-(3, 2, 3, 2, 109000, '2025-03-18 10:30:43'),
-(4, 3, 1, 1, 30000, '2025-03-18 10:32:55'),
-(5, 3, 4, 1, 56000, '2025-03-18 10:32:55');
+(15, 10, 2, 1, 84000, '2025-03-20 19:32:08'),
+(16, 10, 7, 1, 88000, '2025-03-20 19:32:08'),
+(17, 10, 5, 1, 104000, '2025-03-20 19:32:08');
 
 -- --------------------------------------------------------
 
@@ -194,17 +190,17 @@ CREATE TABLE `orders` (
   `note` text DEFAULT NULL,
   `total` int(11) NOT NULL,
   `status` int(11) DEFAULT 1,
-  `created_at` timestamp NOT NULL DEFAULT current_timestamp()
+  `created_at` timestamp NOT NULL DEFAULT current_timestamp(),
+  `distance` int(11) NOT NULL,
+  `location` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Dumping data for table `orders`
 --
 
-INSERT INTO `orders` (`id`, `idUser`, `name`, `phone`, `address`, `note`, `total`, `status`, `created_at`) VALUES
-(1, 1, 'Nguyễn Phát 1', '1234567890', 'ct', '        a', 109000, 1, '2025-03-18 10:28:04'),
-(2, 1, 'Nguyễn Phát 1', '1234567890', 'ct', '        123', 278000, 1, '2025-03-18 10:30:43'),
-(3, 1, 'Nguyễn Phát 1', '1234567890', 'ct', '        rteesdfgfdgsfdfgfgdf', 86000, 1, '2025-03-18 10:32:55');
+INSERT INTO `orders` (`id`, `idUser`, `name`, `phone`, `address`, `note`, `total`, `status`, `created_at`, `distance`, `location`) VALUES
+(10, 1, 'Nguyễn Phát', '1234567890', '26/10 - Phường Bình Thủy - Quận Bình Thuỷ - Thành phố Cần Thơ', '        ', 313000, 5, '2025-03-20 19:32:08', 5261, '[10.078621649474586, 105.74668542652915]');
 
 -- --------------------------------------------------------
 
@@ -251,10 +247,10 @@ CREATE TABLE `products` (
 --
 
 INSERT INTO `products` (`id`, `name`, `currentPrice`, `description`, `image`, `sold`, `isExit`, `isBussiness`, `idCategory`, `created_at`) VALUES
-(1, 'L12', 30000, 'Salad tự chọn: dưa chua, cà chua ta, khoai tây, cà rốt, xà lách tím cuộn, xà lách xanh cuộn, bắp cải trắng, bắp cải tím, dưa chuột, ngô ngọt, củ đậu, ớt vàng Đà Lạt, ớt xanh Đà Lạt, cải ngó xuân, xà lách Frise, đậu Hà Lan, rau rocket, hành tây tím, dứa quả, đậu đũa, củ cải', 'L12 (liên hệ để được tư vấn cụ thể)1742292903.5529604.png', 0, 1, 1, 1, '2025-03-18 10:17:56'),
-(2, 'L11', 84000, 'Mì soba Nhật, cá saba áp chảo, nấm mèo xào, cải bó xôi luộc', 'L111742292904.1814141.png', 0, 1, 1, 1, '2025-03-18 10:17:56'),
-(3, 'L10', 109000, 'Cá hồi áp chảo, bí đỏ nướng, măng tây xào, nấm mèo xào, hạnh nhân', 'L101742292904.439046.png', 0, 1, 1, 1, '2025-03-18 10:17:56'),
-(4, 'L9', 56000, 'Nui xoắn, nạc vai bò, rau củ xào, đậu Hà Lan xào', 'L91742292904.6827044.png', 0, 1, 1, 1, '2025-03-18 10:17:56'),
+(1, 'L12', 30000, 'Salad tự chọn: dưa chua, cà chua ta, khoai tây, cà rốt, xà lách tím cuộn, xà lách xanh cuộn, bắp cải trắng, bắp cải tím, dưa chuột, ngô ngọt, củ đậu, ớt vàng Đà Lạt, ớt xanh Đà Lạt, cải ngó xuân, xà lách Frise, đậu Hà Lan, rau rocket, hành tây tím, dứa quả, đậu đũa, củ cải', 'L12 (liên hệ để được tư vấn cụ thể)1742292903.5529604.png', 1, 1, 1, 1, '2025-03-18 10:17:56'),
+(2, 'L11', 84000, 'Mì soba Nhật, cá saba áp chảo, nấm mèo xào, cải bó xôi luộc', 'L111742292904.1814141.png', 5, 1, 1, 1, '2025-03-18 10:17:56'),
+(3, 'L10', 109000, 'Cá hồi áp chảo, bí đỏ nướng, măng tây xào, nấm mèo xào, hạnh nhân', 'L101742292904.439046.png', 1, 1, 1, 1, '2025-03-18 10:17:56'),
+(4, 'L9', 56000, 'Nui xoắn, nạc vai bò, rau củ xào, đậu Hà Lan xào', 'L91742292904.6827044.png', 1, 1, 1, 1, '2025-03-18 10:17:56'),
 (5, 'L8', 104000, 'Cơm gạo tẻ, tôm sốt tiêu chanh, súp lơ trắng luộc, đậu Hà Lan xào', 'L81742292904.9153395.png', 0, 1, 1, 1, '2025-03-18 10:17:56'),
 (6, 'L7', 85000, 'Mỳ soba trà xanh, cá ngừ áp chảo, nấm hương tươi xào, súp lơ trắng luộc, đậu phụ sốt mật ong', 'L71742292905.1484206.png', 0, 1, 1, 1, '2025-03-18 10:17:56'),
 (7, 'L6', 88000, 'Mỳ soba trà xanh, sườn heo nướng, rau củ xào, măng tây xào', 'L61742292905.37961.png', 0, 1, 1, 1, '2025-03-18 10:17:56'),
@@ -385,8 +381,8 @@ CREATE TABLE `shopinfo` (
 --
 
 INSERT INTO `shopinfo` (`name`, `phone`, `taxCode`, `email`, `address`, `activeTime`, `idEditor`, `location`, `province`, `district`, `ward`) VALUES
-('ShopBear', '0382909902', '24244432242-24324', 'lienhe@shopbear.com', 'heẻm 311', '8:00 - 22:00', 1, '[10.047365387127217, 105.7699728012085]', 'Thành phố Cần Thơ', 'Quận Ninh Kiều', 'Phường An Hòa'),
-('ShopBear', '0382909902', '24244432242-24324', 'lienhe@shopbear.com', 'heẻm 311', '8:00 - 22:00', 1, '[10.047365387127217, 105.7699728012085]', 'Thành phố Cần Thơ', 'Quận Ninh Kiều', 'Phường An Hòa');
+('ShopBear', '0382909902', '24244432242-24324', 'lienhe@shopbear.com', 'heẻm 311', '8:00 - 22:00', 1, '[10.046690426873429, 105.76783776283266]', 'Thành phố Cần Thơ', 'Quận Ninh Kiều', 'Phường An Hòa'),
+('ShopBear', '0382909902', '24244432242-24324', 'lienhe@shopbear.com', 'heẻm 311', '8:00 - 22:00', 1, '[10.046690426873429, 105.76783776283266]', 'Thành phố Cần Thơ', 'Quận Ninh Kiều', 'Phường An Hòa');
 
 -- --------------------------------------------------------
 
@@ -501,7 +497,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `addresses`
 --
 ALTER TABLE `addresses`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT for table `banners`
@@ -513,7 +509,7 @@ ALTER TABLE `banners`
 -- AUTO_INCREMENT for table `carts`
 --
 ALTER TABLE `carts`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT for table `categories`
@@ -531,13 +527,13 @@ ALTER TABLE `feedbacks`
 -- AUTO_INCREMENT for table `orderdetail`
 --
 ALTER TABLE `orderdetail`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `orders`
 --
 ALTER TABLE `orders`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `pricehistory`
