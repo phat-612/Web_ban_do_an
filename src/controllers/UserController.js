@@ -305,14 +305,8 @@ const getPaymentAndOrderPolicyPage = (req, res) => {
 const setDefaultAddress = async (req, res) => {
   const userId = req.session.user.id;
   const address = req.body;
-  if (address.isDefault === "1") {
-    return res
-      .status(400)
-      .send("Vui lòng chọn địa chỉ khác làm địa chỉ mặc định!");
-  } else {
-    await userModel.setDefaultAddress(userId);
-    await userModel.defaultAddress(address.id, userId);
-  }
+  await userModel.setDefaultAddress(userId);
+  await userModel.defaultAddress(address.id, userId);
   res.redirect("/listAddress");
 };
 // sửa địa chỉ
@@ -329,6 +323,7 @@ const editAddress = async (req, res) => {
 const deleteAddress = async (req, res) => {
   const userId = req.session.user.id;
   const addressId = req.params;
+  console.log(addressId);
   if (addressId.isDefault === "1") {
     return res
       .status(400)

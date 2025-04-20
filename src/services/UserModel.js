@@ -97,7 +97,7 @@ const getAllAddress = async (idUser) => {
 // xóa địa chỉ mặc định
 const setDefaultAddress = async (idUser) => {
   const [row, field] = await pool.execute(
-    "UPDATE `addresses` SET `isDefault` = false",
+    "UPDATE `addresses` SET `isDefault` = 0",
     [idUser]
   );
   return row;
