@@ -12,7 +12,7 @@
     >
       <!-- 1 the danh muc  -->
       <% for (var i = 0; i < data.categorys.length; i++) { %>
-      <li class="my-3 col row d-flex justify-content-center">
+      <li class="my-3 col row d-flex justify-content-center ">
         <a
           href="/menu?category=<%= data.categorys[i].id %>"
           class="btn btn-light col-10"
@@ -38,7 +38,7 @@
     <!-- 1 the san pham -->
     <% data.products.forEach(function (product){ %>
     <div class="col d-flex justify-content-center my-5 ">
-      <div class="card position-relative" style="width: 18rem">
+      <div class="card position-relative shadow " style="width: 18rem">
         <% if (!product.isBussiness) { %>
         <div
           class="tag position-absolute top-0 start-0 bg-danger rounded-pill px-2 text-white"
@@ -79,7 +79,7 @@
             <button
               data-bs-toggle="modal"
               data-bs-target="#staticBackdrop"
-              class="btn btn-success d-flex justify-content-center btnShowModal"
+              class="btn btn-success d-flex justify-content-center btnShowModal shadow "
               data-bs-isLogin="<% if (userLogin) { %>true<% } else { %>false<% } %>"
               data-bs-productId="<%= product.id %>"
               data-bs-productName="<%= product.name %>"
