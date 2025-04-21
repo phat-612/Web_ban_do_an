@@ -131,6 +131,10 @@ $(document).ready(function () {
         "none"
       );
     } else {
+      $("#formOrder > div.col-5 > div:nth-child(4) > div.fs-5.areaShiping").css(
+        "display",
+        "block"
+      );
       $(".btnOrder").removeAttr("disabled");
     }
     let totalPrice = dataProduct.reduce(
