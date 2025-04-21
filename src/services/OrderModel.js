@@ -44,7 +44,7 @@ const addOrder = async (order, orderDetail) => {
   console.log("order", order);
   console.log("orderDetail", orderDetail);
   const [rows, fields] = await pool.execute(
-    "INSERT INTO `orders` (`idUser`, `name`, `phone`, `address`, `note`, `total`, `status`, `distance` ) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+    "INSERT INTO `orders` (`idUser`, `name`, `phone`, `address`, `note`, `total`, `status`, `distance`, `location` ) VALUES (?, ?, ?, ?, ?, ?, ?, ?,?)",
     [
       order.idUser,
       order.name,
@@ -54,6 +54,7 @@ const addOrder = async (order, orderDetail) => {
       order.total,
       order.status,
       order.distance,
+      order.location,
     ]
   );
   const idOrder = rows.insertId;

@@ -192,6 +192,7 @@ const addOrder = async (req, res) => {
           total,
           status: 1,
         };
+
         return orderModel.addOrder(dataOrder, dataDetailOrder);
       } else {
         alert("Không tìm thấy đường đi");
